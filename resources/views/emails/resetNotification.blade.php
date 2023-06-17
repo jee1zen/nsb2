@@ -1,0 +1,31 @@
+
+<h2>A Reset Profile for Verification  to NSB FMC</h2>
+<table>
+
+        <tr>
+            <th>
+                Name
+            </th>
+            <td>
+                {{$title}}  {{$name}}
+            </td>
+        </tr>
+        <tr>
+            <th>
+                contact
+            </th>
+            <td>
+                {{$phone}}
+            </td>
+        </tr>
+        <tr>
+            <th>
+                Link
+            </th>
+            <td>
+               <a href="{{route('admin.clients.management')}}">Link</a>
+            </td>
+        </tr>
+    
+</table>
+

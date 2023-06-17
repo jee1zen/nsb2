@@ -1,0 +1,7 @@
+﻿Cus ID,Customer Name,NIC,Address,Email,Mobile
+FMC000003000,K.B.Weerasekara,883134168V,"No.241,Sarabhoomi Scheme,Madapatha,Piliyandala",kasunmahagu@gmail.com,0772665741
+FMC000003037,S.A.P.C.Weerasinghe,198383502200,"No1273,Zone 5,Millenium City,Athurugiriya",chamaleeweerasinghe@gmail.com,0713018208
+FMC000003032,Puritha Jeewakarathne,810810810V,"No.2,Temple Road,Kaluthara North",it.fmc@nsb.lk,0779323875
+FMC000002762,Achala Weerasekara,840840840V,"No.241,Sarabhoomi Scheme,Madapatha,Piliyandala",achala.fmc@nsb.lk,0777913559
+FMC000003035,K.A.Wijebandara,870870870V,"No.400,Galle Road,Colombo 03",krishni.fmc@nsb.lk,0772125744
+FMC000003036,S.D.P.Sathsala,890890890V,"No.200,Webada Road,Weboda",pawani.fmc@nsb.lk,0779448482

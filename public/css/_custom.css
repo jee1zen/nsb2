@@ -1,0 +1,512 @@
+.ck-editor__editable,
+textarea {
+    min-height: 150px;
+}
+
+
+
+.datatable {
+    width: 100% !important;
+}
+
+.dataTables_length,
+.dataTables_filter,
+.dt-buttons {
+    margin-bottom: 0.333em;
+    margin-top: .2rem;
+}
+
+.dataTables_filter {
+    margin-right: .2rem;
+}
+
+.dt-buttons .btn {
+    margin-left: 0.333em;
+    border-radius: 0;
+}
+
+.table.datatable {
+    box-sizing: border-box;
+    border-collapse: collapse;
+}
+
+table.dataTable thead th {
+    border-bottom: 2px solid #c8ced3;
+}
+
+.dataTables_wrapper.no-footer .dataTables_scrollBody {
+    border-bottom: 1px solid #c8ced3;
+}
+
+.select2 {
+    max-width: 100%;
+    width: 100% !important;
+}
+
+.select2-selection__rendered {
+    padding-bottom: 5px !important;
+}
+
+.has-error .invalid-feedback {
+    display: block !important;
+}
+
+.btn-info,
+.badge-info {
+    color: white;
+}
+
+table.dataTable thead .sorting,
+table.dataTable thead .sorting_asc,
+table.dataTable thead .sorting_desc {
+    background-image: none;
+}
+
+.sidebar .nav-item {
+    cursor: pointer;
+}
+
+.btn-default {
+    color: #23282c;
+    background-color: #f0f3f5;
+    border-color: #f0f3f5;
+}
+
+.btn-default.focus,
+.btn-default:focus {
+    box-shadow: 0 0 0 .2rem rgba(209, 213, 215, .5);
+}
+
+.btn-default:hover {
+    color: #23282c;
+    background-color: #d9e1e6;
+    border-color: #d1dbe1;
+}
+
+.btn-group-xs > .btn,
+.btn-xs {
+    padding: 1px 5px;
+    font-size: 12px;
+    line-height: 1.5;
+    border-radius: 3px;
+}
+
+.searchable-title {
+    font-weight: bold;
+}
+.searchable-fields {
+    padding-left:5px;
+}
+.searchable-link {
+    padding:0 5px 0 5px;
+}
+.searchable-link:hover   {
+    cursor: pointer;
+    background: #eaeaea;
+}
+.select2-results__option {
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+.form-group .required::after {
+    content: " *";
+    color: red;
+}
+
+.form-check.is-invalid ~ .invalid-feedback {
+    display: block;
+}
+/* progressive forms css */
+
+/* * {
+    margin: 0;
+    padding: 0
+}
+html {
+    height: 100%
+}
+p {
+    color: grey
+} */
+
+#msform {
+    text-align: center;
+    position: relative;
+    margin-top: 20px;
+}
+
+#msform fieldset {
+    background: rgba(29, 28, 28, 0.6);
+    border: 0 none;
+    border-radius: 0.5rem;
+    box-sizing: border-box;
+    width: 100%;
+    margin: 0;
+    padding-bottom: 20px;
+    position: relative
+}
+
+.form-card {
+    text-align: left
+}
+
+#msform fieldset:not(:first-of-type) {
+    display: none
+}
+#msform radio,
+#msform input,
+#msform select,
+#msform textarea {
+    padding: 8px 15px 8px 15px;
+   
+    border-radius: 0px;
+    margin-bottom: 25px;
+    margin-top: 2px;
+    width: 80%;
+    box-sizing: border-box;
+    font-family: montserrat;
+    color: #dce3eb;
+    background-color: rgba(19, 19, 18, 0.5);
+    font-size: 16px;
+    letter-spacing: 1px
+}
+
+#msform input:focus,
+#msform textarea:focus {
+    -moz-box-shadow: none !important;
+    -webkit-box-shadow: none !important;
+    box-shadow: none !important;
+    border: 1px solid #673AB7;
+    outline-width: 0
+}
+
+#msform .action-button {
+    width: 100px;
+    background:rgb(255, 217, 0);
+    font-weight: bold;
+    color: black;
+    border: 0 none;
+    border-radius:  0px !important;
+    cursor: pointer;
+    padding: 10px 5px;
+    margin: 10px 0px 10px 5px;
+    float: right
+}
+
+#msform .action-button:hover,
+#msform .action-button:focus {
+    background-color:orange;
+    color: white;
+}
+
+#msform .action-button-previous {
+    width: 100px;
+    background: #807f7f;
+    font-weight: bold;
+    color: black;
+    border: 0 none;
+    border-radius: 0px !important;
+    cursor: pointer;
+    padding: 10px 5px;
+    margin: 10px 5px 10px 0px;
+    float: right
+}
+
+#msform .action-button-previous:hover,
+#msform .action-button-previous:focus {
+    background-color: #000000;
+    color: white;
+}
+
+
+.card {
+    
+    margin: auto;
+    z-index: 0;
+    border: none;
+    position:relative;
+    align-content: center;
+    background-color:  rgba(107, 104, 96, 0.5);
+    width: 65%;
+   
+    
+    
+}
+
+.fs-title {
+    font-size: 25px;
+    color: #1b1630;
+    margin-bottom: 15px;
+    font-weight: normal;
+    text-align: left
+}
+
+.purple-text {
+    color: #19ec12;
+    font-weight: normal
+}
+
+.steps {
+    font-size: 20px;
+    color: gray;
+    margin-bottom: 10px;
+    font-weight: normal;
+    text-align: right
+}
+
+.fieldlabels {
+    color: gray;
+    text-align: left;
+    display: block;
+}
+
+#progressbar {
+    margin-bottom: 30px;
+    overflow: hidden;
+    color: lightgrey
+}
+
+#progressbar .active {
+    color: black
+}
+
+#progressbar li {
+    list-style-type: none;
+    font-size: 13px;
+    width: 14%;
+    float: left;
+    position: relative;
+    font-weight: 400
+}
+
+
+
+
+
+
+#progressbar #account:before {
+    font-family: FontAwesome;
+    content: "\f13e";
+
+}
+
+
+#progressbar #basic:before {
+    font-family: FontAwesome;
+    content: "\f007";
+    
+}
+
+#progressbar #employment:before {
+    font-family: FontAwesome;
+    content: "\f129"
+}
+
+#progressbar #bank:before {
+    font-family: FontAwesome;
+    content: "\f19c"
+}
+
+#progressbar #other:before {
+    font-family: FontAwesome;
+    content: "\f009"
+}
+
+
+#progressbar #confirm:before {
+    font-family: FontAwesome;
+    content: "\f00c"
+}
+
+@media only screen and (max-width:600px)  {
+    #progressbar, .progress{
+        display: none;
+    }
+    
+    .card {
+    
+        margin: auto;
+        z-index: 0;
+        border: none;
+        position:relative;
+        align-content: center;
+        background-color:  rgba(243, 243, 230, 0.5);
+        width: 360px;
+       
+        
+        
+        
+    }
+    
+    
+}
+
+#progressbar li:before {
+    width: 50px;
+    height: 50px;
+    line-height: 45px;
+    display: block;
+    font-size: 20px;
+    color: #ffffff;
+    background: lightgray;
+    border-radius: 50%;
+    margin: 0 auto 10px auto;
+    padding: 2px
+}
+
+#progressbar li:after {
+    content: '';
+    width: 100%;
+    height: 2px;
+    background: lightgray;
+    position: absolute;
+    left: 0;
+    top: 25px;
+    z-index: -1
+}
+
+#progressbar li.active:before,
+#progressbar li.active:after {
+    background: black;
+    color: #ec9d0a;
+}
+
+.progress {
+    height: 20px
+}
+
+.progress-bar {
+    background-color: #ec9d0a
+}
+
+.fit-image {
+    width: 100%;
+    object-fit: cover
+}
+/* Dynamic Forms */
+
+
+.myForm{
+background-color: rgba(0,0,0,0.5) !important;
+padding: 15px !important;
+border-radius: 15px !important;
+color: white;
+
+}
+
+/* input{
+border-radius:15px 15px 15px 15px !important;
+} */
+
+span.input-group-text {
+    border-radius: 25px;
+    margin-right: 5px;
+}
+
+input:focus{
+outline: none;
+box-shadow:none !important;
+border:1px solid #ccc !important;
+
+}
+
+.br-15{
+border-radius: 15px 0 0 15px !important;
+}
+
+#add_more{
+color: white !important;
+background-color: #fa8231 !important;
+border-radius: 15px !important;
+border: 0 !important;
+
+}
+#remove_more{
+color: white !important;
+background-color: #fc5c65 !important;
+border-radius: 15px !important;
+border: 0 !important;
+display: none;
+
+}
+
+/* checkbox */
+
+
+/*
+Rounded Check Box
+*/
+
+    .round {
+  position: relative;
+}
+
+.round label {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 50%;
+  cursor: pointer;
+  height: 28px;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 28px;
+}
+
+.round label:after {
+  border: 2px solid #fff;
+  border-top: none;
+  border-right: none;
+  content: "";
+  height: 6px;
+  left: 7px;
+  opacity: 0;
+  position: absolute;
+  top: 8px;
+  transform: rotate(-45deg);
+  width: 12px;
+}
+
+.round input[type="checkbox"] {
+  visibility: hidden;
+}
+
+.round input[type="checkbox"]:checked + label {
+  background-color: #66bb6a;
+  border-color: #66bb6a;
+}
+
+.round input[type="checkbox"]:checked + label:after {
+  opacity: 1;
+}
+/* client verification tabs  */
+#exTab1 .tab-content {
+    color : white;
+    background-color: #428bca;
+    padding : 5px 15px;
+  }
+  
+  #exTab2 h3 {
+    color : white;
+    background-color: #428bca;
+    padding : 5px 15px;
+  }
+  
+  /* remove border radius for the tab */
+  
+  #exTab1 .nav-pills > li > a {
+    border-radius: 0;
+  }
+  
+  /* change border radius for the tab , apply corners on top*/
+  
+  #exTab3 .nav-pills > li > a {
+    border-radius: 4px 4px 0 0 ;
+  }
+  
+  #exTab3 .tab-content {
+    color : white;
+    background-color: #428bca;
+    padding : 5px 15px;
+  }

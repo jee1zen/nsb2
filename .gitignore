@@ -1,0 +1,5 @@
+vendor/
+nbproject
+nsbfm.zip
+.env
+public/storage
