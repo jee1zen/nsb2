@@ -13,6 +13,7 @@ class Process extends Model
         'id',
         'user_id',
         'client_id',
+        'account_id',
         'previous_state',
         'current_state',
         'comment',
@@ -33,4 +34,3 @@ class Process extends Model
 
    
 }
-

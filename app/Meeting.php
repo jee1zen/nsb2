@@ -14,6 +14,7 @@ class Meeting extends Model
         'id',
         'client_id',
         'officer_id',
+        'account_id',
         'date',
         'time',
         'link',

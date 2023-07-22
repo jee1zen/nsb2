@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Account;
 use App\AuthorizedPerson;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\MassDestroyUserRequest;
@@ -53,7 +54,7 @@ class ApprovalController extends Controller
 
         if ($officer_role->id == 5) {
 
-            $clients = Client::where('officer_id', '=', Auth::user()->id)->orWhere('status', '<', 5)->get()->sortByDesc("create_at");
+            $accounts = Account::where('officer_id', '=', Auth::user()->id)->orWhere('status', '<', 5)->get()->sortByDesc("create_at");
         } elseif ($officer_role->id == 6) {
 
             // $clients = Client::Where('officer_id', '!=', null)->orWhere('officer_id', '=', Auth::user()->id)
@@ -67,7 +68,7 @@ class ApprovalController extends Controller
             //              ->Where('officer_id', '!=', null)->orWhere('officer_id', '=', Auth::user()->id)->groupBy('id')
             //              ->get();
 
-            $clients = Client::where('officer_id', '=', null)->orWhere('officer_id', '=', Auth::user()->id)->orWhere('status', '<=', 6)->get()->sortByDesc("created_at");
+            $accounts = Account::where('officer_id', '=', null)->orWhere('officer_id', '=', Auth::user()->id)->orWhere('status', '<=', 6)->get()->sortByDesc("created_at");
 
             //  dd($clients);
 
@@ -79,7 +80,7 @@ class ApprovalController extends Controller
             //  ->join('users','clients.officer_id','=','users.id')
             //  ->join('investments','investments.client_id','=','clients.id')->where('is_main','=',1)
             //  ->where('investments.status','=',7)->get();
-            $clients = Client::where('status', '=', 7)->get()->sortByDesc("created_at");
+            $accounts = Account::where('status', '=', 7)->get()->sortByDesc("created_at");
         } elseif ($officer_role->id == 1) {
             return redirect()->route('admin.clients.management');
         } else {
@@ -90,7 +91,7 @@ class ApprovalController extends Controller
         // $clients = Client::all();
 
 
-        return view('admin.clients.index', compact('clients', 'officer_role'));
+        return view('admin.clients.index', compact('accounts', 'officer_role'));
     }
 
     public function pick($client_id)
@@ -457,12 +458,12 @@ class ApprovalController extends Controller
     public function updateRefEmail(Request $request)
     {
 
-        $client_id = $request->client_id;
+        $account_id = $request->account_id;
         $reference_email = $request->reference_email;
 
-        $client = Client::findorFail($client_id);
-        $client->reference_email = $reference_email;
-        $client->save();
+        $account = Account::findorFail($account_id);
+        $account->reference_email = $reference_email;
+        $account->save();
 
         return redirect()->back();
     }
@@ -475,12 +476,12 @@ class ApprovalController extends Controller
         $officer_role = Auth::user()->roles()->first();
 
 
-        $client_id = $request->client_id;
+        $account_id = $request->account_id;
         $request_type = $request->request_type;
         $request_comment = $request->request_comment;
-
-        $client = Client::findorFail($client_id);
-        $prev_state = $client->status;
+        $account = Account::findOrFail($account_id);
+        $client = $account->client;
+        $prev_state = $account->status;
 
         if ($request_type == 1) {
 
@@ -551,11 +552,11 @@ class ApprovalController extends Controller
                 }
             }
 
-            $client->status = $client->status + $request_type;
+            $account->status = $account->status + $request_type;
         } else {
 
 
-            $client->status = 100;
+            $account->status = 100;
             // if ($officer_role->id != 7) {
                 Mail::send('emails.applicationRejected', ['name' => $client->title . ' ' . $client->name, 'email' => $client->user->email, 'id' => $client->id], function ($message) use ($client) {
                     $message->to($client->user->email);
@@ -565,27 +566,29 @@ class ApprovalController extends Controller
         }
 
 
-        $client->save();
+        $account->save();
 
         Process::create([
 
             'user_id' => $officer->id,
-            'client_id' => $client_id,
+            'account_id' => $account->id,
+            'client_id' => $client->id,
             'previous_state' => $prev_state,
-            'current_state' =>  $client->status,
+            'current_state' =>  $account->status,
             'comment' => $request_comment
 
         ]);
 
-        return redirect()->route('admin.clients.show', $client_id);
+        return redirect()->route('admin.clients.show', $account_id);
     }
 
     public function show($id)
     {
         abort_if(Gate::denies('client_approval_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        $account = Account::findOrFail($id);
 
-        $client = Client::findOrFail($id);
-        $authorizedPerson = Client::find($id)->authorizedPerson;
+        $client = $account->client;
+        $authorizedPerson = $client->authorizedPerson;
         // $employmentDetails = Client::find($id)->employmentDetails;
         $employmentDetails = $client->employmentDetails;
         $otherDetails = $client->otherDetails;
@@ -593,18 +596,21 @@ class ApprovalController extends Controller
         $kyc = null;
         $kyc_rating = null;
 
-        if ($client->hasClientKYC()) {
+        if ($account->hasKyc()) {
 
 
 
-            $kyc = $client->clientKYC();
+            $kyc = KYCForm::where('account_id',$id)->where('investment_id',0)->latest()->first();
+          
+            if($kyc!=null){
 
+           
             $totalRiskRate = 0;
             $rateLabel = "Unrated";
             $rateColor = "light";
             //risk calculation..
 
-            if ($client->client_type == 1) {
+            if ($account->type == 1) {
                 $type_rate = 0.05;
             } elseif ($client->client_type == 2) {
                 $type_rate = 0.10;
@@ -615,7 +621,7 @@ class ApprovalController extends Controller
 
 
 
-            if ($client->client_type != 3) {
+            if ($account->type != 3) {
                 //ownership..
                 if ($kyc->kyc_ownership_of_premises == 'Owner' || $kyc->kyc_ownership_of_premises == "Parent's") {
                     $ownership_rate = 0.05;
@@ -770,6 +776,7 @@ class ApprovalController extends Controller
 
 
                 ];
+            }
         }
 
         //   dd($kyc);
@@ -778,10 +785,10 @@ class ApprovalController extends Controller
         // dd($kyc);
 
         //   dd($kyc_rating['totalRiskRate']);
-        return view('admin.clients.show', compact('client', 'authorizedPerson', 'employmentDetails', 'otherDetails', 'kyc_rating', 'kyc'));
+        return view('admin.clients.show', compact('client','account', 'authorizedPerson', 'employmentDetails', 'otherDetails', 'kyc_rating', 'kyc'));
     }
 
-    public function verifyType(Request $request, $client_id)
+    public function verifyType(Request $request, $account_id)
     {
 
         $request->validate([
@@ -791,11 +798,11 @@ class ApprovalController extends Controller
 
         ]);
         $officer = Auth::user();
+        $account = Account::findOrFail($account_id);
 
-        $client = Client::findOrFail($client_id);
-        $client->verify_type = $request->verify_type;
-        $client->verify_comment = $request->verityTypeComment;
-        $client->save();
+        $account->verify_type = $request->verify_type;
+        $account->verify_comment = $request->verityTypeComment;
+        $account->save();
 
         if ($request->verifyType == 0) {
             $request_type = 2;
@@ -806,15 +813,16 @@ class ApprovalController extends Controller
 
         $request_comment = 'physically verified';
 
-        $client = Client::findorFail($client_id);
-        $prev_state = $client->status;
-        $client->status = $client->status + $request_type;
-        $client->save();
+        $client = $account->client;
+        $prev_state = $account->status;
+        $account->status = $account->status + $request_type;
+        $account->save();
 
         Process::create([
 
             'user_id' => $officer->id,
-            'client_id' => $client_id,
+            'account_id' => $account_id,
+            'client_id' => $client->id,
             'previous_state' => $prev_state,
             'current_state' => $prev_state + $request_type,
             'comment' => $request_comment
@@ -822,11 +830,11 @@ class ApprovalController extends Controller
         ]);
 
 
-        return redirect()->route('admin.clients.show', $client_id);
+        return redirect()->route('admin.clients.show', $account_id);
     }
 
 
-    public function sheduleMeeting(Request $request, $client_id)
+    public function sheduleMeeting(Request $request, $account_id)
     {
 
 
@@ -835,11 +843,12 @@ class ApprovalController extends Controller
         DB::beginTransaction();
         try {
             $officer = Auth::user();
-            $client = Client::find($client_id);
+            $account = Account::findOrFail($account_id);
+            $client = $account->client;
 
             $meeting = Meeting::create([
-
-                'client_id' => $client_id,
+                'account_id' => $account_id,
+                'client_id' => $client->id,
                 'officer_id' => $officer->id,
                 'date' => $request->date,
                 'time' => $request->time,
@@ -857,7 +866,7 @@ class ApprovalController extends Controller
                 $message->subject('NSB FMC Confirmation Video Conference' . $client->title . " " . $client->name);
             });
 
-            if ($client->client_type == 2) {
+            if ($account->type == 2) {
 
                 if ($client->hasJointHolders()) {
 
@@ -879,18 +888,19 @@ class ApprovalController extends Controller
             $request_type = 1;
             $request_comment = 'Sheduled Meeting!';
 
-            $client = Client::findorFail($client_id);
-            $client->verify_type = 1;
-            $client->save();
+            $client =   $account->client;
+            $account->verify_type = 1;
+            $account->save();
 
-            $prev_state = $client->status;
-            $client->status = $client->status + $request_type;
-            $client->save();
+            $prev_state = $account->status;
+            $account->status = $account->status + $request_type;
+            $account->save();
 
             Process::create([
 
                 'user_id' => $officer->id,
-                'client_id' => $client_id,
+                'account_id'=>$account_id,
+                'client_id' => $client->id,
                 'previous_state' => $prev_state,
                 'current_state' => $prev_state + $request_type,
                 'comment' => $request_comment
@@ -905,47 +915,53 @@ class ApprovalController extends Controller
         }
 
 
-        return redirect()->route('admin.clients.show', $client_id);
+        return redirect()->route('admin.clients.show', $account_id);
     }
-    public function updateMeeting(Request $request, $client_id)
+    public function updateMeeting(Request $request, $account_id)
     {
 
         abort_if(Gate::denies('client_management_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         $officer = Auth::user();
         $meeting = Meeting::findorFail($request->meetingId);
+        $account = Account::findOrFail($account_id);
 
         if ($request->meetingStatus == 1) {
 
-            $date = date('m/d/Y h:i:s a', time());
-            // $video = $request->file('video');
-            // $videoName = time() . '.' . $video->extension();
-            // $destinationPath = storage_path('app/public/uploads/');
-            // $upload = $video->move($destinationPath, $videoName);
-            // if($upload){
+            if($account->status==3){
+                $date = date('m/d/Y h:i:s a', time());
+                $meeting->status = 1;
+                $meeting->save();
+    
+                $request_type = 1;
+                $request_comment = 'Conference Done!';
+    
+               
+                $client = $account->client;
+    
+                $prev_state = $account->status;
+                $account->status = $account->status + $request_type;
+                $account->save();
+                Process::create([
+                    'user_id' => $officer->id,
+                    'account_id' => $account_id,
+                    'client_id' => $client->id,
+                    'previous_state' => $prev_state,
+                    'current_state' => $prev_state + $request_type,
+                    'comment' => $request_comment
+                ]);
 
-            // $meeting->video = $videoName;
-            $meeting->status = 1;
-            $meeting->save();
 
-            $request_type = 1;
-            $request_comment = 'Conference Done!';
+            }
 
-            $client = Client::findorFail($client_id);
-
-            $prev_state = $client->status;
-            $client->status = $client->status + $request_type;
-            $client->save();
-            Process::create([
-                'user_id' => $officer->id,
-                'client_id' => $client_id,
-                'previous_state' => $prev_state,
-                'current_state' => $prev_state + $request_type,
-                'comment' => $request_comment
-            ]);
+           
             // }
+        }else{
+
+            $meeting->status = $request->meetingStatus;
+            $meeting->save();
         }
 
-        return redirect()->route('admin.clients.show', $client_id);
+        return redirect()->route('admin.clients.show', $account_id);
     }
 
 

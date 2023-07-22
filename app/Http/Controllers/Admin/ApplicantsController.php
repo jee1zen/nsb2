@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Account;
 use App\Client;
 use App\EmploymentDetails;
 use App\GovernmentVerifyDoc;
@@ -23,10 +24,11 @@ class ApplicantsController extends Controller
 
         abort_if(Gate::denies('client_management_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         $officer_role = Auth::user()->roles()->first();
+        $accounts = Account::all()->sortByDesc("create_at");
 
-        $clients = Client::all()->sortByDesc("create_at");
+       
 
-        return view('admin.applicants.index', compact('clients', 'officer_role'));
+        return view('admin.applicants.index', compact('accounts', 'officer_role'));
     }
 
     public function edit(Client $client)
@@ -169,7 +171,9 @@ class ApplicantsController extends Controller
         }
         $date = date('m/d/Y h:i:s a', time());
         $user = Auth::user();
-        $client_id = $request->client_id;
+        $account_id = $request->account_id;
+        $account = Account::findOrFail($account_id);
+        $client = $account->client;
         $title = $request->title;
 
 
@@ -183,7 +187,8 @@ class ApplicantsController extends Controller
 
         Upload::create([
             'user_id' => $user->id,
-            'client_id' => $client_id,
+            'account_id'=>$account_id,
+            'client_id' => $client->id,
             'file_name' => $imageName,
             'title' => $title,
         ]);
@@ -498,10 +503,12 @@ class ApplicantsController extends Controller
 
     public function clientDashboard($id){
 
-     $client = Client::findOrFail($id);
-     $investments = $client->investments()->where('invested_amount','>',0)->where('method','!=','Maturity')->get();
+     $account = Account::findOrFail($id);   
+
+     $client =  $account->client;
+     $investments = $account->investments()->where('invested_amount','>',0)->where('method','!=','Maturity')->get();
      $investmentTypes = InvestmentType::all();
-     return view('admin.applicants.dashboard',compact('client','investmentTypes','investments'));
+     return view('admin.applicants.dashboard',compact('client','investmentTypes','investments','account'));
 
     }
 

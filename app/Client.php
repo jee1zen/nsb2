@@ -72,6 +72,10 @@ class Client extends Model
         return $this->belongsTo(User::class,'id','id');
 
      }
+
+     public function accounts(){
+        return $this->hasMany(Account::class,'client_id');
+     }
      public function officer(){ 
 
         return $this->belongsTo(User::class,'officer_id','id');

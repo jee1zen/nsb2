@@ -55,6 +55,16 @@
                             <tbody>
                                 <tr>
                                     <th>
+                                        Account ID
+
+                                    </th>
+                                    <td>
+                                        {{ $account->id }}
+                                    </td>
+                                    <td> &nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <th>
                                         Clinet ID
 
                                     </th>
@@ -73,7 +83,7 @@
                                     <td>
                                         <input type="checkbox" class="checkBoxVerify"
                                             {{ $client->name_verify == 0 ? '' : 'checked' }}
-                                            {{ $client->status > 2 ? 'disabled' : '' }} />
+                                            {{ $account->status > 2 ? 'disabled' : '' }} />
                                         <input type="hidden"
                                             value="{{ base64_encode(serialize(['clients', 'name_verify', $client->name_verify, $client->id])) }}">
                                         <label for="checkbox"></label>
@@ -89,7 +99,7 @@
                                     <td>
                                         <input type="checkbox" class="checkBoxVerify"
                                             {{ $client->name_by_initials_verify == 0 ? '' : 'checked' }}
-                                            {{ $client->status > 2 ? 'disabled' : '' }} />
+                                            {{ $account->status > 2 ? 'disabled' : '' }} />
                                         <input type="hidden"
                                             value="{{ base64_encode(serialize(['clients', 'name_by_initials_verify', $client->name_by_initials_verify, $client->id])) }}">
                                         <label for="checkbox"></label>
@@ -103,7 +113,7 @@
                                         {{ $client->user->email }}
                                     </td>
                                     <td>
-                                        {{-- <input type="checkbox" class="checkBoxVerify" {{$client->name_verify==0?"":'checked'}} {{$client->status > 2 ?"disabled":""}} />
+                                        {{-- <input type="checkbox" class="checkBoxVerify" {{$client->name_verify==0?"":'checked'}} {{$account->status > 2 ?"disabled":""}} />
                                 <input type="hidden" value="{{base64_encode(serialize(array("clients","name_verify",$client->name_verify,$client->id)))}}">
                                 <label for="checkbox"></label>    --}}
                                     </td>
@@ -116,7 +126,7 @@
                                         {{ $client->mobile }}
                                     </td>
                                     <td>
-                                        {{-- <input type="checkbox" class="checkBoxVerify" {{$client->name_verify==0?"":'checked'}} {{$client->status > 2 ?"disabled":""}} />
+                                        {{-- <input type="checkbox" class="checkBoxVerify" {{$client->name_verify==0?"":'checked'}} {{$account->status > 2 ?"disabled":""}} />
                                 <input type="hidden" value="{{base64_encode(serialize(array("clients","name_verify",$client->name_verify,$client->id)))}}">
                                 <label for="checkbox"></label>    --}}
                                     </td>
@@ -129,7 +139,7 @@
                                         {{ $client->telephone }}
                                     </td>
                                     <td>
-                                        {{-- <input type="checkbox" class="checkBoxVerify" {{$client->name_verify==0?"":'checked'}} {{$client->status > 2 ?"disabled":""}} />
+                                        {{-- <input type="checkbox" class="checkBoxVerify" {{$client->name_verify==0?"":'checked'}} {{$account->status > 2 ?"disabled":""}} />
                                 <input type="hidden" value="{{base64_encode(serialize(array("clients","name_verify",$client->name_verify,$client->id)))}}">
                                 <label for="checkbox"></label>    --}}
                                     </td>
@@ -146,21 +156,21 @@
                                     <td>
                                         <input type="checkbox" class="checkBoxVerify"
                                             {{ $client->address_line_1_verify == 0 ? '' : 'checked' }}
-                                            {{ $client->status > 2 ? 'disabled' : '' }} />
+                                            {{ $account->status > 2 ? 'disabled' : '' }} />
                                         <input type="hidden"
                                             value="{{ base64_encode(serialize(['clients', 'address_line_1_verify', $client->address_line_1_verify, $client->id])) }}">
                                         <label for="checkbox"></label>
                                         <br>
                                         <input type="checkbox" class="checkBoxVerify"
                                             {{ $client->address_line_2_verify == 0 ? '' : 'checked' }}
-                                            {{ $client->status > 2 ? 'disabled' : '' }} />
+                                            {{ $account->status > 2 ? 'disabled' : '' }} />
                                         <input type="hidden"
                                             value="{{ base64_encode(serialize(['clients', 'address_line_2_verify', $client->address_line_2_verify, $client->id])) }}">
                                         <label for="checkbox"></label>
                                         <br>
                                         <input type="checkbox" class="checkBoxVerify"
                                             {{ $client->address_line_3_verify == 0 ? '' : 'checked' }}
-                                            {{ $client->status > 2 ? 'disabled' : '' }} />
+                                            {{ $account->status > 2 ? 'disabled' : '' }} />
                                         <input type="hidden"
                                             value="{{ base64_encode(serialize(['clients', 'address_line_3_verify', $client->address_line_3_verify, $client->id])) }}">
                                         <label for="checkbox"></label>
@@ -179,21 +189,21 @@
                                     <td>
                                         <input type="checkbox" class="checkBoxVerify"
                                             {{ $client->correspondence_address_line_1_verify == 0 ? '' : 'checked' }}
-                                            {{ $client->status > 2 ? 'disabled' : '' }} />
+                                            {{ $account->status > 2 ? 'disabled' : '' }} />
                                         <input type="hidden"
                                             value="{{ base64_encode(serialize(['clients', 'correspondence_address_line_1_verify', $client->correspondence_address_line_1_verify, $client->id])) }}">
                                         <label for="checkbox"></label>
                                         <br>
                                         <input type="checkbox" class="checkBoxVerify"
                                             {{ $client->correspondence_address_line_2_verify == 0 ? '' : 'checked' }}
-                                            {{ $client->status > 2 ? 'disabled' : '' }} />
+                                            {{ $account->status > 2 ? 'disabled' : '' }} />
                                         <input type="hidden"
                                             value="{{ base64_encode(serialize(['clients', 'correspondence_address_line_2_verify', $client->correspondence_address_line_2_verify, $client->id])) }}">
                                         <label for="checkbox"></label>
                                         <br>
                                         <input type="checkbox" class="checkBoxVerify"
                                             {{ $client->correspondence_address_line_3_verify == 0 ? '' : 'checked' }}
-                                            {{ $client->status > 2 ? 'disabled' : '' }} />
+                                            {{ $account->status > 2 ? 'disabled' : '' }} />
                                         <input type="hidden"
                                             value="{{ base64_encode(serialize(['clients', 'correspondence_address_line_3_verify', $client->correspondence_address_line_3_verify, $client->id])) }}">
                                         <label for="checkbox"></label>
@@ -210,7 +220,7 @@
                                     <td>
                                         <input type="checkbox" class="checkBoxVerify"
                                             {{ $client->dob_verify == 0 ? '' : 'checked' }}
-                                            {{ $client->status > 2 ? 'disabled' : '' }} />
+                                            {{ $account->status > 2 ? 'disabled' : '' }} />
                                         <input type="hidden"
                                             value="{{ base64_encode(serialize(['clients', 'dob_verify', $client->dob_verify, $client->id])) }}">
                                         <label for="checkbox"></label>
@@ -226,7 +236,7 @@
                                     <td>
                                         <input type="checkbox" class="checkBoxVerify"
                                             {{ $client->nationality_verify == 0 ? '' : 'checked' }}
-                                            {{ $client->status > 2 ? 'disabled' : '' }} />
+                                            {{ $account->status > 2 ? 'disabled' : '' }} />
                                         <input type="hidden"
                                             value="{{ base64_encode(serialize(['clients', 'nationality_verify', $client->nationality_verify, $client->id])) }}">
                                         <label for="checkbox"></label>
@@ -242,7 +252,7 @@
                                     <td>
                                         <input type="checkbox" class="checkBoxVerify"
                                             {{ $client->nic_verify == 0 ? '' : 'checked' }}
-                                            {{ $client->status > 2 ? 'disabled' : '' }} />
+                                            {{ $account->status > 2 ? 'disabled' : '' }} />
                                         <input type="hidden"
                                             value="{{ base64_encode(serialize(['clients', 'nic_verify', $client->nic_verify, $client->id])) }}">
                                         <label for="checkbox"></label>
@@ -258,7 +268,7 @@
                                     <td>
                                         <input type="checkbox" class="checkBoxVerify"
                                             {{ $client->client_type_verify == 0 ? '' : 'checked' }}
-                                            {{ $client->status > 2 ? 'disabled' : '' }} />
+                                            {{ $account->status > 2 ? 'disabled' : '' }} />
                                         <input type="hidden"
                                             value="{{ base64_encode(serialize(['clients', 'client_type_verify', $client->client_type_verify, $client->id])) }}">
                                         <label for="checkbox"></label>
@@ -300,7 +310,7 @@
                                         <td>
                                             <input type="checkbox" class="checkBoxVerify"
                                                 {{ $client->verification_from_GOV_verify == 0 ? '' : 'checked' }}
-                                                {{ $client->status > 2 ? 'disabled' : '' }} />
+                                                {{ $account->status > 2 ? 'disabled' : '' }} />
                                             <input type="hidden"
                                                 value="{{ base64_encode(serialize(['clients', 'verification_from_GOV_verify', $client->verification_from_GOV_verify, $client->id])) }}">
                                             <label for="checkbox"></label>
@@ -381,7 +391,7 @@
                             <td>
                                 <input type="checkbox" class="checkBoxVerify"
                                     {{ $client->money_laundering_verification_verify == 0 ? '' : 'checked' }}
-                                    {{ $client->status > 2 ? 'disabled' : '' }} />
+                                    {{ $account->status > 2 ? 'disabled' : '' }} />
                                 <input type="hidden"
                                     value="{{ base64_encode(serialize(['clients', 'verification_from_GOV_verify', $client->money_laundering_verification_verify, $client->id])) }}">
                                 <label for="checkbox"></label>
@@ -402,7 +412,7 @@
                             <td>
                                 <input type="checkbox" class="checkBoxVerify"
                                     {{ $client->billing_proof_verify == 0 ? '' : 'checked' }}
-                                    {{ $client->status > 2 ? 'disabled' : '' }} />
+                                    {{ $account->status > 2 ? 'disabled' : '' }} />
                                 <input type="hidden"
                                     value="{{ base64_encode(serialize(['clients', 'billing_proof_verify', $client->billing_proof_verify, $client->id])) }}">
                                 <label for="checkbox"></label>
@@ -424,7 +434,7 @@
                             <td>
                                 <input type="checkbox" class="checkBoxVerify"
                                     {{ $client->nic_front_verify == 0 ? '' : 'checked' }}
-                                    {{ $client->status > 2 ? 'disabled' : '' }} />
+                                    {{ $account->status > 2 ? 'disabled' : '' }} />
                                 <input type="hidden"
                                     value="{{ base64_encode(serialize(['clients', 'nic_front_verify', $client->nic_front_verify, $client->id])) }}">
                                 <label for="checkbox"></label>
@@ -445,7 +455,7 @@
                             <td>
                                 <input type="checkbox" class="checkBoxVerify"
                                     {{ $client->nic_back_verify == 0 ? '' : 'checked' }}
-                                    {{ $client->status > 2 ? 'disabled' : '' }} />
+                                    {{ $account->status > 2 ? 'disabled' : '' }} />
                                 <input type="hidden"
                                     value="{{ base64_encode(serialize(['clients', 'nic_back_verify', $client->nic_back_verify, $client->id])) }}">
                                 <label for="checkbox"></label>
@@ -466,7 +476,7 @@
                             <td>
                                 <input type="checkbox" class="checkBoxVerify"
                                     {{ $client->passport_verify == 0 ? '' : 'checked' }}
-                                    {{ $client->status > 2 ? 'disabled' : '' }} />
+                                    {{ $account->status > 2 ? 'disabled' : '' }} />
                                 <input type="hidden"
                                     value="{{ base64_encode(serialize(['clients', 'passport_verify', $client->passport_verify, $client->id])) }}">
                                 <label for="checkbox"></label>
@@ -487,7 +497,7 @@
                             <td>
                                 <input type="checkbox" class="checkBoxVerify"
                                     {{ $client->signature_verify == 0 ? '' : 'checked' }}
-                                    {{ $client->status > 2 ? 'disabled' : '' }} />
+                                    {{ $account->status > 2 ? 'disabled' : '' }} />
                                 <input type="hidden"
                                     value="{{ base64_encode(serialize(['clients', 'signature_verify', $client->signature_verify, $client->id])) }}">
                                 <label for="checkbox"></label>
@@ -508,7 +518,7 @@
                             <td>
                                 <input type="checkbox" class="checkBoxVerify"
                                     {{ $client->pro_pic_verify == 0 ? '' : 'checked' }}
-                                    {{ $client->status > 2 ? 'disabled' : '' }} />
+                                    {{ $account->status > 2 ? 'disabled' : '' }} />
                                 <input type="hidden"
                                     value="{{ base64_encode(serialize(['clients', 'signature_verify', $client->pro_pic_verify, $client->id])) }}">
                                 <label for="checkbox"></label>
@@ -528,7 +538,7 @@
                                         <td>
                                             <input type="checkbox" class="checkBoxVerify"
                                                 {{ $authorizedPerson->name_verify == 0 ? '' : 'checked' }}
-                                                {{ $client->status > 2 ? 'disabled' : '' }} />
+                                                {{ $account->status > 2 ? 'disabled' : '' }} />
                                             <input type="hidden"
                                                 value="{{ base64_encode(
                                                     serialize(['authorized_person', 'name_verify', $authorizedPerson->name_verify, $authorizedPerson->id]),
@@ -542,7 +552,7 @@
                                         <td>
                                             <input type="checkbox" class="checkBoxVerify"
                                                 {{ $authorizedPerson->address_verify == 0 ? '' : 'checked' }}
-                                                {{ $client->status > 2 ? 'disabled' : '' }} />
+                                                {{ $account->status > 2 ? 'disabled' : '' }} />
                                             <input type="hidden"
                                                 value="{{ base64_encode(
                                                     serialize(['authorized_person', 'address_verify', $authorizedPerson->address_verify, $authorizedPerson->id]),
@@ -556,7 +566,7 @@
                                         <td>
                                             <input type="checkbox" class="checkBoxVerify"
                                                 {{ $authorizedPerson->nic_verify == 0 ? '' : 'checked' }}
-                                                {{ $client->status > 2 ? 'disabled' : '' }} />
+                                                {{ $account->status > 2 ? 'disabled' : '' }} />
                                             <input type="hidden"
                                                 value="{{ base64_encode(
                                                     serialize(['authorized_person', 'nic_verify', $authorizedPerson->nic_verify, $authorizedPerson->id]),
@@ -570,7 +580,7 @@
                                         <td>
                                             <input type="checkbox" class="checkBoxVerify"
                                                 {{ $authorizedPerson->telephone_verify == 0 ? '' : 'checked' }}
-                                                {{ $client->status > 2 ? 'disabled' : '' }} />
+                                                {{ $account->status > 2 ? 'disabled' : '' }} />
                                             <input type="hidden"
                                                 value="{{ base64_encode(
                                                     serialize(['authorized_person', 'telephone_verify', $authorizedPerson->telephone_verify, $authorizedPerson->id]),
@@ -598,7 +608,7 @@
                                         <td>
                                             <input type="checkbox" class="checkBoxVerify"
                                                 {{ $employmentDetails->occupation_verify == 0 ? '' : 'checked' }}
-                                                {{ $client->status > 2 ? 'disabled' : '' }} />
+                                                {{ $account->status > 2 ? 'disabled' : '' }} />
                                             <input type="hidden"
                                                 value="{{ base64_encode(
                                                     serialize([
@@ -617,7 +627,7 @@
                                         <td>
                                             <input type="checkbox" class="checkBoxVerify"
                                                 {{ $employmentDetails->company_name_verify == 0 ? '' : 'checked' }}
-                                                {{ $client->status > 2 ? 'disabled' : '' }} />
+                                                {{ $account->status > 2 ? 'disabled' : '' }} />
                                             <input type="hidden"
                                                 value="{{ base64_encode(
                                                     serialize([
@@ -636,7 +646,7 @@
                                         <td>
                                             <input type="checkbox" class="checkBoxVerify"
                                                 {{ $employmentDetails->company_address_verify == 0 ? '' : 'checked' }}
-                                                {{ $client->status > 2 ? 'disabled' : '' }} />
+                                                {{ $account->status > 2 ? 'disabled' : '' }} />
                                             <input type="hidden"
                                                 value="{{ base64_encode(
                                                     serialize([
@@ -655,7 +665,7 @@
                                         <td>
                                             <input type="checkbox" class="checkBoxVerify"
                                                 {{ $employmentDetails->telephone_verify == 0 ? '' : 'checked' }}
-                                                {{ $client->status > 2 ? 'disabled' : '' }} />
+                                                {{ $account->status > 2 ? 'disabled' : '' }} />
                                             <input type="hidden"
                                                 value="{{ base64_encode(
                                                     serialize(['employment_details', 'telephone_verify', $employmentDetails->telephone_verify, $employmentDetails->id]),
@@ -669,7 +679,7 @@
                                         <td>
                                             <input type="checkbox" class="checkBoxVerify"
                                                 {{ $employmentDetails->fax_verify == 0 ? '' : 'checked' }}
-                                                {{ $client->status > 2 ? 'disabled' : '' }} />
+                                                {{ $account->status > 2 ? 'disabled' : '' }} />
                                             <input type="hidden"
                                                 value="{{ base64_encode(
                                                     serialize(['employment_details', 'fax_verify', $employmentDetails->fax_verify, $employmentDetails->id]),
@@ -683,7 +693,7 @@
                                         <td>
                                             <input type="checkbox" class="checkBoxVerify"
                                                 {{ $employmentDetails->nature_verify == 0 ? '' : 'checked' }}
-                                                {{ $client->status > 2 ? 'disabled' : '' }} />
+                                                {{ $account->status > 2 ? 'disabled' : '' }} />
                                             <input type="hidden"
                                                 value="{{ base64_encode(
                                                     serialize(['employment_details', 'nature_verify', $employmentDetails->nature_verify, $employmentDetails->id]),
@@ -713,7 +723,7 @@
                                         <td>
                                             <input type="checkbox" class="checkBoxVerify"
                                                 {{ $client->company->name_verify == 0 ? '' : 'checked' }}
-                                                {{ $client->status > 2 ? 'disabled' : '' }} />
+                                                {{ $account->status > 2 ? 'disabled' : '' }} />
                                             <input type="hidden"
                                                 value="{{ base64_encode(serialize(['companies', 'name_verify', $client->company->name_verify, $client->company->id])) }}">
                                             <label for="checkbox"></label>
@@ -729,7 +739,7 @@
                                         <td>
                                             <input type="checkbox" class="checkBoxVerify"
                                                 {{ $client->company->address_line_1_verify == 0 ? '' : 'checked' }}
-                                                {{ $client->status > 2 ? 'disabled' : '' }} />
+                                                {{ $account->status > 2 ? 'disabled' : '' }} />
                                             <input type="hidden"
                                                 value="{{ base64_encode(serialize(['companies', 'address_line_1_verify', $client->company->address_line_1_verify, $client->company->id])) }}">
                                             <label for="checkbox"></label>
@@ -745,7 +755,7 @@
                                         <td>
                                             <input type="checkbox" class="checkBoxVerify"
                                                 {{ $client->company->address_line_2_verify == 0 ? '' : 'checked' }}
-                                                {{ $client->status > 2 ? 'disabled' : '' }} />
+                                                {{ $account->status > 2 ? 'disabled' : '' }} />
                                             <input type="hidden"
                                                 value="{{ base64_encode(serialize(['companies', 'address_line_2_verify', $client->company->address_line_2_verify, $client->company->id])) }}">
                                             <label for="checkbox"></label>
@@ -761,7 +771,7 @@
                                         <td>
                                             <input type="checkbox" class="checkBoxVerify"
                                                 {{ $client->company->address_line_3_verify == 0 ? '' : 'checked' }}
-                                                {{ $client->status > 2 ? 'disabled' : '' }} />
+                                                {{ $account->status > 2 ? 'disabled' : '' }} />
                                             <input type="hidden"
                                                 value="{{ base64_encode(serialize(['companies', 'address_line_3_verify', $client->company->address_line_3_verify, $client->company->id])) }}">
                                             <label for="checkbox"></label>
@@ -778,7 +788,7 @@
                                         <td>
                                             <input type="checkbox" class="checkBoxVerify"
                                                 {{ $client->company->business_registration_no_verify == 0 ? '' : 'checked' }}
-                                                {{ $client->status > 2 ? 'disabled' : '' }} />
+                                                {{ $account->status > 2 ? 'disabled' : '' }} />
                                             <input type="hidden"
                                                 value="{{ base64_encode(serialize(['companies', 'business_registration_no_verify', $client->company->business_registration_no_verify, $client->company->id])) }}">
                                             <label for="checkbox"></label>
@@ -794,7 +804,7 @@
                                         <td>
                                             <input type="checkbox" class="checkBoxVerify"
                                                 {{ $client->company->nature_of_business_verify == 0 ? '' : 'checked' }}
-                                                {{ $client->status > 2 ? 'disabled' : '' }} />
+                                                {{ $account->status > 2 ? 'disabled' : '' }} />
                                             <input type="hidden"
                                                 value="{{ base64_encode(serialize(['companies', 'nature_of_business_verify', $client->company->nature_of_business_verify, $client->company->id])) }}">
                                             <label for="checkbox"></label>
@@ -811,7 +821,7 @@
                                         <td>
                                             <input type="checkbox" class="checkBoxVerify"
                                                 {{ $client->company->telephone_1_verify == 0 ? '' : 'checked' }}
-                                                {{ $client->status > 2 ? 'disabled' : '' }} />
+                                                {{ $account->status > 2 ? 'disabled' : '' }} />
                                             <input type="hidden"
                                                 value="{{ base64_encode(serialize(['companies', 'telephone_1_verify', $client->company->telephone_1_verify, $client->company->id])) }}">
                                             <label for="checkbox"></label>
@@ -827,7 +837,7 @@
                                         <td>
                                             <input type="checkbox" class="checkBoxVerify"
                                                 {{ $client->company->telephone_2_verify == 0 ? '' : 'checked' }}
-                                                {{ $client->status > 2 ? 'disabled' : '' }} />
+                                                {{ $account->status > 2 ? 'disabled' : '' }} />
                                             <input type="hidden"
                                                 value="{{ base64_encode(serialize(['companies', 'telephone_2_verify', $client->company->telephone_2_verify, $client->company->id])) }}">
                                             <label for="checkbox"></label>
@@ -843,7 +853,7 @@
                                         <td>
                                             <input type="checkbox" class="checkBoxVerify"
                                                 {{ $client->company->telephone_3_verify == 0 ? '' : 'checked' }}
-                                                {{ $client->status > 2 ? 'disabled' : '' }} />
+                                                {{ $account->status > 2 ? 'disabled' : '' }} />
                                             <input type="hidden"
                                                 value="{{ base64_encode(serialize(['companies', 'telephone_3_verify', $client->company->telephone_3_verify, $client->company->id])) }}">
                                             <label for="checkbox"></label>
@@ -859,7 +869,7 @@
                                         <td>
                                             <input type="checkbox" class="checkBoxVerify"
                                                 {{ $client->company->email_1_verify == 0 ? '' : 'checked' }}
-                                                {{ $client->status > 2 ? 'disabled' : '' }} />
+                                                {{ $account->status > 2 ? 'disabled' : '' }} />
                                             <input type="hidden"
                                                 value="{{ base64_encode(serialize(['companies', 'email_1_verify', $client->company->email_1_verify, $client->company->id])) }}">
                                             <label for="checkbox"></label>
@@ -875,7 +885,7 @@
                                         <td>
                                             <input type="checkbox" class="checkBoxVerify"
                                                 {{ $client->company->email_2_verify == 0 ? '' : 'checked' }}
-                                                {{ $client->status > 2 ? 'disabled' : '' }} />
+                                                {{ $account->status > 2 ? 'disabled' : '' }} />
                                             <input type="hidden"
                                                 value="{{ base64_encode(serialize(['companies', 'email_2_verify', $client->company->email_2_verify, $client->company->id])) }}">
                                             <label for="checkbox"></label>
@@ -891,7 +901,7 @@
                                         <td>
                                             <input type="checkbox" class="checkBoxVerify"
                                                 {{ $client->company->email_3_verify == 0 ? '' : 'checked' }}
-                                                {{ $client->status > 2 ? 'disabled' : '' }} />
+                                                {{ $account->status > 2 ? 'disabled' : '' }} />
                                             <input type="hidden"
                                                 value="{{ base64_encode(serialize(['companies', 'email_3_verify', $client->company->email_3_verify, $client->company->id])) }}">
                                             <label for="checkbox"></label>
@@ -907,7 +917,7 @@
                                         <td>
                                             <input type="checkbox" class="checkBoxVerify"
                                                 {{ $client->company->fax_1_verify == 0 ? '' : 'checked' }}
-                                                {{ $client->status > 2 ? 'disabled' : '' }} />
+                                                {{ $account->status > 2 ? 'disabled' : '' }} />
                                             <input type="hidden"
                                                 value="{{ base64_encode(serialize(['companies', 'fax_1_verify', $client->company->fax_1_verify, $client->company->id])) }}">
                                             <label for="checkbox"></label>
@@ -923,7 +933,7 @@
                                         <td>
                                             <input type="checkbox" class="checkBoxVerify"
                                                 {{ $client->company->fax_2_verify == 0 ? '' : 'checked' }}
-                                                {{ $client->status > 2 ? 'disabled' : '' }} />
+                                                {{ $account->status > 2 ? 'disabled' : '' }} />
                                             <input type="hidden"
                                                 value="{{ base64_encode(serialize(['companies', 'fax_2_verify', $client->company->fax_2_verify, $client->company->id])) }}">
                                             <label for="checkbox"></label>
@@ -952,7 +962,7 @@
                                         <td>
                                             <input type="checkbox" class="checkBoxVerify"
                                                 {{ $client->company->business_act_verify == 0 ? '' : 'checked' }}
-                                                {{ $client->status > 2 ? 'disabled' : '' }} />
+                                                {{ $account->status > 2 ? 'disabled' : '' }} />
                                             <input type="hidden"
                                                 value="{{ base64_encode(serialize(['companies', 'business_act_verify', $client->company->business_act_verify, $client->company->id])) }}">
                                             <label for="checkbox"></label>
@@ -971,7 +981,7 @@
                                         <td>
                                             <input type="checkbox" class="checkBoxVerify"
                                                 {{ $client->company->trust_deed_verify == 0 ? '' : 'checked' }}
-                                                {{ $client->status > 2 ? 'disabled' : '' }} />
+                                                {{ $account->status > 2 ? 'disabled' : '' }} />
                                             <input type="hidden"
                                                 value="{{ base64_encode(serialize(['companies', 'trust_deed_verify', $client->company->trust_deed_verify, $client->company->id])) }}">
                                             <label for="checkbox"></label>
@@ -990,7 +1000,7 @@
                                         <td>
                                             <input type="checkbox" class="checkBoxVerify"
                                                 {{ $client->company->board_resolution_verify == 0 ? '' : 'checked' }}
-                                                {{ $client->status > 2 ? 'disabled' : '' }} />
+                                                {{ $account->status > 2 ? 'disabled' : '' }} />
                                             <input type="hidden"
                                                 value="{{ base64_encode(serialize(['companies', 'board_resolution_verify', $client->company->board_resolution_verify, $client->company->id])) }}">
                                             <label for="checkbox"></label>
@@ -1009,7 +1019,7 @@
                                         <td>
                                             <input type="checkbox" class="checkBoxVerify"
                                                 {{ $client->company->society_constitution_verify == 0 ? '' : 'checked' }}
-                                                {{ $client->status > 2 ? 'disabled' : '' }} />
+                                                {{ $account->status > 2 ? 'disabled' : '' }} />
                                             <input type="hidden"
                                                 value="{{ base64_encode(serialize(['companies', 'society_constitution_verify', $client->company->society_constitution_verify, $client->company->id])) }}">
                                             <label for="checkbox"></label>
@@ -1028,7 +1038,7 @@
                                         <td>
                                             <input type="checkbox" class="checkBoxVerify"
                                                 {{ $client->company->power_of_attorney_verify == 0 ? '' : 'checked' }}
-                                                {{ $client->status > 2 ? 'disabled' : '' }} />
+                                                {{ $account->status > 2 ? 'disabled' : '' }} />
                                             <input type="hidden"
                                                 value="{{ base64_encode(serialize(['companies', 'power_of_attorney_verify', $client->company->power_of_attorney_verify, $client->company->id])) }}">
                                             <label for="checkbox"></label>
@@ -1051,7 +1061,7 @@
                                             <td>
                                                 <input type="checkbox" class="checkBoxVerify"
                                                     {{ $jointHolder->name_verify == 0 ? '' : 'checked' }}
-                                                    {{ $client->status > 2 ? 'disabled' : '' }} />
+                                                    {{ $account->status > 2 ? 'disabled' : '' }} />
                                                 <input type="hidden"
                                                     value="{{ base64_encode(serialize(['joint_holders', 'name_verify', $jointHolder->name_verify, $jointHolder->id])) }}">
                                                 <label for="checkbox"></label>
@@ -1063,7 +1073,7 @@
                                             <td>
                                                 <input type="checkbox" class="checkBoxVerify"
                                                     {{ $jointHolder->name_by_initials_verify == 0 ? '' : 'checked' }}
-                                                    {{ $client->status > 2 ? 'disabled' : '' }} />
+                                                    {{ $account->status > 2 ? 'disabled' : '' }} />
                                                 <input type="hidden"
                                                     value="{{ base64_encode(
                                                         serialize(['joint_holders', 'name_by_initials_verify', $jointHolder->name_by_initials_verify, $jointHolder->id]),
@@ -1077,7 +1087,7 @@
                                             <td>
                                                 <input type="checkbox" class="checkBoxVerify"
                                                     {{ $jointHolder->dob_verify == 0 ? '' : 'checked' }}
-                                                    {{ $client->status > 2 ? 'disabled' : '' }} />
+                                                    {{ $account->status > 2 ? 'disabled' : '' }} />
                                                 <input type="hidden"
                                                     value="{{ base64_encode(serialize(['joint_holders', 'dob_verify', $jointHolder->dob_verify, $jointHolder->id])) }}">
                                                 <label for="checkbox"></label>
@@ -1089,7 +1099,7 @@
                                             <td>
                                                 <input type="checkbox" class="checkBoxVerify"
                                                     {{ $jointHolder->nic_verify == 0 ? '' : 'checked' }}
-                                                    {{ $client->status > 2 ? 'disabled' : '' }} />
+                                                    {{ $account->status > 2 ? 'disabled' : '' }} />
                                                 <input type="hidden"
                                                     value="{{ base64_encode(serialize(['joint_holders', 'nic_verify', $jointHolder->nic_verify, $jointHolder->id])) }}">
                                                 <label for="checkbox"></label>
@@ -1101,7 +1111,7 @@
                                             <td>
                                                 <input type="checkbox" class="checkBoxVerify"
                                                     {{ $jointHolder->nationality_verify == 0 ? '' : 'checked' }}
-                                                    {{ $client->status > 2 ? 'disabled' : '' }} />
+                                                    {{ $account->status > 2 ? 'disabled' : '' }} />
                                                 <input type="hidden"
                                                     value="{{ base64_encode(
                                                         serialize(['joint_holders', 'nationality_verify', $jointHolder->nationality_verify, $jointHolder->id]),
@@ -1115,7 +1125,7 @@
                                             <td>
                                                 <input type="checkbox" class="checkBoxVerify"
                                                     {{ $jointHolder->address_line_1_verify == 0 ? '' : 'checked' }}
-                                                    {{ $client->status > 2 ? 'disabled' : '' }} />
+                                                    {{ $account->status > 2 ? 'disabled' : '' }} />
                                                 <input type="hidden"
                                                     value="{{ base64_encode(
                                                         serialize(['joint_holders', 'address_line_1_verify', $jointHolder->address_line_1_verify, $jointHolder->id]),
@@ -1129,7 +1139,7 @@
                                             <td>
                                                 <input type="checkbox" class="checkBoxVerify"
                                                     {{ $jointHolder->address_line_2_verify == 0 ? '' : 'checked' }}
-                                                    {{ $client->status > 2 ? 'disabled' : '' }} />
+                                                    {{ $account->status > 2 ? 'disabled' : '' }} />
                                                 <input type="hidden"
                                                     value="{{ base64_encode(
                                                         serialize(['joint_holders', 'address_line_2_verify', $jointHolder->address_line_2_verify, $jointHolder->id]),
@@ -1143,7 +1153,7 @@
                                             <td>
                                                 <input type="checkbox" class="checkBoxVerify"
                                                     {{ $jointHolder->address_line_3_verify == 0 ? '' : 'checked' }}
-                                                    {{ $client->status > 2 ? 'disabled' : '' }} />
+                                                    {{ $account->status > 2 ? 'disabled' : '' }} />
                                                 <input type="hidden"
                                                     value="{{ base64_encode(
                                                         serialize(['joint_holders', 'address_line_3_verify', $jointHolder->address_line_3_verify, $jointHolder->id]),
@@ -1157,7 +1167,7 @@
                                             <td>
                                                 <input type="checkbox" class="checkBoxVerify"
                                                     {{ $jointHolder->telephone_verify == 0 ? '' : 'checked' }}
-                                                    {{ $client->status > 2 ? 'disabled' : '' }} />
+                                                    {{ $account->status > 2 ? 'disabled' : '' }} />
                                                 <input type="hidden"
                                                     value="{{ base64_encode(
                                                         serialize(['joint_holders', 'telephone_verify', $jointHolder->telephone_verify, $jointHolder->id]),
@@ -1171,7 +1181,7 @@
                                             <td>
                                                 <input type="checkbox" class="checkBoxVerify"
                                                     {{ $jointHolder->mobile_verify == 0 ? '' : 'checked' }}
-                                                    {{ $client->status > 2 ? 'disabled' : '' }} />
+                                                    {{ $account->status > 2 ? 'disabled' : '' }} />
                                                 <input type="hidden"
                                                     value="{{ base64_encode(serialize(['joint_holders', 'mobile_verify', $jointHolder->mobile_verify, $jointHolder->id])) }}">
                                                 <label for="checkbox"></label>
@@ -1189,7 +1199,7 @@
                                                 <td>
                                                     <input type="checkbox" class="checkBoxVerify"
                                                         {{ $jointHolder->nic_front_verify == 0 ? '' : 'checked' }}
-                                                        {{ $client->status > 2 ? 'disabled' : '' }} />
+                                                        {{ $account->status > 2 ? 'disabled' : '' }} />
                                                     <input type="hidden"
                                                         value="{{ base64_encode(
                                                             serialize(['joint_holders', 'nic_front_verify', $jointHolder->nic_front_verify, $jointHolder->id]),
@@ -1210,7 +1220,7 @@
                                                 <td>
                                                     <input type="checkbox" class="checkBoxVerify"
                                                         {{ $jointHolder->nic_back_verify == 0 ? '' : 'checked' }}
-                                                        {{ $client->status > 2 ? 'disabled' : '' }} />
+                                                        {{ $account->status > 2 ? 'disabled' : '' }} />
                                                     <input type="hidden"
                                                         value="{{ base64_encode(
                                                             serialize(['joint_holders', 'nic_back_verify', $jointHolder->nic_back_verify, $jointHolder->id]),
@@ -1231,7 +1241,7 @@
                                                 <td>
                                                     <input type="checkbox" class="checkBoxVerify"
                                                         {{ $jointHolder->passport_verify == 0 ? '' : 'checked' }}
-                                                        {{ $client->status > 2 ? 'disabled' : '' }} />
+                                                        {{ $account->status > 2 ? 'disabled' : '' }} />
                                                     <input type="hidden"
                                                         value="{{ base64_encode(
                                                             serialize(['joint_holders', 'passport_verify', $jointHolder->passport_verify, $jointHolder->id]),
@@ -1252,7 +1262,7 @@
                                                 <td>
                                                     <input type="checkbox" class="checkBoxVerify"
                                                         {{ $jointHolder->signature_verify == 0 ? '' : 'checked' }}
-                                                        {{ $client->status > 2 ? 'disabled' : '' }} />
+                                                        {{ $account->status > 2 ? 'disabled' : '' }} />
                                                     <input type="hidden"
                                                         value="{{ base64_encode(
                                                             serialize(['joint_holders', 'signature_verify', $jointHolder->signature_verify, $jointHolder->id]),
@@ -1273,7 +1283,7 @@
                                                 <td>
                                                     <input type="checkbox" class="checkBoxVerify"
                                                         {{ $jointHolder->pro_pic_verify == 0 ? '' : 'checked' }}
-                                                        {{ $client->status > 2 ? 'disabled' : '' }} />
+                                                        {{ $account->status > 2 ? 'disabled' : '' }} />
                                                     <input type="hidden"
                                                         value="{{ base64_encode(
                                                             serialize(['joint_holders', 'signature_verify', $jointHolder->pro_pic_verify, $jointHolder->id]),
@@ -1303,7 +1313,7 @@
                                             <td>
                                                 <input type="checkbox" class="checkBoxVerify"
                                                     {{ $signature->name_verify == 0 ? '' : 'checked' }}
-                                                    {{ $client->status > 2 ? 'disabled' : '' }} />
+                                                    {{ $account->status > 2 ? 'disabled' : '' }} />
                                                 <input type="hidden"
                                                     value="{{ base64_encode(serialize(['company_signatures', 'name_verify', $signature->name_verify, $signature->id])) }}">
                                                 <label for="checkbox"></label>
@@ -1315,7 +1325,7 @@
                                             <td>
                                                 <input type="checkbox" class="checkBoxVerify"
                                                     {{ $signature->dob_verify == 0 ? '' : 'checked' }}
-                                                    {{ $client->status > 2 ? 'disabled' : '' }} />
+                                                    {{ $account->status > 2 ? 'disabled' : '' }} />
                                                 <input type="hidden"
                                                     value="{{ base64_encode(serialize(['company_signatures', 'dob_verify', $signature->dob_verify, $signature->id])) }}">
                                                 <label for="checkbox"></label>
@@ -1327,7 +1337,7 @@
                                             <td>
                                                 <input type="checkbox" class="checkBoxVerify"
                                                     {{ $signature->nic_verify == 0 ? '' : 'checked' }}
-                                                    {{ $client->status > 2 ? 'disabled' : '' }} />
+                                                    {{ $account->status > 2 ? 'disabled' : '' }} />
                                                 <input type="hidden"
                                                     value="{{ base64_encode(serialize(['company_signatures', 'nic_verify', $signature->nic_verify, $signature->id])) }}">
                                                 <label for="checkbox"></label>
@@ -1339,7 +1349,7 @@
                                             <td>
                                                 <input type="checkbox" class="checkBoxVerify"
                                                     {{ $signature->nationality_verify == 0 ? '' : 'checked' }}
-                                                    {{ $client->status > 2 ? 'disabled' : '' }} />
+                                                    {{ $account->status > 2 ? 'disabled' : '' }} />
                                                 <input type="hidden"
                                                     value="{{ base64_encode(
                                                         serialize(['company_signatures', 'nationality_verify', $signature->nationality_verify, $signature->id]),
@@ -1353,7 +1363,7 @@
                                             <td>
                                                 <input type="checkbox" class="checkBoxVerify"
                                                     {{ $signature->address_line_1_verify == 0 ? '' : 'checked' }}
-                                                    {{ $client->status > 2 ? 'disabled' : '' }} />
+                                                    {{ $account->status > 2 ? 'disabled' : '' }} />
                                                 <input type="hidden"
                                                     value="{{ base64_encode(
                                                         serialize(['company_signatures', 'address_line_1_verify', $signature->address_line_1_verify, $signature->id]),
@@ -1367,7 +1377,7 @@
                                             <td>
                                                 <input type="checkbox" class="checkBoxVerify"
                                                     {{ $signature->address_line_2_verify == 0 ? '' : 'checked' }}
-                                                    {{ $client->status > 2 ? 'disabled' : '' }} />
+                                                    {{ $account->status > 2 ? 'disabled' : '' }} />
                                                 <input type="hidden"
                                                     value="{{ base64_encode(
                                                         serialize(['company_signatures', 'address_line_2_verify', $signature->address_line_2_verify, $signature->id]),
@@ -1381,7 +1391,7 @@
                                             <td>
                                                 <input type="checkbox" class="checkBoxVerify"
                                                     {{ $signature->address_line_3_verify == 0 ? '' : 'checked' }}
-                                                    {{ $client->status > 2 ? 'disabled' : '' }} />
+                                                    {{ $account->status > 2 ? 'disabled' : '' }} />
                                                 <input type="hidden"
                                                     value="{{ base64_encode(
                                                         serialize(['company_signatures', 'address_line_3_verify', $signature->address_line_3_verify, $signature->id]),
@@ -1395,7 +1405,7 @@
                                             <td>
                                                 <input type="checkbox" class="checkBoxVerify"
                                                     {{ $signature->telephone_verify == 0 ? '' : 'checked' }}
-                                                    {{ $client->status > 2 ? 'disabled' : '' }} />
+                                                    {{ $account->status > 2 ? 'disabled' : '' }} />
                                                 <input type="hidden"
                                                     value="{{ base64_encode(
                                                         serialize(['company_signatures', 'telephone_verify', $signature->telephone_verify, $signature->id]),
@@ -1409,7 +1419,7 @@
                                             <td>
                                                 <input type="checkbox" class="checkBoxVerify"
                                                     {{ $signature->mobile_verify == 0 ? '' : 'checked' }}
-                                                    {{ $client->status > 2 ? 'disabled' : '' }} />
+                                                    {{ $account->status > 2 ? 'disabled' : '' }} />
                                                 <input type="hidden"
                                                     value="{{ base64_encode(serialize(['company_signatures', 'mobile_verify', $signature->mobile_verify, $signature->id])) }}">
                                                 <label for="checkbox"></label>
@@ -1427,7 +1437,7 @@
                                                 <td>
                                                     <input type="checkbox" class="checkBoxVerify"
                                                         {{ $signature->nic_front_verify == 0 ? '' : 'checked' }}
-                                                        {{ $client->status > 2 ? 'disabled' : '' }} />
+                                                        {{ $account->status > 2 ? 'disabled' : '' }} />
                                                     <input type="hidden"
                                                         value="{{ base64_encode(
                                                             serialize(['company_signatures', 'nic_front_verify', $signature->nic_front_verify, $signature->id]),
@@ -1448,7 +1458,7 @@
                                                 <td>
                                                     <input type="checkbox" class="checkBoxVerify"
                                                         {{ $signature->nic_back_verify == 0 ? '' : 'checked' }}
-                                                        {{ $client->status > 2 ? 'disabled' : '' }} />
+                                                        {{ $account->status > 2 ? 'disabled' : '' }} />
                                                     <input type="hidden"
                                                         value="{{ base64_encode(
                                                             serialize(['company_signatures', 'nic_back_verify', $signature->nic_back_verify, $signature->id]),
@@ -1469,7 +1479,7 @@
                                                 <td>
                                                     <input type="checkbox" class="checkBoxVerify"
                                                         {{ $signature->passport_verify == 0 ? '' : 'checked' }}
-                                                        {{ $client->status > 2 ? 'disabled' : '' }} />
+                                                        {{ $account->status > 2 ? 'disabled' : '' }} />
                                                     <input type="hidden"
                                                         value="{{ base64_encode(
                                                             serialize(['company_signatures', 'passport_verify', $signature->passport_verify, $signature->id]),
@@ -1490,7 +1500,7 @@
                                                 <td>
                                                     <input type="checkbox" class="checkBoxVerify"
                                                         {{ $signature->signature_verify == 0 ? '' : 'checked' }}
-                                                        {{ $client->status > 2 ? 'disabled' : '' }} />
+                                                        {{ $account->status > 2 ? 'disabled' : '' }} />
                                                     <input type="hidden"
                                                         value="{{ base64_encode(
                                                             serialize(['company_signatures', 'signature_verify', $signature->signature_verify, $signature->id]),
@@ -1531,7 +1541,7 @@
                                             <td>
                                                 <input type="checkbox" class="checkBoxVerify"
                                                     {{ $bankParticulars->verified == 0 ? '' : 'checked' }}
-                                                    {{ $client->status > 2 ? 'disabled' : '' }} />
+                                                    {{ $account->status > 2 ? 'disabled' : '' }} />
                                                 <input type="hidden"
                                                     value="{{ base64_encode(serialize(['bank_particulars', 'verified', $bankParticulars->verified, $bankParticulars->id])) }}">
                                                 <label for="checkbox"></label>
@@ -1554,7 +1564,7 @@
                                         <td>{{ $otherDetails->nsb_staff_fund_management == 1 ? 'Yes' : 'No' }}</td>
                                         <td><input type="checkbox" class="checkBoxVerify"
                                                 {{ $otherDetails->nsb_staff_fund_management_verify == 0 ? '' : 'checked' }}
-                                                {{ $client->status > 2 ? 'disabled' : '' }} />
+                                                {{ $account->status > 2 ? 'disabled' : '' }} />
                                             <input type="hidden"
                                                 value="{{ base64_encode(
                                                     serialize([
@@ -1573,7 +1583,7 @@
                                         <td>{{ $otherDetails->related_nsb_staff == 1 ? 'Yes' : 'No' }}</td>
                                         <td><input type="checkbox" class="checkBoxVerify"
                                                 {{ $otherDetails->related_nsb_staff_verify == 0 ? '' : 'checked' }}
-                                                {{ $client->status > 2 ? 'disabled' : '' }} />
+                                                {{ $account->status > 2 ? 'disabled' : '' }} />
                                             <input type="hidden"
                                                 value="{{ base64_encode(
                                                     serialize([
@@ -1591,7 +1601,7 @@
                                         <td>{{ $otherDetails->nsb_staff == 1 ? 'Yes' : 'No' }}</td>
                                         <td><input type="checkbox" class="checkBoxVerify"
                                                 {{ $otherDetails->nsb_staff_verify == 0 ? '' : 'checked' }}
-                                                {{ $client->status > 2 ? 'disabled' : '' }} />
+                                                {{ $account->status > 2 ? 'disabled' : '' }} />
                                             <input type="hidden"
                                                 value="{{ base64_encode(
                                                     serialize(['other_details', 'nsb_staff_verify', $otherDetails->nsb_staff_verify, $otherDetails->id]),
@@ -1605,7 +1615,7 @@
                                         <td>{{ $otherDetails->staff_relationship }}</td>
                                         <td><input type="checkbox" class="checkBoxVerify"
                                                 {{ $otherDetails->staff_relationship_verify == 0 ? '' : 'checked' }}
-                                                {{ $client->status > 2 ? 'disabled' : '' }} />
+                                                {{ $account->status > 2 ? 'disabled' : '' }} />
                                             <input type="hidden"
                                                 value="{{ base64_encode(
                                                     serialize([
@@ -1624,7 +1634,7 @@
                                         <td>{{ $otherDetails->member_holding_company == 1 ? 'Yes' : 'No' }}</td>
                                         <td><input type="checkbox" class="checkBoxVerify"
                                                 {{ $otherDetails->member_holding_company_verify == 0 ? '' : 'checked' }}
-                                                {{ $client->status > 2 ? 'disabled' : '' }} />
+                                                {{ $account->status > 2 ? 'disabled' : '' }} />
                                             <input type="hidden"
                                                 value="{{ base64_encode(
                                                     serialize([
@@ -1643,7 +1653,7 @@
                                         <td>{{ $otherDetails->member_holding_company_state }}</td>
                                         <td><input type="checkbox" class="checkBoxVerify"
                                                 {{ $otherDetails->member_holding_company_state_verify == 0 ? '' : 'checked' }}
-                                                {{ $client->status > 2 ? 'disabled' : '' }} />
+                                                {{ $account->status > 2 ? 'disabled' : '' }} />
                                             <input type="hidden"
                                                 value="{{ base64_encode(
                                                     serialize([
@@ -1699,7 +1709,7 @@
                             </td>
                         @endif
                     @endif
-                    @if ($client->status == 1)
+                    @if ($account->status == 1)
                         <tr>
                             <td colspan="3" align="center">
                                 <button id="btnSelectAll" class="btn btn-primary">Verify All</button>
@@ -1710,7 +1720,7 @@
                         <td colspan="3" id="tdVerifyInfo" align="center">
                         </td>
                     </tr>
-                    @if ($client->status == 2)
+                    @if ($account->status == 2)
                         <tr>
                             <form method="POST" action="{{ route('admin.clients.verifyType', [$client->id]) }}"
                                 enctype="multipart/form-data">
@@ -1757,7 +1767,7 @@
                             </form>
                         </tr>
                     @endif
-                    @if ($client->status == 2)
+                    @if ($account->status == 2)
                         <tr id="tr_sheduleMeeting">
                             <td></td>
                             <td>
@@ -1768,7 +1778,7 @@
 
                                     <div class="card-body">
                                         <form method="POST"
-                                            action="{{ route('admin.clients.meeting', [$client->id]) }}"
+                                            action="{{ route('admin.clients.meeting', [$account->id]) }}"
                                             enctype="multipart/form-data">
                                             @method('POST')
                                             @csrf
@@ -1840,15 +1850,15 @@
                         </tr>
                     @endif
 
-                    @if ($client->status == 3 && $client->verify_type == 1)
+                    @if ($account->status == 3 && $account->verify_type == 1)
                         <tr>
                             <th>
                                 Meeting Shedule
                             </th>
                             <td>
-                                @foreach ($client->meetings()->get() as $meeting)
+                                @foreach ($account->meetings()->get() as $meeting)
                                     <form method="POST"
-                                        action="{{ route('admin.clients.meeting.update', [$client->id]) }}"
+                                        action="{{ route('admin.clients.meeting.update', [$account->id]) }}"
                                         enctype="multipart/form-data">
                                         @method('POST')
                                         @csrf
@@ -1893,9 +1903,15 @@
 
                                                 <td>
                                                     <select name="meetingStatus" id="meetingStatus">
-                                                        <option value="0">Pending</option>
-                                                        <option value="1">Done</option>
-                                                        <option value="2">Cancelled</option>
+                                                        <option value="0"
+                                                            {{ $meeting->status == 0 ? 'selected' : '' }}>
+                                                            Pending</option>
+                                                        <option value="1"
+                                                            {{ $meeting->status == 1 ? 'selected' : '' }}>
+                                                            Done</option>
+                                                        <option value="2"
+                                                            {{ $meeting->status == 2 ? 'selected' : '' }}>
+                                                            Cancelled</option>
                                                     </select>
                                                 </td>
                                             </tr>
@@ -1917,7 +1933,7 @@
                             </td>
                         </tr>
                     @endif
-                    @if ($client->status >= 3 && $client->verify_type == 0)
+                    @if ($account->status >= 3 && $account->verify_type == 0)
                         <tr>
                             <th>
 
@@ -1936,7 +1952,7 @@
                                 Verification comment
                             </th>
                             <td>
-                                {{ $client->verify_comment }}
+                                {{ $account->verify_comment }}
 
                             </td>
                             <td>
@@ -1947,7 +1963,7 @@
                             </td>
                         </tr>
                     @endif
-                    @if ($client->status >= 3)
+                    @if ($account->status >= 3)
                         <tr>
                             <th>
 
@@ -1960,7 +1976,7 @@
                                     <div class="panel-body">
                                         <br />
                                         <form id="videoUploadForm" method="post"
-                                            action="{{ route('admin.clients.management.upload', $client->id) }}"
+                                            action="{{ route('admin.clients.management.upload') }}"
                                             enctype="multipart/form-data">
                                             @csrf
                                             <div class="row">
@@ -1970,7 +1986,8 @@
                                                 <div class="col-md-6">
                                                     <input type="text" name="title" id="title"
                                                         class="form-control" />
-                                                    <input type="hidden" name="client_id" value="{{ $client->id }}">
+                                                    <input type="hidden" name="account_id"
+                                                        value="{{ $account->id }}">
                                                 </div>
                                             </div>
                                     </div>
@@ -2005,7 +2022,7 @@
                 <td></td>
                 </tr>
                 @endif
-                @if ($client->status >= 3)
+                @if ($account->status >= 3)
                     <tr>
                         <th>
                             Videos
@@ -2013,7 +2030,7 @@
                         </th>
                         <td>
 
-                            @foreach ($client->uploads()->get() as $upload)
+                            @foreach ($account->uploads()->get() as $upload)
                                 @php
                                     $info = pathinfo($upload->file_name);
                                     
@@ -2030,7 +2047,7 @@
                         </td>
                     </tr>
                 @endif
-                @if ($client->status >= 3)
+                @if ($account->status >= 3)
                     <tr>
                         <th>
                             Documents
@@ -2038,7 +2055,7 @@
                         </th>
                         <td>
 
-                            @foreach ($client->uploads()->get() as $upload)
+                            @foreach ($account->uploads()->get() as $upload)
                                 @php
                                     $info = pathinfo($upload->file_name);
                                     
@@ -2061,14 +2078,14 @@
                         <form method="post" action="{{ route('admin.clients.refemail.update') }}">
                             @csrf
                             <input type="text" name="reference_email" id="reference_email"
-                                value="{{ $client->reference_email }}" class="form-control" />
-                            <input type="hidden" name="client_id" value="{{ $client->id }}">
+                                value="{{ $account->reference_email }}" class="form-control" />
+                            <input type="hidden" name="account_id" value="{{ $account->id }}">
                             <button type="submit" class="btn btn-danger">Save</button>
                         </form>
                     </td>
                 </tr>
 
-                {{-- @if ($client->status >= 4)
+                {{-- @if ($account->status >= 4)
                        
                         <tr>
                             <th>
@@ -2098,15 +2115,19 @@
                         Status Progress
                     </th>
                     <td>
-                        @if ($client->status == 100)
+                        @if ($account->status == 100)
 
                             <div class="badge bg-danger text-wrap" style="width: 10rem;">
                                 Application Rejected
                             </div>
                         @else
-                            @if ($client->verify_type == 1)
-                                @foreach (Config::get('constants.CLIENT_STATUS') as $key => $client_state)
-                                    @if ($key > $client->status)
+                            @if ($account->verify_type == 1)
+                                @php
+                                    $status_display = Config::get('constants.CLIENT_STATUS');
+                                    unset($status_display[100]);
+                                @endphp
+                                @foreach ($status_display as $key => $client_state)
+                                    @if ($key > $account->status)
                                         <div class="badge bg-secondary text-wrap" style="width: 10rem;">
                                             {{ $client_state }}
                                         </div>
@@ -2117,8 +2138,12 @@
                                     @endif
                                 @endforeach
                             @else
+                                @php
+                                    $status_display_psy = Config::get('constants.CLIENT_STATUS_PHY');
+                                    unset($status_display_psy[100]);
+                                @endphp
                                 @foreach (Config::get('constants.CLIENT_STATUS_PHY') as $key => $client_state)
-                                    @if ($key > $client->status)
+                                    @if ($key > $account->status)
                                         <div class="badge bg-secondary text-wrap" style="width: 10rem;">
                                             {{ $client_state }}
                                         </div>
@@ -2129,9 +2154,6 @@
                                     @endif
                                 @endforeach
                             @endif
-
-
-
                     </td>
                     @endif
                 </tr>
@@ -2140,13 +2162,13 @@
                         Current Status
                     </th>
                     <td>
-                        @if ($client->status == 100)
+                        @if ($account->status == 100)
                             Declined
                         @else
-                            @if ($client->verify_type == 1)
-                                {{ Config::get('constants.CLIENT_STATUS')[$client->status] }}
+                            @if ($account->verify_type == 1)
+                                {{ Config::get('constants.CLIENT_STATUS')[$account->status] }}
                             @else
-                                {{ Config::get('constants.CLIENT_STATUS_PHY')[$client->status] }}
+                                {{ Config::get('constants.CLIENT_STATUS_PHY')[$account->status] }}
                             @endif
                         @endif
 
@@ -2161,18 +2183,18 @@
                 @endphp
                 @if (
                     ($client->hasGovDocs() &&
-                        ($current_user->id == 5 && $client->status < 5 && $client->status != 3 && $client->status != 2)) ||
-                        ($current_user->id == 6 && $client->status < 7 && $client->status != 3 && $client->status != 2) ||
-                        ($current_user->id == 7 && $client->status < 8))
+                        ($current_user->id == 5 && $account->status < 5 && $account->status != 3 && $account->status != 2)) ||
+                        ($current_user->id == 6 && $account->status < 7 && $account->status != 3 && $account->status != 2) ||
+                        ($current_user->id == 7 && $account->status < 8))
                     <tr>
                         <th>
                             Action
                         </th>
                         @php
                             $actionButtonText = 'Approve';
-                            if ($client->status == 4) {
+                            if ($account->status == 4) {
                                 $actionButtonText = 'Send to Bank Manager';
-                            } elseif ($client->status == 6) {
+                            } elseif ($account->status == 6) {
                                 $actionButtonText = 'Send to Middle Officer';
                             } else {
                                 $actionButtonText = 'Approve';
@@ -2187,13 +2209,13 @@
                                 @csrf
                                 <input type="hidden" name="request_type" id="request_type" value="">
                                 <input type="hidden" name="request_comment" id="request_comment" value="">
-                                <input type="hidden" name="client_id" id="client_id" value="{{ $client->id }}">
+                                <input type="hidden" name="account_id" id="account_id" value="{{ $account->id }}">
                                 <button type="button" id="btnApprove" class="btn btn-success btn-lg">
                                     {{ $actionButtonText }}</button> &nbsp; &nbsp;
                                 <button type="button" id="btnDecline" class="btn btn-danger btn-lg"> Decline </button>
                             </form>
 
-                            @if ($client->status <= 1)
+                            @if ($account->status <= 1)
                                 &nbsp;
 
                                 <form action="{{ route('admin.clients.delete') }}" id="deleteForm"
@@ -3717,7 +3739,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($client->process()->get() as $process)
+                @foreach ($account->process()->get() as $process)
                     <tr>
                         <td>{{ $process->id }}</td>
                         <td>{{ $process->users()->first()->name }} -
@@ -3833,7 +3855,7 @@
 
             $('#processSpiner').show();
 
-            var client_status = "{{ $client->status }}";
+            var client_status = "{{ $account->status }}";
 
 
             //upload videos and materials
@@ -3910,7 +3932,7 @@
 
 
             let nextStage =
-                "{{ $client->status != 100 ? Config::get('constants.CLIENT_STATUS')[$client->status + 1] : '' }}"
+                "{{ $account->status != 100 ? Config::get('constants.CLIENT_STATUS')[$account->status + 1] : '' }}"
             $('#btnApprove').click(function() {
                 alertify.confirm('Client Approval',
                     'Are you sure you want to Approve the client for further process?',
@@ -3973,7 +3995,7 @@
                 $('#tdVerifyInfo').html(
                     `<h3> Verified ${$('.checkBoxVerify').filter(':checked').length} out of ${$('.checkBoxVerify').length} </h3>`
                 );
-                let status = "{{ $client->status }}";
+                let status = "{{ $account->status }}";
                 if ($('.checkBoxVerify').filter(':checked').length !== $('.checkBoxVerify').length && status == 2) {
 
                     $('#tdAction').hide();

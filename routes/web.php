@@ -124,7 +124,7 @@ Route::post('migrateExisting/{client_id}','Admin\ExistingClientController@regist
     Route::post('clients_management/update/{client}','ApplicantsController@update')->name('clients.management.basicInfo.update');
     Route::post('clients_management/employment/update/{client}','ApplicantsController@empUpdate')->name('clients.management.employmentInfo.update');
     Route::post('clients_management/jointHolder/update/{client}','ApplicantsController@jointUpdate')->name('clients.management.jointHolder.update');
-    Route::post('clients_management/upload{client}','ApplicantsController@upload')->name('clients.management.upload');
+    Route::post('clients_management/upload','ApplicantsController@upload')->name('clients.management.upload');
     Route::post('clients_management/govVerify/{client}','ApplicantsController@govVerifyDocUpload')->name('clients.management.gov');
     Route::post('clients_management/govVerifyApproval/{client}','ApplicantsController@govVerifyDocUploadApproval')->name('clients.management.gov.approval');
     Route::post('clients_management/moneyLVD/{client}','ApplicantsController@moneyLVDUpload')->name('clients.management.money');

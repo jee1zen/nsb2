@@ -47,13 +47,13 @@
 
                         <!-- @can('team_access')
         <li class="nav-item">
-                                                                                <a href="{{ route('admin.teams.index') }}" class="nav-link {{ request()->is('admin/teams') || request()->is('admin/teams/*') ? 'active' : '' }}">
-                                                                                    <i class="fa-fw fas fa-users nav-icon">
+                                                                                        <a href="{{ route('admin.teams.index') }}" class="nav-link {{ request()->is('admin/teams') || request()->is('admin/teams/*') ? 'active' : '' }}">
+                                                                                            <i class="fa-fw fas fa-users nav-icon">
 
-                                                                                    </i>
-                                                                                    {{ trans('cruds.team.title') }}
-                                                                                </a>
-                                                                            </li>
+                                                                                            </i>
+                                                                                            {{ trans('cruds.team.title') }}
+                                                                                        </a>
+                                                                                    </li>
     @endcan -->
                     </ul>
                 </li>
@@ -70,13 +70,13 @@
             @endcan --}}
             <!--   @can('stock_access')
     <li class="nav-item">
-                                            <a href="{{ route('admin.stocks.index') }}" class="nav-link {{ request()->is('admin/stocks') || request()->is('admin/stocks/*') ? 'active' : '' }}">
-                                                <i class="fa-fw fas fa-cogs nav-icon">
+                                                <a href="{{ route('admin.stocks.index') }}" class="nav-link {{ request()->is('admin/stocks') || request()->is('admin/stocks/*') ? 'active' : '' }}">
+                                                    <i class="fa-fw fas fa-cogs nav-icon">
 
-                                                </i>
-                                                {{ trans('cruds.stock.title') }}
-                                            </a>
-                                        </li>
+                                                    </i>
+                                                    {{ trans('cruds.stock.title') }}
+                                                </a>
+                                            </li>
 @endcan -->
             @can('client_approval_access')
                 <li class="nav-item">
@@ -85,7 +85,7 @@
                         <i class="fa fa-check-circle-o">
 
                         </i>
-                        {{-- {{ trans('cruds.transaction.title') }} --}} Client Approval
+                        {{-- {{ trans('cruds.transaction.title') }} --}} Account Approval
                     </a>
                 </li>
             @endcan
@@ -96,7 +96,7 @@
                         <i class="fa fa-address-book">
 
                         </i>
-                        {{-- {{ trans('cruds.transaction.title') }} --}} Applicants
+                        {{-- {{ trans('cruds.transaction.title') }} --}} Accounts
                     </a>
                 </li>
             @endcan

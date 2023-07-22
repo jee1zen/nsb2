@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Account;
 use App\Client;
 use App\Http\Controllers\Controller;
 use App\Investment;
@@ -44,9 +45,10 @@ class InvestmentInfoController extends Controller
   }
  public function client($id){
 
-    $client = Client::findOrFail($id);
-
-    return view('admin.investmentInfo.client',compact('client'));
+    $account = Account::findOrFail($id);
+    $client = $account->client;
+   
+    return view('admin.investmentInfo.client',compact('client','account'));
 
 
 
@@ -237,13 +239,14 @@ if($investment->hasKyc()){
 public function kyc($id,$investment_id){
 
 
-      $kyc = KYCForm::where('client_id',$id)->where('investment_id',$investment_id)->latest()->first();
-      $client = Client::findOrFail($id);
+      $kyc = KYCForm::where('account_id',$id)->where('investment_id',$investment_id)->latest()->first();
+      $account = Account::findOrFail($id);
+      $client =  $account->client;
       $investment = Investment::find($investment_id);
 
       
 
-      return view('admin.investmentInfo.kyc',compact('client','investment','investment_id','kyc'));
+      return view('admin.investmentInfo.kyc',compact('client','investment','investment_id','kyc','account'));
 
 
 }
