@@ -60,6 +60,10 @@ class Account extends Model
         return (bool) $this->jointHolders()->first();
     }
 
+    public function selectedAccount(){
+        return $this->hasOne(SelectedAccount::class,'account_id','id');
+    }
+
 
 
 }

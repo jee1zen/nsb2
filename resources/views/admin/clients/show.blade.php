@@ -263,15 +263,10 @@
                                         Account Type
                                     </th>
                                     <td>
-                                        {{ Config::get('constants.CLIENT_TYPE')[$client->client_type] }}
+                                        {{ Config::get('constants.CLIENT_TYPE')[$account->type] }}
                                     </td>
                                     <td>
-                                        <input type="checkbox" class="checkBoxVerify"
-                                            {{ $client->client_type_verify == 0 ? '' : 'checked' }}
-                                            {{ $account->status > 2 ? 'disabled' : '' }} />
-                                        <input type="hidden"
-                                            value="{{ base64_encode(serialize(['clients', 'client_type_verify', $client->client_type_verify, $client->id])) }}">
-                                        <label for="checkbox"></label>
+
                                     </td>
                                 </tr>
                                 @if ($client->hasGovDocs())
@@ -333,8 +328,7 @@
                                                     <div class="col-md-6">
                                                         <input type="text" name="title" id="title"
                                                             class="form-control" />
-                                                        <input type="hidden" name="client_id"
-                                                            value="{{ $client->id }}">
+                                                        <input type="hidden" name="client_id" value="{{ $client->id }}">
                                                     </div>
                                                 </div>
                     </div>

@@ -232,10 +232,12 @@ Route::group(['prefix' => 'client', 'as' => 'client.', 'namespace' => 'Client', 
   
     Route::get('staging','CustomerController@staging')->name('staging');
 
+    Route::post('setAccount','CustomerController@selectAccount')->name('setAccount');
+
     Route::get('dashboard','CustomerController@index')->name('dashboard');
     Route::get('history','CustomerController@history')->name('history');
 
-    //fund requests
+    //maturity  instructions
     Route::get('fundRequest','WithdrawController@requestForm')->name('fundRequest.form');
     Route::post('fundRequest','WithdrawController@store')->name('fundRequest.post');
     Route::get('requests','WithdrawController@requests')->name('requests');

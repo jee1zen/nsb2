@@ -30,6 +30,11 @@ class RequestInvestmentController extends Controller
     public function post(Request $request){
 
         $client = Auth::user()->client;
+        $selectedAccount = $client->selectedAccount;
+        $account = $selectedAccount->account;
+
+        
+
 
         $type = $request->investment_type;
 
@@ -39,6 +44,7 @@ class RequestInvestmentController extends Controller
 
            $investment =Investment::create([
                 'client_id'=>$client->id,
+                'account_id' => $account->id,
                 'investment_type_id'=>$type,
                 'amount'=>str_replace(",", "",$request->amount ),
                 'value_date'=>$request->value_date,
@@ -329,7 +335,10 @@ class RequestInvestmentController extends Controller
     public function list(){
 
         $client = Auth::user()->client;
-        $investments = $client->investments()->where('is_main',0)->where('status','<',3)->where('status','!=',-100)->get();
+        $selectedAccount = $client->selectedAccount;
+       
+        $account = $selectedAccount->account;
+        $investments = $account->investments()->where('is_main',0)->where('status','<',3)->where('status','!=',-100)->get();
 
        
 

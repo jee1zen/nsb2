@@ -76,6 +76,19 @@ class Client extends Model
      public function accounts(){
         return $this->hasMany(Account::class,'client_id');
      }
+
+     public function hasAccounts(){
+
+        return (bool) $this->accounts()->first();
+
+     }
+
+     public function selectedAccount(){
+
+        return $this->hasOne(SelectedAccount::class,'client_id','id');
+     }
+
+
      public function officer(){ 
 
         return $this->belongsTo(User::class,'officer_id','id');

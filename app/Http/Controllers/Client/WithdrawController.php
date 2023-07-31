@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\InvestmentType;
 use App\JointWithdrawApproval;
 use App\ReverseRepo;
+use App\SelectedAccount;
 use App\Withdraw;
 use App\WithdrawProcess;
 
@@ -140,7 +141,10 @@ class WithdrawController extends Controller
        
 
             $user = Auth::user();
-            $client= Client::findOrFail($user->id);
+            $client= $user->client;
+            $selectedAccount = $client->selectedAccount;
+            $account_id = $selectedAccount->account->id;
+           
             $type = $request->investment_type;
             $fromDate = $request->fromDate;
             $toDate = $request->toDate;
@@ -153,31 +157,38 @@ class WithdrawController extends Controller
                 $withdraws='';
                 $reverseRepos = ReverseRepo::select('reverse_repos.*')
                 ->whereBetween('reverse_repos.created_at', [$fromDate." 00:00:00", $toDate." 23:59:59"])
-                ->join('investments','reverse_repos.investment_id','=','investments.id')
+                ->join('investments','reverse_repos.investment_id','=','investments.id')->where('investments.account_id',$account_id)
                 ->where('reverse_repos.client_id',$user->id) 
                 ->paginate(20);
+
+              
             
 
             }elseif($type==0){
               
                 $withdraws = Withdraw::select('withdraws.*')
                 ->whereBetween('withdraws.created_at', [$fromDate." 00:00:00", $toDate." 23:59:59"])
-                ->join('investments','withdraws.investment_id','=','investments.id')
+                ->join('investments','withdraws.investment_id','=','investments.id')->where('investments.account_id',$account_id)
                 ->paginate(20);
                 $reverseRepos = ReverseRepo::select('reverse_repos.*')
+               
+                ->join('investments','reverse_repos.investment_id','=','investments.id')->where('investments.account_id',$account_id)
                 ->whereBetween('reverse_repos.created_at', [$fromDate." 00:00:00", $toDate." 23:59:59"])
                 ->where('reverse_repos.client_id',$user->id) 
-                ->join('investments','reverse_repos.investment_id','=','investments.id')
                 ->paginate(20);
-            
+
+        
             }else{
                 // dd('came here');
                 $reverseRepos='';
-                $withdraws = Withdraw::select('withdraws.*')
+                $withdraws = Withdraw::join('investments',function($join) use($account_id,$type){
+                    $join->on('withdraws.investment_id','=','investments.id')->where('investments.account_id','=',$account_id)
+                    ->where('investments.investment_type_id','=',$type);
+                })
+                ->select('withdraws.*')
                 ->whereBetween('withdraws.created_at', [$fromDate." 00:00:00", $toDate." 23:59:59"])
                 ->where('withdraws.client_id',$user->id) 
-                ->join('investments','withdraws.investment_id','=','investments.id')
-                ->where('investments.investment_type_id',$type)->paginate(20);
+                ->paginate(20);
              
             }
 

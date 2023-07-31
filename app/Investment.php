@@ -9,13 +9,17 @@ class Investment extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['client_id','ref_no','invested_amount','investment_type_id','value_date','maturity_date','amount','status','kyc',
+    protected $fillable = ['client_id','account_id','ref_no','invested_amount','investment_type_id','value_date','maturity_date','amount','status','kyc',
     'is_main','method','instruction','ref_investment','bank_id','created_at',
     'updated_at'];
 
     public function client(){
         return $this->belongsTo(Client::class);
 
+    }
+
+    public function account(){
+      return $this->belongsTo(Account::class);
     }
     public function InvestmentType(){
         return $this->belongsTo(InvestmentType::class);

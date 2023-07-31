@@ -112,9 +112,20 @@ class User extends Authenticatable
         return (bool) $this->client()->first();
     }
 
+
+
     public function JointHolder(){
 
         return $this->hasOne(JointHolder::class,'user_id');
+    }
+
+    public function selectedAccount(){
+        return $this->hasOne(SelectedAccount::class,'client_id','id');
+    }
+
+    public function hasSelectedAccount(){
+
+        return (bool) $this->selectedAccount()->first();
     }
 
     public function companySignature(){
