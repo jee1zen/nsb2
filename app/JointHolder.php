@@ -23,6 +23,7 @@ class JointHolder extends Model
         'id',
         'password',
         'client_id',
+         'account_id',
         'user_id',
         'name',
         'title',

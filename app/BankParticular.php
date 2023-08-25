@@ -20,6 +20,7 @@ class BankParticular extends Model
 
     protected $fillable = [
         'id',
+        'account_id',
         'client_id',
         'name',
         'bank_name',

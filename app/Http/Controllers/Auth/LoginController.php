@@ -29,9 +29,18 @@ class LoginController extends Controller
      */
     // protected $redirectTo = '/admin/clients_management';
     public function redirectTo() {
+        //  dd("came here to redirect");
+
+          
        
 
             $role =Auth::user()->roles()->first(); 
+
+            if($role->id==11){
+
+                return 'registration/staging';
+            }
+          
             $client = Auth::user()->client;
             Auth::user()->last_login = new DateTime();
             Auth::user()->save();

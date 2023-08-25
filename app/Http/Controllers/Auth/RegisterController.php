@@ -69,13 +69,13 @@ class RegisterController extends Controller
     {
 
         // $investment_types = InvestmentType::all(); 
-        $banks = Bank::orderBy('name', 'ASC')->with('branches')->get();  
-        $banksJson = $banks->toJson();
+        // $banks = Bank::orderBy('name', 'ASC')->with('branches')->get();  
+        // $banksJson = $banks->toJson();
         // dd($banks);
-        $branches= Branch::orderBy('name', 'ASC')->get();
+        // $branches= Branch::orderBy('name', 'ASC')->get();
         // $branches = $branches->toJson();
         // dd($branches);
-        return view('auth.register',compact('banks','banksJson'));
+        return view('auth.register.register');
     }
 
 
@@ -90,10 +90,29 @@ class RegisterController extends Controller
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'dob'=>['required','date'],
-            'nic'=>['required'],
+            'password' => ['required','min:6','confirmed'],
            
         ]);
+    }
+    public function register(Request $request){
+        $this->validator($request->all())->validate();
+        $user=User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+        ]);
+        $user->roles()->attach(11);
+        $this->guard()->login($user);
+        $user->sendEmailVerificationNotification();
+       
+        // $email = $request->email;
+        // Mail::send('emails.initialRegistrationActivate', [
+        //     'name'=>$request->name,
+        //     ],function($message) use($email) {
+        //     $message->to($email);
+        //     $message->subject('Notification New Client Joined NSB FMC ');
+        // });
+
     }
 
     /**
@@ -110,7 +129,7 @@ class RegisterController extends Controller
             'password' => Hash::make('123123123'),
         ]);
     }
-    public function register(Request $request)
+    public function register_old(Request $request)
     {
             // dd($request);
 

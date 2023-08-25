@@ -29,6 +29,6 @@ class OtherDetails extends Model
     ];
 
     public function client(){
-        $this->belongsTo(Client::class);
+        $this->belongsTo(Client::class,'id','id');
     }
 }

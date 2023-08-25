@@ -85,7 +85,7 @@
             <div class="col-md-6">
                 <input type="hidden" name="full_joint_mobile[]" />
                 <label class="fieldlabels">Mobile: *</label>
-                <input type="tel" name="joint_mobile[]"placeholder="mobile" class="form-control joint_mobile OTP" />
+                <input type="tel" name="joint_mobile[]"placeholder="mobile" class="form-control joint_mobile" />
                 <input type="hidden" value="">
             </div>
         </div>

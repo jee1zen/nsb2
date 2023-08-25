@@ -1,10 +1,9 @@
 <?php
 
-use App\Http\Controllers\Client\BidController;
-use App\Http\Controllers\Client\CustomerController;
+
 use Illuminate\Support\Facades\Route;
 
-Route::redirect('/', '/login')->name('login');
+Route::redirect('/', '/login');
 Route::get('/home', function () {
     if (session('status')) {
         return redirect()->route('admin.home')->with('status', session('status'));
@@ -13,7 +12,8 @@ Route::get('/home', function () {
     return redirect()->route('admin.home');
 });
 
-Auth::routes(['register' => true]);
+
+Auth::routes();
 
 Route::post('otp','SMS\SmsController@otp')->name('otp');
 Route::post('otpt','SMS\SmsController@otpt')->name('otpt');
@@ -44,6 +44,8 @@ Route::post('migrateExisting/{client_id}','Admin\ExistingClientController@regist
 
 
 
+Route::get('/email/verify/{id}/{hash}','CustomVerificationController@verify')->name('verification.verify');
+Route::post('/email/verification-notification', 'CustomVerificationController@resend')->name('verification.send');
 
 // Admin
 
@@ -225,6 +227,26 @@ Route::post('migrateExisting/{client_id}','Admin\ExistingClientController@regist
     Route::get('inquiries','ClientsController@inquiries')->name('inquiries.index');
     Route::get('inquiries/show/{id}','ClientsController@inquirieShow')->name('inquiries.show');
 
+
+});
+
+Route::group(['prefix' => 'registration', 'as' => 'registration.', 'namespace' => 'Registration', 'middleware' => ['auth' ]], function () {
+
+    Route::get('staging','PreUserController@index')->name('staging');
+    Route::post('accountType','PreUserController@accountTypeSave')->name('accountType');
+    Route::get('basicInfo','PreUserController@basicInfoShow')->name('basicInfo');
+    Route::post('basicInfo','PreUserController@basicinfoSave')->name('basicInfo');
+    Route::get('empInfo','PreUserController@employmentDetailsShow')->name('empInfo');
+    Route::post('empInfo','PreUserController@employmentDetailsSave')->name('empInfo');
+    Route::get('bank','PreUserController@bankParticularsShow')->name('bank');
+    Route::post('bank','PreUserController@bankParticularsSave')->name('bank');
+    Route::get('otherInfo','PreUserController@otherInfoShow')->name('otherInfo');
+    Route::post('otherInfo','PreUserController@otherInfoSave')->name('otherInfo');
+    Route::get('kyc','PreUserController@KycShow')->name('kyc');
+    Route::post('kyc','PreUserController@KycSave')->name('kyc');
+    Route::get('statement','PreUserController@statement')->name('statement');
+    Route::post('finish','PreUserController@finish')->name('finish');
+    Route::get('end','PreUserController@end')->name('end');
 
 });
 

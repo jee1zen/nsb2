@@ -54,7 +54,7 @@
     </div>
 
 
-    <label for="kyc_account_at_NSB_FMC" class="form-label"> Nature Of Business : *</label>
+    <label for="kyc_nature_of_business" class="form-label"> Nature Of Business : *</label>
 
     <select name="kyc_nature_of_business" id="kyc_nature_of_business"
         class="form-control {{ $errors->has('kyc_nature_of_business') ? 'is-invalid' : '' }} fieldRequired"

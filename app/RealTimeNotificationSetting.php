@@ -18,6 +18,6 @@ class RealTimeNotificationSetting extends Model
     ];
 
     public function client(){
-        return $this->belongsTo(client::class);
+        return $this->belongsTo(client::class,'id','id');
     }
 }

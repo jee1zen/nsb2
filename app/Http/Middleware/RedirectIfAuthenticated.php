@@ -21,6 +21,11 @@ class RedirectIfAuthenticated
           
             $role =Auth::user()->roles()->first(); 
             $client = Auth::user()->client;
+
+            if($role->id==11){
+               return redirect(route('registration.staging'));
+            }
+
             //  dd($role->id);
              if($role->id==4){
         

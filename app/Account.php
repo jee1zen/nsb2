@@ -9,11 +9,14 @@ class Account extends Model
 {
     use HasFactory;
     protected $fillable =[
-       'client_id','officer_id','type','verify_type','kyc','status','verify_comment','reference_email'
+       'client_id','officer_id','type','verify_type','kyc','status','joint_permission','pre','verify_comment','reference_email'
     ];
 
     public function client(){
         return $this->belongsTo(Client::class);
+    }
+    public function user(){
+        return $this->belongsTo(User::class);
     }
 
     public function investments(){

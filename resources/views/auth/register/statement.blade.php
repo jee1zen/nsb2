@@ -6,24 +6,25 @@
         <div class="col-5">
             <h2 class="steps">Step 6 - 6</h2>
         </div>
-    </div> 
-<div class="row">
-    <div class="col-md-12">
+    </div>
+    <div class="row">
+        <div class="col-md-12">
 
-        {{-- <div name="nsbTerms" class="overflow-auto"> --}}
+            {{-- <div name="nsbTerms" class="overflow-auto"> --}}
             {{-- <iframe src="{{asset('storage/images/termsconditions.pdf#toolbar=0')}}" type="application/pdf"   height="500" width="900">
             </iframe> --}}
 
-          
-              
-                    <a class="btn btn-primary btn-lg" href="{{asset('storage/images/termsconditions.pdf')}}" target="_blank" style="margin-bottom:20px;">Terms and Conditions</a>
-              
 
-               
-         
-           
 
-            
+            <a class="btn btn-primary btn-lg" href="{{ asset('storage/images/termsconditions.pdf') }}" target="_blank"
+                style="margin-bottom:20px;">Terms and Conditions</a>
+
+
+
+
+
+
+
             {{-- <h3>GENERAL TERMS AND CONDITIONS</h3>
             <h4>NSB FUND MANAGEMENT CO.LTD ONLINE PORTAL</h4>
                <pre>
@@ -79,23 +80,25 @@
                </pre> --}}
 
 
-      {{-- </div>  --}}
-    </div>
-    <div class="clearfix">
+            {{-- </div>  --}}
+        </div>
+        <div class="clearfix">
 
+        </div>
     </div>
-</div>
-<div class="row">
-    <div class="col-md-12">
-        <div class="form-check form-check-inline " style="display: inline-block">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-check form-check-inline " style="display: inline-block">
 
-            <input class="form-check-input" type="checkbox" value="" id="acceptCheck" style="display: inline-block !important">
-            
-            <label class="form-check-label" for="acceptCheck" style="display: inline-block!important">
-                I / We hereby confirm that all information given herewith is true and correct to the best of my / our knowledge.  
-            </label>
-          </div>
+                <input class="form-check-input" type="checkbox" id="acceptCheck" name="acceptCheck" value="1"
+                    style="display: inline-block !important">
+
+                <label class="form-check-label" style="display: inline-block!important">
+                    I / We hereby confirm that all information given herewith is true and correct to the best of my /
+                    our knowledge.
+                </label>
+            </div>
+        </div>
     </div>
+
 </div>
-          
-</div> 

@@ -12,6 +12,8 @@ class KYCForm extends Model
 
     protected $fillable = [
         'id',
+        'client_id',
+        'account_id',
         'investment_id',
         'kyc_account_at_NSB_FMC',
         'kyc_ownership_of_premises',

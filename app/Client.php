@@ -117,7 +117,7 @@ class Client extends Model
         return (bool) $this->authorizedPerson()->first();
     }
      public function employmentDetails(){
-        return $this->hasOne(EmploymentDetails::class,'id')->withDefault();
+        return $this->hasOne(EmploymentDetails::class,'id','id');
 
     }
 
@@ -133,6 +133,18 @@ class Client extends Model
         return (bool) $this->jointHolders()->first();
     }
 
+    public function joinHoldersWithAccount($account_id){
+
+        return $this->jointHolders()->where('account_id',$account_id);
+
+
+    }
+
+    public function hasJointHoldersWithAccount($account_id){
+        return (bool) $this->joinHoldersWithAccount($account_id)->first();
+
+    }
+
 
     public function bankParticulars(){
         return $this->hasMany(BankParticular::class,'client_id');
@@ -142,7 +154,7 @@ class Client extends Model
         return (bool) $this->bankParticulars()->first();
     }
     public function otherDetails(){
-        return $this->hasOne(OtherDetails::class,'id');
+        return $this->hasOne(OtherDetails::class,'id','id')->withDefault();
     }
     public function hasOtherDetails(){
         return (bool) $this->otherDetails()->first();
@@ -284,13 +296,13 @@ class Client extends Model
         return  $this->kyc()->where('investment_type','=',$type)->first();
     }
 
-    public function clientKYC(){
-        return $this->kyc()->where('investment_id',0)->first();
+    public function clientKYC($account_id){
+        return $this->kyc()->where('investment_id',0)->where('account_id',$account_id)->first();
 
     }
 
-    public function hasClientKYC(){
-        return (bool) $this->clientKYC();
+    public function hasClientKYC($account_id){
+        return (bool) $this->clientKYC($account_id);
     }
 
 
@@ -386,7 +398,7 @@ class Client extends Model
     }
 
     public function realTimeNotification(){
-        return $this->hasOne(RealTimeNotificationSetting::class,'id');
+        return $this->hasOne(RealTimeNotificationSetting::class,'id','id')->withDefault();
     }
 
     public function hasRealTimeNotification(){

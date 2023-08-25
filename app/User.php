@@ -2,6 +2,8 @@
 
 namespace App;
 
+use App\Notifications\CustomVerifyEmail;
+use App\Notifications\CustomVerifyEmailNotification;
 use Carbon\Carbon;
 use Hash;
 use Illuminate\Auth\Notifications\ResetPassword;
@@ -12,6 +14,9 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
 use \DateTimeInterface;
+
+use Illuminate\Support\Facades\Hash as FacadesHash;
+
 
 class User extends Authenticatable
 {
@@ -50,114 +55,136 @@ class User extends Authenticatable
     protected function serializeDate(DateTimeInterface $date)
     {
         return $date->format('Y-m-d H:i:s');
-
     }
 
     public function getIsAdminAttribute()
     {
         return $this->roles()->where('id', 1)->exists();
-
     }
 
     public function getEmailVerifiedAtAttribute($value)
     {
         return $value ? Carbon::createFromFormat('Y-m-d H:i:s', $value)->format(config('panel.date_format') . ' ' . config('panel.time_format')) : null;
+    }
 
+    public function sendEmailVerificationNotification()
+    {
+        $this->notify(new CustomVerifyEmailNotification);
     }
 
     public function setEmailVerifiedAtAttribute($value)
     {
         $this->attributes['email_verified_at'] = $value ? Carbon::createFromFormat(config('panel.date_format') . ' ' . config('panel.time_format'), $value)->format('Y-m-d H:i:s') : null;
-
     }
 
     public function setPasswordAttribute($input)
     {
         if ($input) {
-            $this->attributes['password'] = app('hash')->needsRehash($input) ? Hash::make($input) : $input;
+            $this->attributes['password'] = app('hash')->needsRehash($input) ? FacadesHash::make($input) : $input;
         }
-
     }
 
     public function sendPasswordResetNotification($token)
     {
         $this->notify(new ResetPassword($token));
-
     }
 
     public function roles()
     {
         return $this->belongsToMany(Role::class);
-
     }
 
     public function team()
     {
         return $this->belongsTo(Team::class, 'team_id');
-
     }
 
-    public function client(){
+    public function client()
+    {
 
-        return $this->hasOne(Client::class,'id','id');
+        return $this->hasOne(Client::class, 'id', 'id');
     }
 
-    public function remarkOfficer(){
-        return $this->hasMany(KYCForm::class,'officer');
+    public function accounts(){
+        return $this->hasMany(Account::class,'client_id','id');
+     }
+
+     public function hasAccounts(){
+
+        return (bool) $this->accounts()->first();
+
+     }
+
+    public function remarkOfficer()
+    {
+        return $this->hasMany(KYCForm::class, 'officer');
     }
 
-  
 
-    public function hasClient(){
+
+    public function hasClient()
+    {
         return (bool) $this->client()->first();
     }
 
 
 
-    public function JointHolder(){
+    public function JointHolder()
+    {
 
-        return $this->hasOne(JointHolder::class,'user_id');
+        return $this->hasOne(JointHolder::class, 'user_id');
     }
 
-    public function selectedAccount(){
-        return $this->hasOne(SelectedAccount::class,'client_id','id');
+    public function selectedAccount()
+    {
+        return $this->hasOne(SelectedAccount::class, 'client_id', 'id');
     }
 
-    public function hasSelectedAccount(){
+    public function hasSelectedAccount()
+    {
 
         return (bool) $this->selectedAccount()->first();
     }
 
-    public function companySignature(){
+    public function companySignature()
+    {
 
 
-        return $this->hasOne(CompanySignature::class,'user_id');
+        return $this->hasOne(CompanySignature::class, 'user_id');
     }
-    public function hasCompanySignature(){
+    public function hasCompanySignature()
+    {
 
 
         return (bool) $this->companySignature()->first();
     }
 
-    public function isClientFirstLog(){
+    public function isClientFirstLog()
+    {
         return (bool) $this->client()->first()->is_first;
     }
 
-    public function govDocs(){
-        return $this->hasMany(GovernmentVerifyDoc::class,'officer_id');
+    public function govDocs()
+    {
+        return $this->hasMany(GovernmentVerifyDoc::class, 'officer_id');
     }
 
-    public function moneyDocs(){
-        return $this->hasMany(MoneyLaunderingVerifyDoc::class,'officer_id');
+    public function moneyDocs()
+    {
+        return $this->hasMany(MoneyLaunderingVerifyDoc::class, 'officer_id');
     }
 
-    public function inquiry(){
-        return $this->hasMany(Inquiry::class,'user_id');
+    public function inquiry()
+    {
+        return $this->hasMany(Inquiry::class, 'user_id');
     }
 
-    public function changeRequest(){
-        return $this->hasMany(ChangeRequest::class,'officer_id');
+    public function changeRequest()
+    {
+        return $this->hasMany(ChangeRequest::class, 'officer_id');
     }
-   
-
+    public function getKey()
+    {
+        return $this->getAttribute($this->primaryKey);
+    }
 }
