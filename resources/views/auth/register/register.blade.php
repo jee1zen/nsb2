@@ -77,6 +77,22 @@
                                     </div>
                                 @endif
                             </div>
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fa fa-lock"></i></span>
+                                </div>
+
+                                <input id="password" name="password_confirmation" type="password"
+                                    class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" required
+                                    placeholder=" Confirm Password">
+
+                                @if ($errors->has('password_confirmation'))
+                                    <div class="invalid-feedback">
+                                        {{ $errors->first('password_confirmation') }}
+                                    </div>
+                                @endif
+                            </div>
+
 
 
 
@@ -84,7 +100,7 @@
                                 <div class="col-3"></div>
                                 <div class="col-md-6 col-sm-12">
                                     <button type="submit" class="btn btn-primary px-4" style="background-color:orange">
-                                        {{ trans('global.login') }}
+                                        SignUp
                                     </button>
                                 </div>
                                 <div class="col-3"></div>
@@ -94,7 +110,7 @@
                                 <div class="col-md-3"></div>
                                 <div class="col-md-6 col-sm-12 text-center">
                                     <a class="btn btn-secondary btn-signup px-0" href="{{ route('login') }}">
-                                        Login Up
+                                        Login
                                     </a><br>
 
                                 </div>

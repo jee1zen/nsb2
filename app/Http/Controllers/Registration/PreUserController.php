@@ -25,6 +25,15 @@ use Illuminate\Support\Str;
 
 class PreUserController extends Controller
 {
+    public function verifyEmailMessage(){
+
+
+        return view('client.emailVerifyMessage');
+
+    }
+
+
+
     public function index()
     {
 
@@ -461,6 +470,7 @@ class PreUserController extends Controller
         $user = Auth::user();
         $client = $user->client;
         $empDetails = $client->employmentDetails;
+        $account = $client->accounts()->first();
         // dd($empDetails);
         if ($empDetails == null) {
 
@@ -487,19 +497,26 @@ class PreUserController extends Controller
             ]);
         }
 
-        for ($i = 0; $i < count($request->jointHolder_emp_id); $i++) {
-            JointHolder::where('id', $request->jointHolder_emp_id[$i])->update([
+  if($account->type ==2){
 
-                'occupation' => $request->joint_emp_occupation[$i],
-                'company_name' => $request->joint_emp_company_name[$i],
-                'company_address' => $request->joint_emp_company_address[$i],
-                'company_telephone' => $request->joint_emp_company_telephone[$i],
-                'company_fax' => $request->joint_emp_fax[$i],
-                'company_nature' => $request->joint_emp_nature[$i],
+    for ($i = 0; $i < count($request->jointHolder_emp_id); $i++) {
+        JointHolder::where('id', $request->jointHolder_emp_id[$i])->update([
+
+            'occupation' => $request->joint_emp_occupation[$i],
+            'company_name' => $request->joint_emp_company_name[$i],
+            'company_address' => $request->joint_emp_company_address[$i],
+            'company_telephone' => $request->joint_emp_company_telephone[$i],
+            'company_fax' => $request->joint_emp_fax[$i],
+            'company_nature' => $request->joint_emp_nature[$i],
 
 
 
-            ]);
+        ]);
+
+  }
+       
+
+
         }
 
 

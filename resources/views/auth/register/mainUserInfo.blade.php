@@ -154,14 +154,26 @@
         <div class="col-md-6">
             <label class="fieldlabels">NIC Front Image</label>
             <input type="file" id="nic_front" name="nic_front" class="imgLoad" accept="image/*" />
-            <img id="nic_front_preview" src="{{ asset('storage/uploads/' . $client->nic_front) }}"
-                class="img_preview" />
+            @if ($client != null && $client->nic_front != null)
+                <img id="nic_front_preview" src="{{ asset('storage/uploads/' . $client->nic_front) }}"
+                    class="img_preview" />
+            @else
+                <img id="nic_front_preview" src="{{ asset('storage/images/nic_front_preview.jpg') }}"
+                    class="img_preview" />
+            @endif
+
         </div>
         <div class="col-md-6">
             <label class="fieldlabels">NIC Back Image </label>
             <input type="file" id="nic_back" name="nic_back" class="imgLoad" accept="image/*">
-            <img id="nic_back_preview" src="{{ asset('storage/uploads/' . $client->nic_back) }}"
-                class="img_preview" />
+            @if ($client != null && $client->nic_back != null)
+                <img id="nic_back_preview" src="{{ asset('storage/uploads/' . $client->nic_back) }}"
+                    class="img_preview" />
+            @else
+                <img id="nic_back_preview" src="{{ asset('storage/images/nic_back_preview.jpg') }}"
+                    class="img_preview" />
+            @endif
+
         </div>
     </div>
 </div>
@@ -170,8 +182,14 @@
         <div class="col-md-6">
             <label class="fieldlabels">Passport Image </label>
             <input type="file" id="passport" name="passport" class="imgLoad" accept="image/*">
-            <img id="passport_preview" src="{{ asset('storage/uploads/' . $client->passport) }}"
-                class="img_preview" />
+            @if ($client != null && $client->passport != null)
+                <img id="passport_preview" src="{{ asset('storage/uploads/' . $client->passport) }}"
+                    class="img_preview" />
+            @else
+                <img id="passport_preview" src="{{ asset('storage/images/nic_back_preview.jpg') }}"
+                    class="img_preview" />
+            @endif
+
         </div>
     </div>
 </div>
@@ -180,14 +198,26 @@
         <div class="col-md-6">
             <label class="fieldlabels">Signature </label>
             <input type="file" id="signature" name="signature" accept="image/*" class="imgLoad">
-            <img id="signature_preview" src="{{ asset('storage/uploads/' . $client->signature) }}"
-                class="img_preview" />
+            @if ($client != null && $client->signature != null)
+                <img id="signature_preview" src="{{ asset('storage/uploads/' . $client->signature) }}"
+                    class="img_preview" />
+            @else
+                <img id="signature_preview" src="{{ asset('storage/images/signature_preview.png') }}"
+                    class="img_preview" />
+            @endif
+
         </div>
         <div class="col-md-6">
             <label class="fieldlabels">Profile picture </label>
             <input type="file" id="profile_pic" name="pro_pic" accept="image/*" class="imgLoad">
-            <img id="signature_preview" src="{{ asset('storage/uploads/' . $client->pro_pic) }}"
-                class="img_preview" />
+            @if ($client != null && $client->pro_pic != null)
+                <img id="signature_preview" src="{{ asset('storage/uploads/' . $client->pro_pic) }}"
+                    class="img_preview" />
+            @else
+                <img id="signature_preview" src="{{ asset('storage/images/pro_pic.png') }}" class="img_preview" />
+            @endif
+
+
         </div>
     </div>
 </div>

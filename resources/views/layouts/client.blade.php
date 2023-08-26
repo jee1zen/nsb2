@@ -37,6 +37,7 @@
             if (!$user->hasSelectedAccount()) {
                 $selectedAccount = 0;
                 $account_id = 0;
+                $account = $mainClient->accounts()->first();
             } else {
                 $_selectedAccount = $user->selectedAccount;
                 // dd($_selectedAccount);
@@ -99,7 +100,7 @@
                         @endif
                     </div>
                     <div class="title-name">{{ $account_name ?? 'Selecting..' }}</div>
-                    <button id="accountChangeBtn">Change Account</button>
+
                     {{-- <label for="" class="badge badge-light badge-lg ms-3" id="account_label">
                         @if ($account_id != 0)
                             {{ $account->id }}
@@ -123,9 +124,15 @@
 
                 <ul class="nav navbar-nav navbar-right">
                     <li>
+                        <a id="accountChangeBtn" class="btn btn-default" style="background-color:transparent"><i
+                                class="glyphicon glyphicon-transfer"></i>Account</a>
+                    </li>
+
+                    <li>
                         <p class="last-login">Last Login :
                             {{ \Carbon\Carbon::parse($user->last_login)->format('d m Y g:i:s A') }}</p>
                     </li>
+
                     @php
                         $userGuide = App\UserManual::find(1);
                     @endphp
@@ -326,7 +333,7 @@
                                                 ' & ' .
                                                 $mainClient->jointHolders()->first()->name .
                                                 '
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                (Joint Account)'
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                (Joint Account)'
                                             : $account->client->name . ' (individual)' }}
                                     </option>
                                 @endforeach

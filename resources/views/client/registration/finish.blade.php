@@ -203,11 +203,21 @@
                                     <div class="col-3"> <img src="{{ asset('storage/images/done.gif') }}"
                                             class="fit-image"> </div>
                                 </div> <br><br>
-                                {{-- <div class="row justify-content-center">
+
+
+                                <div class="row justify-content-center">
                                     <div class="col-7 text-center">
-                                        <h5 class="purple-text text-center">Please Wait... </h5>
+                                        <a href="javascript:void" onclick="$('#logout-form').submit();"
+                                            class="btn btn-default btn-lg"><i class="glyphicon glyphicon-off"></i> Log
+                                            off</a>
+
+                                        <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                                            style="display: none;">
+                                            @csrf
+                                        </form>
+
                                     </div>
-                                </div> --}}
+                                </div>
                             </div>
                         </fieldset>
                     </div>

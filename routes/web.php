@@ -47,6 +47,11 @@ Route::post('migrateExisting/{client_id}','Admin\ExistingClientController@regist
 Route::get('/email/verify/{id}/{hash}','CustomVerificationController@verify')->name('verification.verify');
 Route::post('/email/verification-notification', 'CustomVerificationController@resend')->name('verification.send');
 
+Route::get('emailVerifyMessage','Registration\PreUserController@verifyEmailMessage')->name('verifyEmail.message');
+
+
+
+
 // Admin
 
 

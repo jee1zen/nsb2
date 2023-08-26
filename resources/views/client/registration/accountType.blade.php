@@ -370,7 +370,7 @@
 
 
             $('#joint_authority_DIV').hide();
-            $('#client_type').val("{{ $account_type }}");
+            $('#client_type').val("{{ $account_type ?? 1 }}");
             if ("{{ $account_type }}" == 2) {
 
                 $("#joint_authority_DIV").show();
@@ -380,7 +380,7 @@
 
                 $("#joint_authority_DIV").hide();
             }
-            $('#joint_permission').val("{{ $account->joint_permission }}")
+            $('#joint_permission').val("{{ $account->joint_permission ?? 0 }}")
 
 
 

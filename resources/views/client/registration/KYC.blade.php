@@ -465,95 +465,100 @@
             //.........................................
 
             //Data coding for KYC..
-            $('#kyc_account_at_NSB_FMC').val("{{ $kyc->kyc_account_at_NSB_FMC }}")
-            $('#kyc_employment_status').val("{{ $kyc->kyc_employment_status }}")
-            if ("{{ $kyc->kyc_employment_status }}" === "Other") {
-                $('#kyc_other_employement').val("{{ $kyc->kyc_other_employement }}")
-                $('#kyc_other_employement_DIV').show();
+            if ("{{ $kyc }}" !== null) {
+                $('#kyc_account_at_NSB_FMC').val("{{ $kyc->kyc_account_at_NSB_FMC ?? '' }}")
+                $('#kyc_employment_status').val("{{ $kyc->kyc_employment_status ?? '' }}")
+                if ("{{ $kyc->kyc_employment_status ?? '' }}" === "Other") {
+                    $('#kyc_other_employement').val("{{ $kyc->kyc_other_employement ?? '' }}")
+                    $('#kyc_other_employement_DIV').show();
 
-            } else {
-                $('#kyc_other_employement_DIV').hide();
-            }
-            $('#kyc_nature_of_business').val("{{ $kyc->kyc_nature_of_business }}")
-            if ("{{ $kyc->kyc_nature_of_business }}" === "Other") {
-                $('#kyc_nature_of_business_specify').val("$kyc->kyc_nature_of_business_specify")
-                $('#kyc_nature_of_business_specify_DIV').show();
-            } else {
-                $('#kyc_nature_of_business_specify_DIV').hide();
-            }
-            $('#kyc_marital_status').val("{{ $kyc->kyc_marital_status }}")
-            if ("{{ $kyc->kyc_marital_status }}" === "Married") {
-                $('#kyc_spouse_name').val("{{ $kyc->kyc_spouse_name }}");
-                $('#kyc_spouse_job').val("{{ $kyc->kyc_spouse_job }}");
+                } else {
+                    $('#kyc_other_employement_DIV').hide();
+                }
+                $('#kyc_nature_of_business').val("{{ $kyc->kyc_nature_of_business ?? '' }}")
+                if ("{{ $kyc->kyc_nature_of_business ?? '' }}" === "Other") {
+                    $('#kyc_nature_of_business_specify').val("$kyc->kyc_nature_of_business_specify ?? '' ")
+                    $('#kyc_nature_of_business_specify_DIV').show();
+                } else {
+                    $('#kyc_nature_of_business_specify_DIV').hide();
+                }
+                $('#kyc_marital_status').val("{{ $kyc->kyc_marital_status ?? '' }}")
+                if ("{{ $kyc->kyc_marital_status ?? '' }}" === "Married") {
+                    $('#kyc_spouse_name').val("{{ $kyc->kyc_spouse_name ?? '' }}");
+                    $('#kyc_spouse_job').val("{{ $kyc->kyc_spouse_job ?? '' }}");
 
-                $('#kyc_marital_status_DIV').show();
-            } else {
-
-                $('#kyc_marital_status_DIV').hide();
-            }
-
-            $('#kyc_ownership_of_premises').val("{{ $kyc->kyc_ownership_of_premises }}");
-
-            $('#kyc_citizenship').val("{{ $kyc->kyc_citizenship }}");
-            if ("{{ $kyc->kyc_citizenship }}" !== 'Sri Lankan') {
-
-                $('#kyc_country_of_birth').val("{{ $kyc->kyc_country_of_birth }}")
-                $('#kyc_nationality').val("{{ $kyc->kyc_nationality }}")
-                $('#kyc_type_of_visa').val("{{ $kyc->kyc_type_of_visa }}")
-                if ("{{ $kyc->kyc_type_of_visa }}" === 'other') {
-                    $('#kyc_other_visa_type').val("$kyc->kyc_other_visa_type")
-                    $('#other_visa_DIV').show()
+                    $('#kyc_marital_status_DIV').show();
                 } else {
 
-                    $('#other_visa_DIV').hide()
+                    $('#kyc_marital_status_DIV').hide();
                 }
-                $('#kyc_expiry_date').val("{{ $kyc->kyc_expiry_date }}")
 
-                $('#kyc_foreign_DIV').show();
+                $('#kyc_ownership_of_premises').val("{{ $kyc->kyc_ownership_of_premises ?? '' }}");
 
-            } else {
-                $('#kyc_foreign_DIV').hide();
+                $('#kyc_citizenship').val("{{ $kyc->kyc_citizenship ?? '' }}");
+                if ("{{ $kyc->kyc_citizenship ?? '' }}" !== 'Sri Lankan') {
+
+                    $('#kyc_country_of_birth').val("{{ $kyc->kyc_country_of_birth ?? '' }}")
+                    $('#kyc_nationality').val("{{ $kyc->kyc_nationality ?? '' }}")
+                    $('#kyc_type_of_visa').val("{{ $kyc->kyc_type_of_visa ?? '' }}")
+                    if ("{{ $kyc->kyc_type_of_visa ?? '' }}" === 'other') {
+                        $('#kyc_other_visa_type').val("$kyc->kyc_other_visa_type ?? '' ")
+                        $('#other_visa_DIV').show()
+                    } else {
+
+                        $('#other_visa_DIV').hide()
+                    }
+                    $('#kyc_expiry_date').val("{{ $kyc->kyc_expiry_date ?? '' }}")
+
+                    $('#kyc_foreign_DIV').show();
+
+                } else {
+                    $('#kyc_foreign_DIV').hide();
+                }
+                $('#kyc_purpose_account_foreign').val("{{ $kyc->kyc_purpose_account_foreign ?? '' }}")
+                $('#kyc_purpose_of_opening_account').val("{{ $kyc->kyc_purpose_of_opening_account ?? '' }}")
+                if ("{{ $kyc->kyc_purpose_of_opening_account ?? '' }}" === "Other") {
+                    $('#kyc_other_purpose').val("{{ $kyc->kyc_other_purpose ?? '' }}");
+                    $('#other_special_purpose_DIV').show();
+                } else {
+                    $('#other_special_purpose_DIV').hide();
+                }
+                $('#kyc_source_of_funds').val("{{ $kyc->kyc_source_of_funds ?? '' }}");
+                if ("{{ $kyc->kyc_source_of_funds ?? '' }}" === "Other") {
+                    $('#kyc_other_source').val("{{ $kyc->kyc_other_source ?? '' }}");
+
+                    $("#kyc_other_source_DIV").show();
+                } else {
+                    $("#kyc_other_source_DIV").hide();
+                }
+
+                $('#kyc_anticipated_volume').val("{{ $kyc->kyc_anticipated_volume ?? '' }}")
+                $('#kyc_expected_mode_of_transacation').val("{{ $kyc->kyc_expected_mode_of_transacation ?? '' }}");
+                $('#kyc_other_connected_businesses').val("{{ $kyc->kyc_other_connected_businesses ?? '' }}");
+                $('#kyc_expected_types_of_counterparties').val(
+                    "{{ $kyc->kyc_expected_types_of_counterparties ?? '' }}")
+                $('#kyc_operation_authority').val("{{ $kyc->kyc_operation_authority ?? '' }}")
+
+                if ("{{ $kyc->kyc_operation_authority ?? '' }}" === 'Other') {
+
+                    $('#kyc_other_name').val("{{ $kyc->kyc_other_name ?? '' }}");
+                    $('#kyc_other_address').val("{{ $kyc->kyc_other_address ?? '' }}");
+                    $('#kyc_other_nic').val("{{ $kyc->kyc_other_nic ?? '' }}");
+
+                    $('#kyc_other_authrity_DIV').show();
+
+                } else {
+                    $('#kyc_other_authrity_DIV').hide();
+
+
+                }
+
+                $('#kyc_relationship').val("{{ $kyc->kyc_relationship ?? '' }}");
+                $("#kyc_pep").val("{{ $kyc->kyc_pep ?? '' }}");
+                $("#kyc_us_person").val("{{ $kyc->kyc_us_person ?? '' }}");
+
             }
-            $('#kyc_purpose_account_foreign').val("{{ $kyc->kyc_purpose_account_foreign }}")
-            $('#kyc_purpose_of_opening_account').val("{{ $kyc->kyc_purpose_of_opening_account }}")
-            if ("{{ $kyc->kyc_purpose_of_opening_account }}" === "Other") {
-                $('#kyc_other_purpose').val("{{ $kyc->kyc_other_purpose }}");
-                $('#other_special_purpose_DIV').show();
-            } else {
-                $('#other_special_purpose_DIV').hide();
-            }
-            $('#kyc_source_of_funds').val("{{ $kyc->kyc_source_of_funds }}");
-            if ("{{ $kyc->kyc_source_of_funds }}" === "Other") {
-                $('#kyc_other_source').val("{{ $kyc->kyc_other_source }}");
 
-                $("#kyc_other_source_DIV").show();
-            } else {
-                $("#kyc_other_source_DIV").hide();
-            }
-
-            $('#kyc_anticipated_volume').val("{{ $kyc->kyc_anticipated_volume }}")
-            $('#kyc_expected_mode_of_transacation').val("{{ $kyc->kyc_expected_mode_of_transacation }}");
-            $('#kyc_other_connected_businesses').val("{{ $kyc->kyc_other_connected_businesses }}");
-            $('#kyc_expected_types_of_counterparties').val("{{ $kyc->kyc_expected_types_of_counterparties }}")
-            $('#kyc_operation_authority').val("{{ $kyc->kyc_operation_authority }}")
-
-            if ("{{ $kyc->kyc_operation_authority }}" === 'Other') {
-
-                $('#kyc_other_name').val("{{ $kyc->kyc_other_name }}");
-                $('#kyc_other_address').val("{{ $kyc->kyc_other_address }}");
-                $('#kyc_other_nic').val("{{ $kyc->kyc_other_nic }}");
-
-                $('#kyc_other_authrity_DIV').show();
-
-            } else {
-                $('#kyc_other_authrity_DIV').hide();
-
-
-            }
-
-            $('#kyc_relationship').val("{{ $kyc->kyc_relationship }}");
-            $("#kyc_pep").val("{{ $kyc->kyc_pep }}");
-            $("#kyc_us_person").val("{{ $kyc->kyc_us_person }}");
 
 
 

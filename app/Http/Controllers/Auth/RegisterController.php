@@ -104,16 +104,12 @@ class RegisterController extends Controller
         $user->roles()->attach(11);
         $this->guard()->login($user);
         $user->sendEmailVerificationNotification();
-       
-        // $email = $request->email;
-        // Mail::send('emails.initialRegistrationActivate', [
-        //     'name'=>$request->name,
-        //     ],function($message) use($email) {
-        //     $message->to($email);
-        //     $message->subject('Notification New Client Joined NSB FMC ');
-        // });
+      
+
+    return redirect()->route('verifyEmail.message');
 
     }
+
 
     /**
      * Create a new user instance after a valid registration.
