@@ -32,24 +32,44 @@
         $role = $user->roles()->first()->id;
         if ($role == 4) {
             $client = App\Client::findOrFail($user->id);
+            $client_id = $client->id;
+            $mainClient = $client;
+            if (!$user->hasSelectedAccount()) {
+                $selectedAccount = 0;
+                $account_id = 0;
+            } else {
+                $_selectedAccount = $user->selectedAccount;
+                // dd($_selectedAccount);
+                $selectedAccount = $_selectedAccount->account_id;
+                $account = App\Account::findOrFail($selectedAccount);
+                $account_id = $account->id;
+                if ($account->type == 2) {
+                    $account_name = $client->name . ' & ' . $client->jointHolders()->first()->name . ' (Joint Account)';
+                } else {
+                    $account_name = $client->name . ' (Individual)';
+                }
+            }
         } elseif ($role == 10) {
             $client = $user->jointHolder;
+            $client_id = $user->id;
             $mainClient = $client->client;
+            $mainClientUser = $mainClient->user;
+            if (!$user->hasSelectedAccount()) {
+                $selectedAccount = 0;
+                $account_id = 0;
+            } else {
+                $_selectedAccount = $user->selectedAccount;
+                // dd($_selectedAccount);
+                $selectedAccount = $_selectedAccount->account_id;
+                $account = App\Account::findOrFail($selectedAccount);
+                $account_id = $account->id;
+            }
+        
+            $account_name = $client->name . ' & ' . $mainClient->name . ' (Joint Acccount) ';
         } else {
             $client = App\CompanySignature::where('user_id', '=', $user->id);
         }
         // dd($user->hasSelectedAccount());
-        if (!$user->hasSelectedAccount()) {
-            $selectedAccount = 0;
-            $account_id = 0;
-        } else {
-            $_selectedAccount = $user->selectedAccount;
-            // dd($_selectedAccount);
-            $selectedAccount = $_selectedAccount->account_id;
-            $account = App\Account::findOrFail($selectedAccount);
-            $account_id = $account->id;
-        }
-        
     @endphp
     <nav class="navbar navbar-default navbar-static-top">
         <div class="container-fluid">
@@ -78,14 +98,15 @@
                                 height="auto" alt="Responsive image">
                         @endif
                     </div>
-                    <div class="title-name">{{ $user->name }}</div>
-                    <label for="" class="badge badge-light badge-lg ms-3" id="account_label">
+                    <div class="title-name">{{ $account_name ?? 'Selecting..' }}</div>
+                    <button id="accountChangeBtn">Change Account</button>
+                    {{-- <label for="" class="badge badge-light badge-lg ms-3" id="account_label">
                         @if ($account_id != 0)
                             {{ $account->id }}
                             {{ Config::get('constants.CLIENT_TYPE')[$account->type] }}
                         @endif
 
-                    </label>
+                    </label> --}}
 
                 </a>
             </div>
@@ -141,20 +162,29 @@
                                 <ul class="nav navbar-nav">
                                     <li class="active"><a href="{{ route('client.dashboard') }}"><span
                                                 class="glyphicon glyphicon-dashboard"></span>Dashboard</a></li>
-                                    @if ($role == 4)
+                                    @if ($role == 4 && $account->status == 9)
+                                        <li><a href="{{ route('client.allAccounts') }}"><span
+                                                    class="glyphicon glyphicon-briefcase"></span>Account Management</a>
+                                        </li>
+                                        {{-- <li><a href="{{route('client.reverseRepo.create')}}"><span class="glyphicon glyphicon-import"></span>Obtain A Reverse Repo</a></li> --}}
+                                    @endif
+                                    @if ($role == 4 && $account->status >= 8)
                                         <li><a href="{{ route('client.investment.index') }}"><span
                                                     class="glyphicon glyphicon-plus"></span>Add Investment </a></li>
                                         <li><a href="{{ route('client.bid') }}"><span
                                                     class="glyphicon glyphicon-user"></span>Bid for Auction</a></li>
                                     @endif
-                                    @if ($role == 4 && $client->status == 9)
+                                    @if ($role == 4 && $account->status == 9)
+                                        {{-- <li><a href="{{ route('client.reverseRepo.create') }}"><span
+                                                    class="glyphicon glyphicon-import"></span>Obtain A Reverse Repo</a>
+                                        </li> --}}
                                         {{-- <li><a href="{{route('client.reverseRepo.create')}}"><span class="glyphicon glyphicon-import"></span>Obtain A Reverse Repo</a></li> --}}
                                     @endif
 
                                     <li class=""><a href="{{ route('client.history') }}"><span
                                                 class="glyphicon glyphicon-dashboard"></span>Transaction History</a>
                                     </li>
-                                    @if ($role == 4 && $client->status == 9)
+                                    @if ($role == 4 && $account->status == 9)
                                         <li><a href="{{ route('client.fundRequest.form') }}"><span
                                                     class="glyphicon glyphicon-send"></span>Maturity Instruction </a>
                                         </li>
@@ -168,7 +198,7 @@
 
 
 
-                                    @if ($role == 4 && $client->status == 9)
+                                    @if ($role == 4 && $account->status == 9)
                                         <li><a href="{{ route('client.investment.list') }}"><span
                                                     class="glyphicon glyphicon-usd"></span>My Investment Requests </a>
                                         </li>
@@ -178,7 +208,7 @@
 
 
 
-                                    @if ($role == 4)
+                                    @if ($role == 4 && $account->status == 9)
                                         <li><a href="{{ route('client.bankAccounts.view') }}"><span
                                                     class="glyphicon glyphicon-th-list"></span>Bank Accounts</a></li>
                                         {{-- <li><a href="{{route('client.blank')}}"><span class="glyphicon glyphicon-user"></span> e-Statements</a></li> --}}
@@ -196,7 +226,7 @@
                                     @endphp
 
 
-                                    @if ($role == 8 || $role == 9 || $is_signatureB == 1 || ($role == 10 && $mainClient->joint_permission == 1))
+                                    @if ($role == 8 || $role == 9 || $is_signatureB == 1 || ($role == 10 && $account->joint_permission == 1))
                                         <li><a href="{{ route('client.requests.proceed') }}"><span
                                                     class="glyphicon glyphicon-th-list"></span>Maturity Requests</a>
                                         </li>
@@ -278,10 +308,23 @@
                     <div class="modal-body">
                         <label for="">Account</label>
                         <select name="account" id="account" class="form-control">
-                            @foreach ($client->accounts()->get() as $account)
+                            @foreach ($mainClient->accounts()->get() as $account)
                                 <option value="{{ $account->id }}">
-                                    AccNO:- &nbsp; {{ $account->id }} &nbsp;
-                                    {{ Config::get('constants.CLIENT_TYPE')[$account->type] }}
+                                    {{-- @if ($account->type == 2)
+                                        $ac_name = $account->client->name .'&'. $client->jointHolders()->first()->name.'
+                                        (Joint Account)
+                                        '.;
+                                    @else
+                                        $ac_name = $account->client->name .' (individual)'.;
+                                    @endif --}}
+                                    {{ $account->type == 2
+                                        ? $account->client->name .
+                                            ' & ' .
+                                            $mainClient->jointHolders()->first()->name .
+                                            '
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    (Joint Account)'
+                                        : $account->client->name . ' (individual)' }}
+                                    {{-- {{ Config::get('constants.CLIENT_TYPE')[$account->type] }} --}}
                                 </option>
                             @endforeach
                         </select>
@@ -327,7 +370,7 @@
 
             $('#btnAccountProceed').click(function() {
                 let account_id = $('#account').val();
-                let client_id = {{ $client->id }};
+                let client_id = {{ $client_id }};
                 var data = {
                     "account_id": account_id,
                     "client_id": client_id,
@@ -353,6 +396,14 @@
                 });
 
             });
+
+            $('#accountChangeBtn').click(function() {
+                    $("#accountSelectModal").modal("show");
+                }
+
+
+
+            );
 
 
             $('.navbar-toggle-sidebar').click(function() {

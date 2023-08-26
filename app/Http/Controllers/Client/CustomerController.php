@@ -60,6 +60,11 @@ class CustomerController extends Controller
     } elseif ($user->roles()->first()->id == 10) {
 
       $client = Client::findorFail($user->jointHolder->client->id);
+      if ($user->hasSelectedAccount()) {
+        $selectedAccount = $user->selectedAccount;
+        $account = $selectedAccount->account;
+      }
+     
     } else {
 
       $client = Client::findorFail($user->companySignature->client->id);
@@ -67,9 +72,11 @@ class CustomerController extends Controller
     $investments = [];
 
     $clientRecords = $client->clientRecords()->get();
+
     if ($user->hasSelectedAccount()) {
       $investments = $account->investments()->where('invested_amount', '>', 0)->where('method', '!=', 'Maturity')->get();
     }
+    
     $investmentTypes = InvestmentType::all();
 
     return view('client.dashboard', compact('client', 'user', 'clientRecords', 'investmentTypes', 'investments'));

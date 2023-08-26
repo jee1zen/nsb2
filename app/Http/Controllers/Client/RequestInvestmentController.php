@@ -58,7 +58,7 @@ class RequestInvestmentController extends Controller
             if($client->investmentCount()==1 && $client->hasClientKYC()){
 
                   $kyc = new KYCForm;
-                  $clientKYC = $client->clientKYC();
+                  $clientKYC = $client->clientKYC($account->id);
 
                   $kyc->client_id = $client->id;
                   $kyc->investment_id = $investment->id;
@@ -194,10 +194,11 @@ class RequestInvestmentController extends Controller
 
 
          $investment = Investment::find($id);
+         $account  = $investment->account;
         //  $investment->amount = $request->amount;
         //  $investment->status = 1;
         //  $investment->save();
-        if($user->client->client_type==3)
+        if($account->type==3)
         {
             $status = -2;
             $investment->status =  $status;
@@ -205,7 +206,7 @@ class RequestInvestmentController extends Controller
             
 
 
-        }else if($user->client->client_type==2 && $user->client->joint_permission==1){
+        }else if($account->type==2 && $account->joint_permission==1){
 
 
             $count = $user->client->jointHolders()->count();
@@ -213,7 +214,7 @@ class RequestInvestmentController extends Controller
             $investment->status =  $status;
             $investment->save();
 
-            foreach($user->client->jointHolders()->get() as $jointHolder){
+            foreach($user->client->joinHoldersWithAccount($account->id)->get() as $jointHolder){
                 $approval = new JointInvestmentApproval;
                 $approval->investment_id = $investment->id;
                 $approval->joint_holder_id = $jointHolder->id;
@@ -246,6 +247,7 @@ class RequestInvestmentController extends Controller
         else{
             if($role==10){
                 $client = $clientUser->jointHolder->client;
+                $account = $clientUser->JointHolder->account;
                 $is_signatureB =0;
             } else{
                 $client = $clientUser->companySignature->client;
@@ -267,10 +269,10 @@ class RequestInvestmentController extends Controller
         
             $newInvestments = $client->investments()->where('status',-2)->paginate(10);
     
-        }elseif($role==10 && $client->joint_permission==1){ 
+        }elseif($role==10 && $account->joint_permission==1){ 
     
           
-           $newInvestments = $client->investments()->where('status','<',0)->where('status','<>',-100)->paginate(10);
+           $newInvestments = $account->investments()->where('status','<',0)->where('status','<>',-100)->paginate(10);
         //    dd($newInvestments);
             
         }else{

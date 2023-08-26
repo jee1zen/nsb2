@@ -19,6 +19,8 @@ class Account extends Model
         return $this->belongsTo(User::class);
     }
 
+ 
+
     public function investments(){
         return $this->hasMany(Investment::class,'account_id');
     }
@@ -30,6 +32,7 @@ class Account extends Model
     public function hasKyc(){
         return (bool) $this->kyc()->first();
     }
+
 
 
     public function meetings(){

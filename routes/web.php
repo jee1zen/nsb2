@@ -259,6 +259,28 @@ Route::group(['prefix' => 'client', 'as' => 'client.', 'namespace' => 'Client', 
     Route::get('dashboard','CustomerController@index')->name('dashboard');
     Route::get('history','CustomerController@history')->name('history');
 
+    //all accounts view
+    Route::get('allAccounts','AccountController@all')->name('allAccounts');
+
+    //new account
+    Route::get('newAccountStaging/{account_id}','AccountController@index')->name('newAccountStaging');
+    Route::post('newAccountAccountType/{account_id}','AccountController@accountTypeSave')->name('newAccountAccountType');
+    Route::get('newAccountBasicInfo/{account_id}','AccountController@basicInfoShow')->name('newAccountBasicInfo');
+    Route::post('newAccountBasicInfo/{account_id}','AccountController@basicinfoSave')->name('newAccountBasicInfo');
+    Route::get('newAccountEmpInfo/{account_id}','AccountController@employmentDetailsShow')->name('newAccountEmpInfo');
+    Route::post('newAccountEmpInfo/{account_id}','AccountController@employmentDetailsSave')->name('newAccountEmpInfo');
+    Route::get('newAccountBank/{account_id}','AccountController@bankParticularsShow')->name('newAccountBank');
+    Route::post('newAccountBank/{account_id}','AccountController@bankParticularsSave')->name('newAccountBank');
+    Route::get('newAccountOtherInfo/{account_id}','AccountController@otherInfoShow')->name('newAccountOtherInfo');
+    Route::post('newAccountOtherInfo/{account_id}','AccountController@otherInfoSave')->name('newAccountOtherInfo');
+    Route::get('newAccountKyc/{account_id}','AccountController@KycShow')->name('newAccountKyc');
+    Route::post('newAccountKyc/{account_id}','AccountController@KycSave')->name('newAccountKyc');
+    Route::get('newAccountStatement/{account_id}','AccountController@statement')->name('newAccountStatement');
+    Route::post('newAccountfinish/{account_id}','AccountController@finish')->name('newAccountfinish');
+    Route::get('newAccountEnd/{account_id}','AccountController@end')->name('newAccountEnd');
+
+
+
     //maturity  instructions
     Route::get('fundRequest','WithdrawController@requestForm')->name('fundRequest.form');
     Route::post('fundRequest','WithdrawController@store')->name('fundRequest.post');

@@ -33,7 +33,7 @@
                 </tr>
             </thead>
             <tbody>
-                @forelse ($bankParticulars as $key => $bankParticular)
+                @foreach ($bankParticulars as $key => $bankParticular)
                     <tr id='addr0' data-id="0" class="hidden" style="cursor: move;">
                         <input type="hidden" name="bankParticular_id[]" value="{{ $bankParticular->id }}">
                         <td data-name="AccountyType">
@@ -94,47 +94,7 @@
                                     aria-hidden="true">×</span></button>
                         </td>
                     </tr>
-                @empty
-                    <tr id='addr0' data-id="0" class="hidden" style="cursor: move;">
-                        <td data-name="AccountyType">
-                            <select name="accountType[]" class="accountType">
-                                <option value="">Select Option</option>
-                                <option value="Individual">Individual</option>
-                                <option value="Joint">Joint</option>
-                            </select>
-                        </td>
-                        <td data-name="holder_name">
-                            <input type="text" name='holder_name[]' placeholder='Holder Name'
-                                class="form-control accOwner" class="fieldRequired" />
-                        </td>
-                        <td data-name="bank">
-                            <select type="text" name='bank[]' placeholder='Bank Name' class="form-control bank"
-                                class="fieldRequired">
-                                <option value="0">Select Bank</option>
-                                @if ($banks)
-                                    @foreach ($banks as $bank)
-                                        <option value="{{ $bank->name }}">{{ $bank->name }}</option>
-                                    @endforeach
-                                @endif
-                            </select>
-                        </td>
-                        <td data-name="branch">
-                            <select type="text" name='branch[]' placeholder='Branch' class="form-control branch">
-                                <option value="0">Select Branch</option>
-                            </select>
-                        </td>
-
-                        <td data-name="Account No">
-                            <input type="text" name='accountno[]' placeholder='Account no'
-                                class="form-control acc" />
-                        </td>
-                        <td data-name="del">
-                            <button name="del0" type="button"
-                                class='btn btn-danger glyphicon glyphicon-remove row-remove'><span
-                                    aria-hidden="true">×</span></button>
-                        </td>
-                    </tr>
-                @endforelse
+                @endforeach
             </tbody>
         </table>
         <a id="add_row" class="btn btn-primary float-right">Add</a>

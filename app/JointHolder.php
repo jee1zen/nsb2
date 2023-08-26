@@ -69,6 +69,10 @@ class JointHolder extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function account(){
+        return $this->belongsTo(Account::class);
+    }
+
 
     public function kyc(){
         return $this->hasMany(KYCJointForm::class,'joint_id');

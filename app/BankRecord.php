@@ -10,6 +10,7 @@ class BankRecord extends Model
     use HasFactory;
     public $table = 'bank_records';
     protected $fillable=[
+        'account_id',
         'ref_no',
         'nic',
         'type',

@@ -9,6 +9,7 @@ class ClientRecord extends Model
 {
     use HasFactory;
     protected $fillable=[
+        'account_id',
         'ref_no',
         'nic',
         'type',

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Account;
 use App\BankRecord;
 use App\Client;
 use App\ClientRecord;
@@ -55,13 +56,13 @@ class BankRecordController extends Controller
 
     public function synchronize(){
 
-        DB::beginTransaction();
-        try {
+        // DB::beginTransaction();
+        // try {
             set_time_limit(0);
             // $bankRecords = BankRecord::all();
 
-            $matchingRecords = DB::select('SELECT bank_records.*, clients.id as client_id  FROM  bank_records , clients WHERE  
-                                          bank_records.nic = clients.nic And clients.status!=100 And clients.status>7');
+            $matchingRecords = DB::select('SELECT bank_records.*  FROM  bank_records , accounts  WHERE  
+                                          bank_records.account_id = accounts.id And accounts.status!=100 And accounts.status>7');
 
 
         
@@ -70,7 +71,7 @@ class BankRecordController extends Controller
            foreach($matchingRecords as $match){
 
               
-               $checkClientRecords = ClientRecord::where('ref_no','=',$match->ref_no)->where('invested_amount',$match->invested_amount)->where('method',$match->method)->count();
+               $checkClientRecords = ClientRecord::where('ref_no','=',$match->ref_no)->where('account_id',$match->account_id)->where('invested_amount',$match->invested_amount)->where('method',$match->method)->count();
              
                 if($match->type=='tbill'){
                     $type = 1;
@@ -82,9 +83,15 @@ class BankRecordController extends Controller
                     $type=0;
                 } 
 
+                  $account = Account::find($match->account_id);
+                  $client = $account->client;
+                  $client_id = $client->id;
+
+
                    if($checkClientRecords==0){   
                         $clientRecord = new ClientRecord;
-                        $clientRecord->client_id = $match->client_id;
+                        $clientRecord->account_id = $match->account_id;
+                        $clientRecord->client_id = $client_id;
                         $clientRecord->cus_id1 = $match->cus_id1;
                         $clientRecord->cus_id2 = $match->cus_id2;
                         $clientRecord->cus_id3 = $match->cus_id3;
@@ -116,11 +123,13 @@ class BankRecordController extends Controller
                   
                    
                        
-                            $investment = Investment::where('investment_type_id',$type)->where('client_id',$match->client_id)
+                            $investment = Investment::where('investment_type_id',$type)->where('client_id',$client_id)->where('account_id',$match->account_id)
                             ->where('amount',$match->invested_amount)->where('value_date',$match->value_date)->where('maturity_date',$match->maturity_date)->where('status','!=',-100)
                             ->where('ref_no',null)->orWhere('ref_no','')->latest()->first();
                         //  dd($investment);
-                     
+                        $account = Account::find($match->account_id);
+                        $client = $account->client;
+                        // dd($client);
                         
                             if($investment==null){
 
@@ -132,7 +141,9 @@ class BankRecordController extends Controller
 
                                 
                                 if($existingInvestment==null){
-                                    $client = Client::find($match->client_id);
+                                 
+                                   
+                                    // dd($client->dob);
 
 
                                     $maturityDate = $match->maturity_date." 23:59:59";
@@ -141,7 +152,7 @@ class BankRecordController extends Controller
                                     $today_ymd =  Carbon::now()->format('Y-m-d H:s:i');
                                     $value_ymd =  Carbon::createFromFormat('Y-m-d H:s:i',$valueDate);
                                     $maturity_ymd  = Carbon::createFromFormat('Y-m-d H:s:i',$maturityDate);
-                                    $client = Client::find($match->client_id);
+                                    // $client = Client::find($match->client_id);
                                     $data = [
                                         'match' => $match,
                                         'client' => $client,
@@ -154,7 +165,7 @@ class BankRecordController extends Controller
     
                                     $client_name = strtoupper($client->name_by_initials);
                                     $passwordNamePart = substr($client_name, strlen($client_name)-3, 3);
-                                    $doc_password = Carbon::createFromFormat('Y-m-d H:i:s', $client->dob)->year;
+                                    $doc_password = Carbon::createFromFormat('Y-m-d', $client->dob)->year;
                                     $doc_password = $passwordNamePart.$doc_password;
     
                                     //  dd($doc_password);
@@ -179,7 +190,8 @@ class BankRecordController extends Controller
 
 
                                     $investment = new Investment;
-                                    $investment->client_id = $match->client_id;
+                                    $investment->client_id = $client_id;
+                                    $investment->account_id = $match->account_id;
                                     $investment->ref_no=$match->ref_no;
                                     $investment->invested_amount = $match->invested_amount;
                                     $investment->maturity_date = $match->maturity_date;
@@ -205,10 +217,10 @@ class BankRecordController extends Controller
                                     }
                                     
                                     
-                                    if($client->status==8 ){
+                                    if($account->status==8 ){
 
-                                        $client->status =9;
-                                        $client->save();
+                                        $account->status =9;
+                                        $account->save();
                                     }
                             
                                     continue;
@@ -259,7 +271,7 @@ class BankRecordController extends Controller
                                                 $tempInvestment =  new TempInvestment;
                                                 $tempInvestment->investment_id = $existingInvestment->id;
                                                 $tempInvestment->client_record_id = $clientRecord->id;
-                                                $tempInvestment->client_id = $match->client_id;
+                                                $tempInvestment->client_id = $client_id;
                                                 $tempInvestment->ref_no = $match->ref_no;
                                                 $tempInvestment->investment_type_id = $type;
                                                 $tempInvestment->invested_amount = $match->invested_amount;
@@ -297,7 +309,8 @@ class BankRecordController extends Controller
                                 $today_ymd =  Carbon::now()->format('Y-m-d H:s:i');
                                 $value_ymd =  Carbon::createFromFormat('Y-m-d H:s:i',$valueDate);
                                 $maturity_ymd  = Carbon::createFromFormat('Y-m-d H:s:i',$maturityDate);
-                                $client = Client::find($match->client_id);
+                                // $account = Account::find($match->account_id);
+                                // $client = $account->client;
                                 $data = [
                                     'match' => $match,
                                     'client' => $client,
@@ -310,7 +323,7 @@ class BankRecordController extends Controller
 
                                 $client_name = strtoupper($client->name_by_initials);
                                 $passwordNamePart = substr($client_name, strlen($client_name)-3, 3);
-                                $doc_password = Carbon::createFromFormat('Y-m-d H:i:s', $client->dob)->year;
+                                $doc_password = Carbon::createFromFormat('Y-m-d', $client->dob)->year;
                                 $doc_password = $passwordNamePart.$doc_password;
 
                                 //  dd($doc_password);
@@ -337,10 +350,10 @@ class BankRecordController extends Controller
                                 // $client->is_active=1;
                                 //email the client..
 
-                                if($client->status==8 ){
+                                if($account->status==8 ){
 
-                                    $client->status =9;
-                                    $client->save();
+                                    $account->status =9;
+                                    $account->save();
                                 }
                                 if($investment->status==2){
                                     $investment->status =3;
@@ -376,11 +389,11 @@ class BankRecordController extends Controller
            }
 
     
-        DB::commit();
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return $e->getMessage();
-        }
+        // DB::commit();
+        // } catch (\Exception $e) {
+        //     DB::rollBack();
+        //     return $e->getMessage();
+        // }
 
 
         return redirect()->back();

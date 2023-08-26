@@ -532,6 +532,14 @@ class ApprovalController extends Controller
 
             if ($prev_state == 7) {
 
+                $clientUser = $client->user;
+
+                $clientUser->roles()->detach();
+
+    // Attach the new role.
+                  $clientUser->roles()->attach(4);
+                
+
                 Mail::send('emails.bankofficerVerified', ['name' => $client->title . ' ' . $client->name], function ($message) use ($client) {
                     $message->to($client->user->email);
                     $message->subject('Bank Details of NSB FMC');
@@ -541,7 +549,7 @@ class ApprovalController extends Controller
                     $message->subject('Account Credentials of NSB FMC Online Portal');
                 });
 
-                if ($client->client_type == 2) {
+                if ($account->type == 2) {
 
                     foreach ($client->jointHolders()->get() as $jointHolder) {
                         Mail::send('emails.welcome', ['name' => $jointHolder->title . ' ' . $jointHolder->name, 'email' => $jointHolder->user->email, 'password' => $jointHolder->password], function ($message) use ($jointHolder) {
@@ -550,6 +558,11 @@ class ApprovalController extends Controller
                         });
                     }
                 }
+
+               
+
+
+
             }
 
             $account->status = $account->status + $request_type;

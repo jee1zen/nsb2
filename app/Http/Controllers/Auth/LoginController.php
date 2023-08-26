@@ -65,10 +65,8 @@ class LoginController extends Controller
 
              }else{
 
-              
-                return  'Client/staging';
+                return  'client/dashboard';
              }
-
           
            
         } elseif($role->id==8 || $role->id== 9){

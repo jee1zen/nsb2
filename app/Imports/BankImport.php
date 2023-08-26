@@ -40,25 +40,25 @@ class BankImport implements ToModel,WithValidation, SkipsOnFailure,WithStartRow
         //  dd($row[0],$row[1],$row[2],$row[3],$row[4],$row[5],$row[6],$row[7],$row[8],$row[9]);
 
         $data=[
-
-            'ref_no'=>$row[0],
-            'nic'=>$row[1],
-            'type'=>$row[2],
-            'name'=>$row[3],
-            'cus_id1'=>$row[4],
-            'cus_id2'=>$row[5],
-            'cus_id3'=>$row[6],
-            'investment_type' => $row[7],
-            'value_date'=>Carbon::createFromFormat('m/d/Y', ltrim($row[8]))->format('Y-m-d'),
-            'maturity_date'=>Carbon::createFromFormat('m/d/Y', ltrim($row[9]))->format('Y-m-d'),
-            'price'=>$row[10],
-            'yield'=>$row[11],
-            'coupon'=>$row[12],
-            'face_value'=>str_replace(",", "", $row[13]),
-            'invested_amount'=>str_replace(",", "", $row[14]),
-            'stock_ref'=> str_replace(",", "", $row[15]),
-            'method' => $row[16],
-            'ref_investment' => $row[17]
+            'account_id'=>$row[0],
+            'ref_no'=>$row[1],
+            'nic'=>$row[2],
+            'type'=>$row[3],
+            'name'=>$row[4],
+            'cus_id1'=>$row[5],
+            'cus_id2'=>$row[6],
+            'cus_id3'=>$row[7],
+            'investment_type' => $row[8],
+            'value_date'=>Carbon::createFromFormat('m/d/Y', ltrim($row[9]))->format('Y-m-d'),
+            'maturity_date'=>Carbon::createFromFormat('m/d/Y', ltrim($row[10]))->format('Y-m-d'),
+            'price'=>$row[11],
+            'yield'=>$row[12],
+            'coupon'=>$row[13],
+            'face_value'=>str_replace(",", "", $row[14]),
+            'invested_amount'=>str_replace(",", "", $row[15]),
+            'stock_ref'=> str_replace(",", "", $row[16]),
+            'method' => $row[17],
+            'ref_investment' => $row[18]
 
         ];
         
