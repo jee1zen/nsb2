@@ -65,8 +65,10 @@
                                     <td> {{ Config::get('constants.CLIENT_TYPE')[$account->type] }} </td>
                                     <td>{{ $account->created_at }}</td>
                                     <td>
-                                        @if ($account->status > 0 && $account->status < 9)
+                                        @if ($account->status > 0 && $account->status < 8)
                                             Under Approval Process
+                                        @elseif ($account->status == 8)
+                                            waiting for first Investment
                                         @elseif ($account->status == 9)
                                             Active
                                         @elseif($account->pre == 1)

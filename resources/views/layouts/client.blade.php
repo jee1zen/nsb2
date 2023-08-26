@@ -307,28 +307,31 @@
                     </div>
                     <div class="modal-body">
                         <label for="">Account</label>
-                        <select name="account" id="account" class="form-control">
-                            @foreach ($mainClient->accounts()->get() as $account)
-                                <option value="{{ $account->id }}">
-                                    {{-- @if ($account->type == 2)
-                                        $ac_name = $account->client->name .'&'. $client->jointHolders()->first()->name.'
-                                        (Joint Account)
-                                        '.;
-                                    @else
-                                        $ac_name = $account->client->name .' (individual)'.;
-                                    @endif --}}
-                                    {{ $account->type == 2
-                                        ? $account->client->name .
-                                            ' & ' .
-                                            $mainClient->jointHolders()->first()->name .
-                                            '
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    (Joint Account)'
-                                        : $account->client->name . ' (individual)' }}
-                                    {{-- {{ Config::get('constants.CLIENT_TYPE')[$account->type] }} --}}
-                                </option>
-                            @endforeach
-                        </select>
-
+                        @if ($role == 10)
+                            <select name="account" id="account" class="form-control">
+                                @foreach ($mainClient->accounts()->get() as $account)
+                                    @if ($account->type == 2)
+                                        <option value="{{ $account->id }}">
+                                            {{ $client->name . ' & ' . $account->client->name . '(Main holder)' }}
+                                        </option>
+                                    @endif
+                                @endforeach
+                            </select>
+                        @else
+                            <select name="account" id="account" class="form-control">
+                                @foreach ($mainClient->accounts()->get() as $account)
+                                    <option value="{{ $account->id }}">
+                                        {{ $account->type == 2
+                                            ? $account->client->name .
+                                                ' & ' .
+                                                $mainClient->jointHolders()->first()->name .
+                                                '
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                (Joint Account)'
+                                            : $account->client->name . ' (individual)' }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        @endif
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

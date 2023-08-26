@@ -1043,11 +1043,11 @@
                         </tr>
                     @endif
 
-                    @if ($client->hasJointHolders())
+                    @if ($account->hasJointHolders())
                         <tr>
                             <th>Joint Holders</th>
                             <td>
-                                @foreach ($client->jointHolders()->get() as $jointHolder)
+                                @foreach ($account->jointHolders()->get() as $jointHolder)
                                     <table>
                                         <tr>
                                             <td>Name</td>
@@ -1510,7 +1510,7 @@
                             <td></td>
                         </tr>
                     @endif
-                    @if ($client->has('bankParticulars')->find($client->id))
+                    @if ($account->hasBankParticulars())
                         <tr>
                             <th>
                                 Bank Particulars
@@ -1525,7 +1525,7 @@
                                         <th>Account No</th>
                                         <th> Verify </th>
                                     </tr>
-                                    @foreach ($client->bankParticulars()->get() as $bankParticulars)
+                                    @foreach ($account->bankParticulars()->get() as $bankParticulars)
                                         <tr>
                                             <td> {{ $bankParticulars->Account_type }} </td>
                                             <td> {{ $bankParticulars->name }} </td>
@@ -1716,7 +1716,7 @@
                     </tr>
                     @if ($account->status == 2)
                         <tr>
-                            <form method="POST" action="{{ route('admin.clients.verifyType', [$client->id]) }}"
+                            <form method="POST" action="{{ route('admin.clients.verifyType', [$account->id]) }}"
                                 enctype="multipart/form-data">
                                 @csrf
                                 <th>
@@ -2922,11 +2922,11 @@
 
                 @endif
 
-                @if ($client->hasJointHolders())
+                @if ($account->hasJointHolders())
                     <h3>Joint Holders</h3>
 
 
-                    @foreach ($client->jointHolders()->get() as $jointHolder)
+                    @foreach ($account->jointHolders()->get() as $jointHolder)
                         @if ($jointHolder->hasKycByInvestmentId(0))
                             @php
                                 $jkyc = $jointHolder->kycByInvestmentId(0);

@@ -37,6 +37,10 @@ class BankParticular extends Model
         return $this->belongsTo(Client::class);
     }
 
+    public function account(){
+        return $this->belongsTo(Account::class);
+    }
+
     public function withdraws(){
         return $this->hasMany(Withdraw::class,'bank_id');
     }

@@ -534,17 +534,19 @@ class ApprovalController extends Controller
 
                 $clientUser = $client->user;
 
-                $clientUser->roles()->detach();
 
-    // Attach the new role.
-                  $clientUser->roles()->attach(4);
+                 if($clientUser->accounts()->count()==1){
+                    $clientUser->roles()->detach();
+                    $clientUser->roles()->attach(4);
+                 }
+                 
                 
 
                 Mail::send('emails.bankofficerVerified', ['name' => $client->title . ' ' . $client->name], function ($message) use ($client) {
                     $message->to($client->user->email);
                     $message->subject('Bank Details of NSB FMC');
                 });
-                Mail::send('emails.welcome', ['name' => $client->title . ' ' . $client->name, 'email' => $client->user->email, 'password' => $client->password], function ($message) use ($client) {
+                Mail::send('emails.welcome', ['name' => $client->title . ' ' . $client->name, 'email' => $client->user->email, 'password' => 'Use Your NSB FMC Password '], function ($message) use ($client) {
                     $message->to($client->user->email);
                     $message->subject('Account Credentials of NSB FMC Online Portal');
                 });

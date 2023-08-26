@@ -65,6 +65,13 @@ class Account extends Model
     public function hasJointHolders(){
         return (bool) $this->jointHolders()->first();
     }
+    public function bankParticulars(){
+        return $this->hasMany(BankParticular::class,'account_id');
+
+    }
+    public function hasBankParticulars(){
+        return (bool) $this->bankParticulars()->first();
+    }
 
     public function selectedAccount(){
         return $this->hasOne(SelectedAccount::class,'account_id','id');
