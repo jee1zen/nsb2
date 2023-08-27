@@ -55,7 +55,7 @@ class RequestInvestmentController extends Controller
 
             ]);
 
-            if($client->investmentCount()==1 && $client->hasClientKYC()){
+            if($client->investmentCount()==1 && $client->hasClientKYC($account->id)){
 
                   $kyc = new KYCForm;
                   $clientKYC = $client->clientKYC($account->id);
