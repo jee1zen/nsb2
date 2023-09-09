@@ -52,12 +52,14 @@
             }
         } elseif ($role == 10) {
             $client = $user->jointHolder;
+        
             $client_id = $user->id;
             $mainClient = $client->client;
             $mainClientUser = $mainClient->user;
             if (!$user->hasSelectedAccount()) {
                 $selectedAccount = 0;
                 $account_id = 0;
+                $account = $mainClient->accounts()->first();
             } else {
                 $_selectedAccount = $user->selectedAccount;
                 // dd($_selectedAccount);
@@ -333,7 +335,7 @@
                                                 ' & ' .
                                                 $mainClient->jointHolders()->first()->name .
                                                 '
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                (Joint Account)'
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        (Joint Account)'
                                             : $account->client->name . ' (individual)' }}
                                     </option>
                                 @endforeach

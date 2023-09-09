@@ -28,7 +28,7 @@ Route::post('userEmail','ValidationController@userEmailvalidation')->name('user.
 
 //joint holders kyc link
 Route::get('jointKyc/{type}/{link}','Client\KYCController@jointKYC')->name('joint.kyc.index');
-Route::get('jointKycChange/{type}/{link}','Client\KYCController@changeJointKYC')->name('joint.kyc.change');
+Route::get('jointKycChange/{type}/{link}','Client\KYCController@jointKYCChange')->name('joint.kyc.change');
 
 Route::get('password/expired', 'Auth\ExpiredPasswordController@expired')->name('password.expired');
 Route::post('password/post_expired', 'Auth\ExpiredPasswordController@postExpired')->name('password.post_expired');
@@ -360,6 +360,8 @@ Route::group(['prefix' => 'client', 'as' => 'client.', 'namespace' => 'Client', 
     Route::post('kyc/client/{type}','KYCController@store')->name('kyc.client.post');
     Route::get('kyc/joint/{joint_id}/{id}','KYCController@joint')->name('kyc.joint');
     Route::post('kyc/joint/{joint_id}/{id}','KYCController@jointStore')->name('kyc.joint.post');
+    Route::get('changeKyc/joint/{joint_id}/{id}','KYCController@jointChange')->name('kyc.jointChange');
+    Route::post('changeKyc/joint/{joint_id}/{id}','KYCController@jointChangeStore')->name('kyc.jointChange.post');
     // Route::get('kyc/signature/{signature_id}','KYCController@signature')->name('kyc.signature');
     // Route::post('kyc/signature/{signature_id}','KYCController@signatureStore')->name('kyc.signature.post');
     Route::get('kyc/company/{company_id}/{type}','KYCController@company')->name('kyc.company');

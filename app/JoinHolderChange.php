@@ -50,4 +50,11 @@ class JoinHolderChange extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function kyc(){
+        return $this->hasOne(joinKycChanges::class,'joint_id','id');
+    }
+    public function hasKyc(){
+        return (bool) $this->kyc()->first();
+    }
+
 }

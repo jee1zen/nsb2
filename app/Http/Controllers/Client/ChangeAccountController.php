@@ -763,7 +763,8 @@ class ChangeAccountController extends Controller
         $client = $user->client;
         $account = Account::findOrFail($account_id);
         if ($account->hasKycChange()) {
-            $kyc =$account->kycChange();
+           
+            $kyc =$account->kycChange()->first();
             $kyc->kyc_account_at_NSB_FMC = $request->kyc_account_at_NSB_FMC;
             $kyc->kyc_ownership_of_premises = $request->kyc_ownership_of_premises;
             $kyc->kyc_foreign_address = "";
@@ -781,7 +782,7 @@ class ChangeAccountController extends Controller
             $kyc->kyc_source_of_funds = $request->kyc_source_of_funds;
             $kyc->kyc_other_source = $request->kyc_other_source;
             $kyc->kyc_anticipated_volume = $request->kyc_anticipated_volume;
-            $kyc->kyc_expected_mode_of_transacation = $request->kyc_expected_mode_of_transacation;
+            $kyc->kyc_expected_mode_of_transaction = $request->kyc_expected_mode_of_transacation;
             $kyc->kyc_other_connected_businesses = $request->kyc_other_connected_businesses;
             $kyc->kyc_expected_types_of_counterparties = $request->kyc_expected_types_of_counterparties;
             $kyc->kyc_operation_authority = $request->kyc_operation_authority;
