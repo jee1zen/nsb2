@@ -114,6 +114,13 @@ class User extends Authenticatable
         return (bool) $this->accounts()->first();
 
      }
+     public function activeAccounts(){
+        return $this->accounts()->where('status','>',7);
+     }
+     public function hasActiveAccounts(){
+        return (bool) $this->activeAccounts()->first();
+     }
+
 
     public function remarkOfficer()
     {
@@ -133,6 +140,10 @@ class User extends Authenticatable
     {
 
         return $this->hasOne(JointHolder::class, 'user_id');
+    }
+
+    public function joinHolderChange(){
+        return $this->hasOne(JoinHolderChange::class,'user_id');
     }
 
     public function selectedAccount()

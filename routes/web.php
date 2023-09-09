@@ -28,6 +28,7 @@ Route::post('userEmail','ValidationController@userEmailvalidation')->name('user.
 
 //joint holders kyc link
 Route::get('jointKyc/{type}/{link}','Client\KYCController@jointKYC')->name('joint.kyc.index');
+Route::get('jointKycChange/{type}/{link}','Client\KYCController@changeJointKYC')->name('joint.kyc.change');
 
 Route::get('password/expired', 'Auth\ExpiredPasswordController@expired')->name('password.expired');
 Route::post('password/post_expired', 'Auth\ExpiredPasswordController@postExpired')->name('password.post_expired');
@@ -268,6 +269,24 @@ Route::group(['prefix' => 'client', 'as' => 'client.', 'namespace' => 'Client', 
     Route::get('allAccounts','AccountController@all')->name('allAccounts');
 
     //new account
+    Route::get('changeAccountStaging/{account_id}','ChangeAccountController@index')->name('changeAccountStaging');
+    Route::post('changeAccountAccountType/{account_id}','ChangeAccountController@accountTypeSave')->name('changeAccountAccountType');
+    Route::get('changeAccountBasicInfo/{account_id}','ChangeAccountController@basicInfoShow')->name('changeAccountBasicInfo');
+    Route::post('changeAccountBasicInfo/{account_id}','ChangeAccountController@basicinfoSave')->name('changeAccountBasicInfo');
+    Route::get('changeAccountEmpInfo/{account_id}','ChangeAccountController@employmentDetailsShow')->name('changeAccountEmpInfo');
+    Route::post('changeAccountEmpInfo/{account_id}','ChangeAccountController@employmentDetailsSave')->name('changeAccountEmpInfo');
+    Route::get('changeAccountBank/{account_id}','ChangeAccountController@bankParticularsShow')->name('changeAccountBank');
+    Route::post('changeAccountBank/{account_id}','ChangeAccountController@bankParticularsSave')->name('changeAccountBank');
+    Route::get('changeAccountOtherInfo/{account_id}','ChangeAccountController@otherInfoShow')->name('changeAccountOtherInfo');
+    Route::post('changeAccountOtherInfo/{account_id}','ChangeAccountController@otherInfoSave')->name('changeAccountOtherInfo');
+    Route::get('changeAccountKyc/{account_id}','ChangeAccountController@KycShow')->name('changeAccountKyc');
+    Route::post('changeAccountKyc/{account_id}','ChangeAccountController@KycSave')->name('changeAccountKyc');
+    Route::get('changeAccountStatement/{account_id}','ChangeAccountController@statement')->name('changeAccountStatement');
+    Route::post('changeAccountfinish/{account_id}','ChangeAccountController@finish')->name('changeAccountfinish');
+    Route::get('changeAccountEnd/{account_id}','ChangeAccountController@end')->name('changeAccountEnd');
+
+
+    //changeAccount
     Route::get('newAccountStaging/{account_id}','AccountController@index')->name('newAccountStaging');
     Route::post('newAccountAccountType/{account_id}','AccountController@accountTypeSave')->name('newAccountAccountType');
     Route::get('newAccountBasicInfo/{account_id}','AccountController@basicInfoShow')->name('newAccountBasicInfo');
@@ -283,6 +302,7 @@ Route::group(['prefix' => 'client', 'as' => 'client.', 'namespace' => 'Client', 
     Route::get('newAccountStatement/{account_id}','AccountController@statement')->name('newAccountStatement');
     Route::post('newAccountfinish/{account_id}','AccountController@finish')->name('newAccountfinish');
     Route::get('newAccountEnd/{account_id}','AccountController@end')->name('newAccountEnd');
+
 
 
 

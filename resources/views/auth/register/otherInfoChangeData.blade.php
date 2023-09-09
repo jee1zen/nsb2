@@ -10,30 +10,29 @@
 
     <label class="fieldlabels">Are you a Director or Staff of NSB Fund Management Company Ltd? </label>
     <label class="radio-inline"><input type="radio" name="nsb_staff_fund_management" value=1
-            {{ $client->otherDetails->nsb_staff_fund_management == 1 ? 'checked' : '' }}> Yes</label>
+            {{ $otherDetails->nsb_staff_fund_management == 1 ? 'checked' : '' }}> Yes</label>
     <label class="radio-inline"><input type="radio" name="nsb_staff_fund_management" checked value=0
-            {{ $client->otherDetails->nsb_staff_fund_management == 0 ? 'checked' : '' }}> No</label>
+            {{ $otherDetails->nsb_staff_fund_management == 0 ? 'checked' : '' }}> No</label>
     <label class="fieldlabels">Are you a Director or Staff of NSB? </label>
     <label class="radio-inline"><input type="radio" name="nsb_staff" value=1
-            {{ $client->otherDetails->nsb_staff == 1 ? 'checked' : '' }}> Yes</label>
+            {{ $otherDetails->nsb_staff == 1 ? 'checked' : '' }}> Yes</label>
     <label class="radio-inline"><input type="radio" name="nsb_staff" checked value=0
-            {{ $client->otherDetails->nsb_staff == 0 ? 'checked' : '' }}> No</label>
+            {{ $otherDetails->nsb_staff == 0 ? 'checked' : '' }}> No</label>
     <label class="fieldlabels">Are you related to any Director or Staff of NSB Fund Management Company Ltd? </label>
     <label class="radio-inline"><input type="radio" name="related_nsb_staff" value=1
-            {{ $client->otherDetails->related_nsb_staff == 1 ? 'checked' : '' }}> Yes</label>
+            {{ $otherDetails->related_nsb_staff == 1 ? 'checked' : '' }}> Yes</label>
     <label class="radio-inline"><input type="radio" name="related_nsb_staff" checked value=0
-            {{ $client->otherDetails->related_nsb_staff == 0 ? 'checked' : '' }}> No</label>
+            {{ $otherDetails->related_nsb_staff == 0 ? 'checked' : '' }}> No</label>
     <label class="fieldlabels">If “Yes”, please state the Relationship </label>
-    <input type="text" name="relationship" placeholder="" value="{{ $client->otherDetails->staff_relationship }}" />
+    <input type="text" name="relationship" placeholder="" value="{{ $otherDetails->staff_relationship }}" />
     <label class="fieldlabels">Are you a Director/Employee of another Primary Dealer/ Holding Company and/or an
         associate of the Primary Dealer</label>
     <label class="radio-inline"><input type="radio" name="member_holding_company" value=1
-            {{ $client->otherDetails->member_holding_company == 1 ? 'checked' : '' }}> Yes</label>
+            {{ $otherDetails->member_holding_company == 1 ? 'checked' : '' }}> Yes</label>
     <label class="radio-inline"><input type="radio" name="member_holding_company" checked value=0
-            {{ $client->otherDetails->member_holding_company == 1 ? 'checked' : '' }}> No</label>
+            {{ $otherDetails->member_holding_company == 1 ? 'checked' : '' }}> No</label>
     <label class="fieldlabels">If yes, please state the Prior written concern </label>
-    <input type="text" name="state" placeholder=""
-        value="{{ $client->otherDetails->member_holding_company_state }}" />
+    <input type="text" name="state" placeholder="" value="{{ $otherDetails->member_holding_company_state }}" />
 
     <div id="notification_DIV">
         <div class="row">
@@ -50,15 +49,14 @@
                                     <label class="form-check-label" style="margin-top: 2.7em">
                                         <input class="form-check-input" type="checkbox" name="notification_by_email"
                                             id="notification_by_email" value="notification_by_email"
-                                            {{ $client->realTimeNotification->on_email == 1 ? 'checked' : '' }}>
+                                            {{ $realTimeNotification->on_email == 1 ? 'checked' : '' }}>
                                         Email
                                     </label>
                                 </div>
                             </td>
                             <td>
                                 <input type="text" name="notification_email" id="notification_email"
-                                    class="form-control"
-                                    value="{{ $client->realTimeNotification->email ?? $user->email }}"
+                                    class="form-control" value="{{ $realTimeNotification->email ?? $user->email }}"
                                     style="margin-top: 2.5em">
                             </td>
 
@@ -69,15 +67,14 @@
                                     <label class="form-check-label" style="margin-top: 2.7em">
                                         <input class="form-check-input" type="checkbox" name="notification_by_mobile"
                                             id="notification_by_phone_no" value="notification_by_mobile"
-                                            {{ $client->realTimeNotification->on_mobile == 1 ? 'checked' : '' }}>
+                                            {{ $realTimeNotification->on_mobile == 1 ? 'checked' : '' }}>
                                         Mobile No
                                     </label>
                                 </div>
                             </td>
                             <td>
                                 <input type="text" name="notification_mobile" id="notification_mobile"
-                                    class="form-control"
-                                    value="{{ $client->realTimeNotification->mobile ?? $client->mobile }}"
+                                    class="form-control" value="{{ $realTimeNotification->mobile ?? $client->mobile }}"
                                     style="margin-top: 2.5em">
                             </td>
 

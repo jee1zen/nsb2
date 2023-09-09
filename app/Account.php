@@ -19,7 +19,50 @@ class Account extends Model
         return $this->belongsTo(User::class);
     }
 
- 
+    public function accountChange(){
+
+        return $this->hasOne(AccountChange::class,'account_id');
+    }
+
+    public function clientChange(){
+
+        return $this->hasOne(ClientChange::class,'account_id');
+    }
+
+    public function joinHolderChanges(){
+        return $this->hasMany(JoinHolderChange::class,'account_id');
+    }
+
+    public function employmentChange(){
+
+        return $this->hasOne(EmploymentDetailChange::class,'account_id');
+    }
+
+    public function bankParticularChanges(){
+
+        return $this->hasMany(bankParticularChanges::class,'account_id');
+    }
+
+    public function otheDetailChanges(){
+        return $this->hasOne(OtherDetailChanges::class,'account_id');
+    }
+    public function notificationChange(){
+        return $this->hasOne(NotificationChange::class,'account_id');
+    }
+    public function hasNotificationChange(){
+        return (bool) $this->notificationChange()->first();
+    }
+
+    public function kycChange(){
+        return $this->hasOne(kycChange::class,'account_id');
+    }
+
+    public function hasKycChange(){
+
+        return (bool) $this->kycChange()->first();
+
+    }
+
 
     public function investments(){
         return $this->hasMany(Investment::class,'account_id');

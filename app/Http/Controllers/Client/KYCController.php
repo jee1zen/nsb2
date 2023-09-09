@@ -7,6 +7,7 @@ use App\Company;
 use App\CompanySignature;
 use App\Http\Controllers\Controller;
 use App\Investment;
+use App\JoinHolderChange;
 use App\JointHolder;
 use App\KYCCompany;
 use App\KYCCompanyForeignInvestor;
@@ -300,6 +301,26 @@ class KYCController extends Controller
     
         
     }
+    public function jointKYCChange($id,$link){
+
+
+        $jointHolder = JoinHolderChange::where('kyc_link',$link)->first();
+        $user = $jointHolder->user;
+        $investment_id = $id;
+        if(!Auth::check()) 
+        {
+           Auth::logout();
+        }
+    
+
+    //    $user->login();
+       Auth::login($user);
+       
+       
+       return view('client.kycJointClient',compact('jointHolder','user','investment_id'));
+
+    }
+
 
     public function signature($id){
 

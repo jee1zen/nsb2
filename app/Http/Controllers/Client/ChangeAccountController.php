@@ -1,18 +1,30 @@
 <?php
 
+namespace App\Http\Controllers\Client;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+
 namespace App\Http\Controllers\client;
 
 use App\Http\Controllers\Controller;
 use App\Account;
+use App\AccountChange;
 use App\AuthorizedPerson;
 use App\Bank;
 use App\BankParticular;
+use App\BankParticularChanges;
 use App\Branch;
 use App\Client;
+use App\ClientChange;
 use App\EmploymentDetails;
 use App\InvestmentType;
+use App\JoinHolderChange;
 use App\JointHolder;
+use App\KYCChange;
 use App\KYCForm;
+use App\NotificationChange;
+use App\OtherDetailChanges;
 use App\OtherDetails;
 use App\RealTimeNotificationSetting;
 use App\User;
@@ -22,61 +34,43 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 
-class AccountController extends Controller
+class ChangeAccountController extends Controller
 {
-    public function all(){
-
-        $user = Auth::user();
-        $client = $user->client;
-        $accounts = $client->accounts()->get();
-
-         return view('client.accounts.all', compact('client', 'user','accounts'));
-    }
-    public function index($account_id=0)
+    public function index($account_id = 0)
     {
 
         $user = Auth::user();
-
-       
-
-
         $investment_types = InvestmentType::all();
         $banks = Bank::orderBy('name', 'ASC')->with('branches')->get();
         $banksJson = $banks->toJson();
-        $account="";
+        $account  = Account::findOrFail($account_id);
+        $accountChange = $account->accountChange;
+       
+        if($accountChange!=null){
+           $account_type = $accountChange->type;
+        }else{
+            $account_type = $account->type;
 
+        }
+
+    
+    //    dd($account_type);
         $branches = Branch::orderBy('name', 'ASC')->get();
         $branches = $branches->toJson();
-        if ($account_id != 0) {
-            $account = Account::findOrFail($account_id);
-            if ($account->pre == 0) {
 
 
-                return redirect()->route('client.newAccountEnd',$account_id);
-            } else {
-
-                $account_type = $account->type;
-
-                return view('client.accounts.accountType', compact('banksJson', 'branches', 'investment_types', 'banks', 'user', 'account','account_id', 'account_type'));
-            }
-        } else {
-            $account_type = 1;
-            
-            return view('client.accounts.accountType', compact('banksJson', 'branches', 'investment_types', 'banks', 'user', 'account','account_id', 'account_type'));
-        }
+        return view('client.changeAccount.accountType', compact('banksJson', 'branches', 'investment_types', 'banks', 'user', 'account', 'account_id', 'account_type'));
     }
 
-    public function accountTypeSave(Request $request,$account_id=0)
+    public function accountTypeSave(Request $request, $account_id = 0)
     {
-
         $user = Auth::user();
+        $account = Account::findOrFail($account_id);
 
-       
-        // dd($account);
-
-        if ($account_id == 0) {
-
-            $account = Account::create([
+        $accountChange = $account->accountChange;
+        if ($accountChange == null) {
+            $accountChange = AccountChange::create([
+                'account_id' => $account_id,
                 'client_id' => $user->id,
                 'type' => $request->client_type,
                 'joint_permission' => $request->joint_permission,
@@ -84,27 +78,56 @@ class AccountController extends Controller
 
             ]);
         } else {
-            $account = Account::findOrFail($account_id);
-            $account->update([
+            $accountChange->update([
+                'account_id' => $account->id,
                 'type' => $request->client_type,
                 'joint_permission' => $request->joint_permission,
                 'pre' => 1,
             ]);
         }
-
-        return redirect()->route('client.newAccountBasicInfo',$account->id);
+        return redirect()->route('client.changeAccountBasicInfo', $account->id);
     }
-    public function basicInfoShow($account_id=0)
+    public function basicInfoShow($account_id = 0)
     {
 
         $user = Auth::user();
-        $client = $user->client;
+    
         $account = Account::findOrFail($account_id);
+        $accountChange = $account->accountChange;
+        $jointHolders=[];
 
-        return view('client.accounts.mainUserInfo', compact('user', 'account', 'client'));
+        $client = $account->clientChange;
+      
+        if($client==null){
+            $client = $user->client;
+            if($account->type==2){
+                $jointHolders = $client->joinHoldersWithAccount($account_id)->get();
+            }else{
+                $jointHolders=[];
+            }
+           
+        }else{
+
+            if($accountChange->type==2){
+
+                $jointHolders = JoinHolderChange::where('account_id',$account_id)->get();
+                // dd($jointHolders);
+              
+            }    
+
+        }
+
+        
+
+        
+        $accountChange =$account->accountChange;
+    //    dd($jointHolders);
+     
+
+        return view('client.changeAccount.mainUserInfo', compact('user', 'account', 'client','accountChange','jointHolders'));
     }
 
-    public function basicinfoSave(Request $request,$account_id=0)
+    public function basicinfoSave(Request $request, $account_id = 0)
     {
 
 
@@ -119,15 +142,17 @@ class AccountController extends Controller
         }
         $account = Account::findOrFail($account_id);
 
-
+        $accountChange = $account->accountChange;
         $user_id = $user->id;
-        $client = $user->client;
+        $client = $account->clientChange;
 
         if ($client == null) {
+            $originalDataClient = $account->client;
 
-            $client = Client::create([
+            $client = ClientChange::create([
                 'id' => $user->id,
                 'password' => '',
+                'account_id' =>$account_id,
                 'name' => $request->name,
                 'name_by_initials' => $request->name_initials,
                 'dob' => $request->dob,
@@ -143,6 +168,13 @@ class AccountController extends Controller
                 'nationality' => $nationality,
                 'telephone' => $request->telephone,
                 'mobile' => $request->full_mobile,
+                'nic_front'=>$originalDataClient->nic_front,
+                'nic_back'=>$originalDataClient->nic_back,
+                'passport'=>$originalDataClient->passport,
+                'signature'=>$originalDataClient->signature,
+                'billing_proof'=>$originalDataClient->billing_proof,
+                'pro_pic'=>$originalDataClient->pro_pic,
+
 
 
             ]);
@@ -187,7 +219,7 @@ class AccountController extends Controller
 
             $signature_name = time() . '_' . $signature->getClientOriginalName();
             $signature->move($destinationPath, $signature_name);
-            Client::where('id', $user_id)->update([
+            ClientChange::where('id', $client->id)->update([
 
                 'signature' => $signature_name,
             ]);
@@ -205,7 +237,7 @@ class AccountController extends Controller
 
 
 
-            Client::where('id', $user_id)->update([
+            ClientChange::where('id', $client->id)->update([
 
                 'billing_proof' => $billing_proof_name,
             ]);
@@ -218,7 +250,7 @@ class AccountController extends Controller
             $pro_pic_name = time() . '_' . $pro_pic->getClientOriginalName();
             $pro_pic->move($destinationPath, $pro_pic_name);
 
-            Client::where('id', $user_id)->update([
+            ClientChange::where('id', $client->id)->update([
 
                 'pro_pic' => $pro_pic_name,
             ]);
@@ -242,7 +274,7 @@ class AccountController extends Controller
                 $passport_name = time() . '.' . $passport->extension();
                 $passport->move($destinationPath, $passport_name);
 
-                Client::where('id', $user_id)->update([
+                ClientChange::where('id', $client->id)->update([
                     'passport' => $passport_name
 
                 ]);
@@ -254,7 +286,7 @@ class AccountController extends Controller
                 $nic_front = $request->file('nic_front');
                 $nic_front_name = time() . '_' . $nic_front->getClientOriginalName();
                 $nic_front->move($destinationPath, $nic_front_name);
-                Client::where('id', $user_id)->update([
+                ClientChange::where('id', $client->id)->update([
 
                     'nic_front' => $nic_front_name,
                 ]);
@@ -265,14 +297,14 @@ class AccountController extends Controller
                 $nic_back_name = time() . '_' . $nic_back->getClientOriginalName();
                 $nic_back->move($destinationPath, $nic_back_name);
 
-                Client::where('id', $user_id)->update([
+                ClientChange::where('id', $client->id)->update([
 
                     'nic_back' => $nic_back_name,
                 ]);
             }
         }
 
-        if ($account->type == 2) {
+        if ($accountChange->type == 2) {
 
 
 
@@ -294,7 +326,7 @@ class AccountController extends Controller
 
                 $password_joint = Str::random(8);
                 $kyc_link_1 = Str::random(15);
-               
+
 
                 $joint_user = User::where('email', $request->joint_email[$i])->first();
 
@@ -322,87 +354,79 @@ class AccountController extends Controller
                         'password' => Hash::make($password_joint),
                     ]);
                     $link = $joint_user->id . $kyc_link_1;
-
                 }
 
-                $jointHolder = JointHolder::where('user_id',$joint_user->id)->first();
+                // $jointHolder = JointHolder::where('user_id', $joint_user->id)->first();
 
-                    if($jointHolder==null){
-
-
-                        $jointHolder = JointHolder::create([
-                            'client_id' => $user_id,
-                            'account_id' => $account->id,
-                            'user_id' => $joint_user->id,
-                            'password' => $password_joint,
-                            'name' => $request->joint_name[$i],
-                            'name_by_initials' => $request->joint_name_initials[$i],
-                            'title' => $request->joint_title[$i],
-                            'dob' => $request->joint_dob[$i],
-                            'nic' => $request->joint_nic[$i],
-                            'nationality' => $joint_nationality,
-                            'email' => $request->joint_email[$i],
-                            'address_line_1' => $request->joint_address_line_1[$i],
-                            'address_line_2' => $request->joint_address_line_2[$i],
-                            'address_line_3' => $request->joint_address_line_3[$i],
-                            'correspondence_address_line_1' => $request->joint_address_line_1[$i],
-                            'correspondence_address_line_2' => $request->joint_address_line_2[$i],
-                            'correspondence_address_line_3' => $request->joint_address_line_3[$i],
-                            'telephone' => $request->joint_telephone[$i],
-                            'mobile' => $request->full_joint_mobile[$i],
-                            // 'occupation' => $request->joint_emp_occupation[$i],
-                            // 'company_name' => $request->joint_emp_company_name[$i],
-                            // 'company_address' => $request->joint_emp_company_address[$i],
-                            // 'company_telephone' => $request->joint_emp_company_telephone[$i],
-                            // 'company_fax' => $request->joint_emp_fax[$i],
-                            // 'company_nature' => $request->joint_emp_nature[$i],
-                            'kyc_link' =>  $link,
-    
-                        ]);
-                   
-    
+             
+             
+                if (!isset($request->jointHolder_info_id)) {
 
 
-                    }else{
+                    $jointHolder = JoinHolderChange::create([
+                        'client_id' => $user_id,
+                        'account_id' => $account->id,
+                        'user_id' => $joint_user->id,
+                        'password' => $password_joint,
+                        'name' => $request->joint_name[$i],
+                        'name_by_initials' => $request->joint_name_initials[$i],
+                        'title' => $request->joint_title[$i],
+                        'dob' => $request->joint_dob[$i],
+                        'nic' => $request->joint_nic[$i],
+                        'nationality' => $joint_nationality,
+                        'email' => $request->joint_email[$i],
+                        'address_line_1' => $request->joint_address_line_1[$i],
+                        'address_line_2' => $request->joint_address_line_2[$i],
+                        'address_line_3' => $request->joint_address_line_3[$i],
+                        'correspondence_address_line_1' => $request->joint_address_line_1[$i],
+                        'correspondence_address_line_2' => $request->joint_address_line_2[$i],
+                        'correspondence_address_line_3' => $request->joint_address_line_3[$i],
+                        'telephone' => $request->joint_telephone[$i],
+                        'mobile' => $request->full_joint_mobile[$i],
+                        // 'occupation' => $request->joint_emp_occupation[$i],
+                        // 'company_name' => $request->joint_emp_company_name[$i],
+                        // 'company_address' => $request->joint_emp_company_address[$i],
+                        // 'company_telephone' => $request->joint_emp_company_telephone[$i],
+                        // 'company_fax' => $request->joint_emp_fax[$i],
+                        // 'company_nature' => $request->joint_emp_nature[$i],
+                        'kyc_link' =>  $link,
 
-                        $jointHolder = JointHolder::where('client_id', $user_id)->where('account_id', $account->id)->first();
-                        $jointHolder->update([
-    
-                            'client_id' => $user_id,
-                            'account_id' => $account->id,
-                            'user_id' => $joint_user->id,
-                            'password' => $password_joint,
-                            'name' => $request->joint_name[$i],
-                            'name_by_initials' => $request->joint_name_initials[$i],
-                            'title' => $request->joint_title[$i],
-                            'dob' => $request->joint_dob[$i],
-                            'nic' => $request->joint_nic[$i],
-                            'nationality' => $joint_nationality,
-                            'email' => $request->joint_email[$i],
-                            'address_line_1' => $request->joint_address_line_1[$i],
-                            'address_line_2' => $request->joint_address_line_2[$i],
-                            'address_line_3' => $request->joint_address_line_3[$i],
-                            'correspondence_address_line_1' => $request->joint_address_line_1[$i],
-                            'correspondence_address_line_2' => $request->joint_address_line_2[$i],
-                            'correspondence_address_line_3' => $request->joint_address_line_3[$i],
-                            'telephone' => $request->joint_telephone[$i],
-                            'mobile' => $request->full_joint_mobile[$i],
-    
-                        ]);
+                    ]);
+                } else {
+                    $jointHolder = JoinHolderChange::find($request->jointHolder_info_id[$i]);
+                
+                    $jointHolder->update([
+
+                        'client_id' => $user_id,
+                        'account_id' => $account->id,
+                        'user_id' => $joint_user->id,
+                        'password' => $password_joint,
+                        'name' => $request->joint_name[$i],
+                        'name_by_initials' => $request->joint_name_initials[$i],
+                        'title' => $request->joint_title[$i],
+                        'dob' => $request->joint_dob[$i],
+                        'nic' => $request->joint_nic[$i],
+                        'nationality' => $joint_nationality,
+                        'email' => $request->joint_email[$i],
+                        'address_line_1' => $request->joint_address_line_1[$i],
+                        'address_line_2' => $request->joint_address_line_2[$i],
+                        'address_line_3' => $request->joint_address_line_3[$i],
+                        'correspondence_address_line_1' => $request->joint_address_line_1[$i],
+                        'correspondence_address_line_2' => $request->joint_address_line_2[$i],
+                        'correspondence_address_line_3' => $request->joint_address_line_3[$i],
+                        'telephone' => $request->joint_telephone[$i],
+                        'mobile' => $request->full_joint_mobile[$i],
+
+                    ]);
+                }
 
 
-
-
-
-                    }
-
-                 
                 if ($joint_signature_array != null) {
 
                     $joint_signature = $joint_signature_array[$i];
                     $joint_signature_name = time() . '_' . $joint_signature->getClientOriginalName();
                     $joint_signature->move($destinationPath, $joint_signature_name);
-                    JointHolder::where('id', $jointHolder->id)->update([
+                   $jointHolder->update([
 
                         'signature' => $joint_signature_name,
                     ]);
@@ -412,11 +436,13 @@ class AccountController extends Controller
                     $joint_pro_pic = $joint_pro_pic_array[$i];
                     $joint_pro_pic_name = time() . '_' . $joint_pro_pic->getClientOriginalName();
                     $joint_pro_pic->move($destinationPath, $joint_pro_pic_name);
-                    JointHolder::where('id', $jointHolder->id)->update([
+                    $jointHolder->update([
 
                         'pro_pic' => $joint_pro_pic_name,
                     ]);
                 }
+
+                // dd($request->joint_nationality[$i]);
 
                 if ($request->joint_nationality[$i] == "other") {
                     if ($joint_passport_array != null) {
@@ -424,22 +450,24 @@ class AccountController extends Controller
                         $joint_passport_name = time() . '_' . $joint_passport->getClientOriginalName();
                         $joint_passport->move($destinationPath, $joint_passport_name);
 
-                        JointHolder::where('id', $jointHolder->id)->update([
+                        $jointHolder->update([
                             'passport' => $joint_passport_name
 
                         ]);
                     }
                 } else {
                     if ($joint_nic_front_array != null && $joint_nic_back_array != null) {
+                        // dd("came here");
                         $joint_nic_front = $joint_nic_front_array[$i];
                         $joint_nic_front_name = time() . '_' . $joint_nic_front->getClientOriginalName();
+                        // dd($joint_nic_front_name);
                         $joint_nic_front->move($destinationPath, $joint_nic_front_name);
 
                         $joint_nic_back = $joint_nic_back_array[$i];
                         $joint_nic_back_name = time() . '_' . $joint_nic_back->getClientOriginalName();
                         $joint_nic_back->move($destinationPath, $joint_nic_back_name);
 
-                        JointHolder::where('id', $jointHolder->id)->update([
+                        $jointHolder->update([
                             'nic_front' => $joint_nic_front_name,
                             'nic_back' => $joint_nic_back_name,
                         ]);
@@ -453,24 +481,62 @@ class AccountController extends Controller
 
             }
         }
-        return redirect()->route('client.newAccountEmpInfo',$account_id);
+        return redirect()->route('client.changeAccountEmpInfo', $account_id);
     }
-    public function employmentDetailsShow($account_id=0)
+    public function employmentDetailsShow($account_id = 0)
+    {
+
+        $user = Auth::user();
+        
+        $account = Account::findOrFail($account_id);
+        $employmentDetails = $account->employmentChange;
+        $accountChange = $account->accountChange;
+        if($employmentDetails==null){
+            $employmentDetails = $account->client->employmentDetails;
+        }
+
+
+        
+
+        $client= $account->clientChange;
+        $jointHolders=[];
+
+        if($accountChange->type==2){
+            $jointHolders = JoinHolderChange::where('account_id',$account_id)->get();
+
+            if($jointHolders==null && $account->type==2){
+                $jointHolders = $client->joinHoldersWithAccount($account_id)->get();
+            }
+        }
+        // if($client==null){
+        //     $client = $user->client;
+        //     if($account->type==2){
+        //         $jointHolders = $client->joinHoldersWithAccount($account_id)->get();
+        //     }else{
+        //         $jointHolders=[];
+        //     }
+        // }else{
+
+        //     if($accountChange->type==2){
+        //         $jointHolders = JoinHolderChange::where('account_id',$account_id)->get();
+        //     }
+        // }
+
+
+     
+
+
+        return view('client.changeAccount.employement', compact('user', 'account', 'client','accountChange','jointHolders','employmentDetails'));
+    }
+    public function employmentDetailsSave(Request $request, $account_id = 0)
     {
 
         $user = Auth::user();
         $client = $user->client;
         $account = Account::findOrFail($account_id);
-
-        return view('client.accounts.employement', compact('user', 'account', 'client'));
-    }
-    public function employmentDetailsSave(Request $request,$account_id=0)
-    {
-
-        $user = Auth::user();
-        $client = $user->client;
-        $empDetails = $client->employmentDetails;
-        $account = Account::findOrFail($account_id);
+        $accountChange = $account->accountChange;
+        $empDetails = $account->employmentChange;
+      
         // dd($empDetails);
         if ($empDetails == null) {
 
@@ -497,40 +563,37 @@ class AccountController extends Controller
             ]);
         }
 
-        if($account->type==2){
+        if ($accountChange->type == 2) {
             for ($i = 0; $i < count($request->jointHolder_emp_id); $i++) {
-                JointHolder::where('id', $request->jointHolder_emp_id[$i])->update([
-    
+                JoinHolderChange::where('id', $request->jointHolder_emp_id[$i])->update([
+
                     'occupation' => $request->joint_emp_occupation[$i],
                     'company_name' => $request->joint_emp_company_name[$i],
                     'company_address' => $request->joint_emp_company_address[$i],
                     'company_telephone' => $request->joint_emp_company_telephone[$i],
                     'company_fax' => $request->joint_emp_fax[$i],
                     'company_nature' => $request->joint_emp_nature[$i],
-    
-    
-    
+
+
+
                 ]);
             }
         }
 
-        
-
-
-
-
 
         // return view('client.registration.employement', compact('user', 'account'));
 
-        return redirect()->route('client.newAccountBank',$account->id);
+        return redirect()->route('client.changeAccountBank', $account->id);
     }
 
 
-    public function bankParticularsShow($account_id=0)
+    public function bankParticularsShow($account_id = 0)
     {
 
         $user = Auth::user();
         $account = Account::findOrFail($account_id);
+    
+
 
 
         $banks = Bank::orderBy('name', 'ASC')->with('branches')->get();
@@ -538,24 +601,33 @@ class AccountController extends Controller
 
         $branches = Branch::orderBy('name', 'ASC')->get();
         $branches = $branches->toJson();
-        $bankParticulars = BankParticular::where('client_id',$user->id)->where('account_id',$account->id)->get();
+
+        $bankParticulars=[];
+
+        $bankParticulars = $account->bankParticularChanges()->get();
+        // dd($bankParticulars);
+        if($bankParticulars->count()==0){
+            $bankParticulars = BankParticular::where('client_id', $user->id)->where('account_id', $account->id)->get();
 
 
+        }
+    
+      
 
-        return view('client.accounts.bankparticulars', compact('banksJson', 'branches', 'banks', 'user', 'account','bankParticulars'));
+        return view('client.changeAccount.bankparticulars', compact('banksJson', 'branches', 'banks', 'user', 'account', 'bankParticulars'));
     }
 
-    public function bankParticularsSave(Request $request,$account_id=0)
+    public function bankParticularsSave(Request $request, $account_id = 0)
     {
 
 
         $user = Auth::user();
         $account = Account::findOrFail($account_id);
-        BankParticular::where('client_id',$user->id)->where('account_id',$account->id)->delete();
+        BankParticularChanges::where('account_id', $account->id)->delete();
 
         for ($i = 0; $i < count($request->accountType); $i++) {
             if ($request->accountType[$i] != null) {
-                BankParticular::create([
+                BankParticularChanges::create([
                     'client_id' => $user->id,
                     'account_id' => $account->id,
                     'name' => $request->holder_name[$i],
@@ -567,32 +639,48 @@ class AccountController extends Controller
             }
         }
 
-        return redirect()->route('client.newAccountOtherInfo',$account_id);
+        return redirect()->route('client.changeAccountOtherInfo', $account_id);
     }
 
-    public function otherInfoShow($account_id=0)
+    public function otherInfoShow($account_id = 0)
     {
 
         $user = Auth::user();
-        $client = $user->client;
         $account = Account::findOrFail($account_id);
+        $accountChange = $account->accountChange;
+        $otherDetails=$account->OtherDetailsChange;
+        if($otherDetails==null){
+            $otherDetails = $account->client->otherDetails;
+        }
+        $realTimeNotification = $account->notificationChange;
+        if($realTimeNotification==null){
+
+            $realTimeNotification = $account->client->realTimeNotification;
+        }
 
 
-        return view('client.accounts.otherInfo', compact('user', 'account','client'));
+
+        $client = $user->client;
+      
+
+
+        return view('client.changeAccount.otherInfo', compact('user', 'account', 'client','otherDetails','realTimeNotification'));
     }
 
-    public function otherInfoSave(Request $request,$account_id=0)
+    public function otherInfoSave(Request $request, $account_id = 0)
     {
 
         $user = Auth::user();
 
         $client = $user->client;
-        $otherInfo = $client->otherDetails;
+        $account= Account::find($account_id);
+        $otherInfo = $account->otheDetailChanges;
 
         if ($otherInfo == null) {
 
-            OtherDetails::create([
+            OtherDetailChanges::create([
                 'id' => $user->id,
+                'account'=>$account_id,
                 'nsb_staff_fund_management' => $request->nsb_staff_fund_management,
                 'nsb_staff' => $request->nsb_staff,
                 'related_nsb_staff' => $request->related_nsb_staff,
@@ -619,10 +707,11 @@ class AccountController extends Controller
         }
 
 
-        if (!$client->hasRealTimeNotification()) {
-            RealTimeNotificationSetting::create([
+        if (!$account->hasNotificationChange()) {
+            NotificationChange::create([
 
                 'id' => $user->id,
+                'account_id'=> $account_id,
                 'on_email' => $request->notification_by_email == true ? 1 : 0,
                 'email' => $request->notification_email,
                 'on_mobile' => $request->notification_by_mobile == true ? 1 : 0,
@@ -644,31 +733,37 @@ class AccountController extends Controller
 
 
 
-        return redirect()->route('client.newAccountKyc',$account_id);
+        return redirect()->route('client.changeAccountKyc', $account_id);
     }
 
-    public function KycShow($account_id=0)
+    public function KycShow($account_id = 0)
     {
+       
 
+        // dd("came here");
         $user = Auth::user();
         $client = $user->client;
         $account = Account::findOrFail($account_id);
-        
-        $kyc = $client->clientKYC($account->id);
+        if(!$account->hasKycChange()){
 
-        // dd($kyc);
+            $kyc = $client->clientKYC($account_id);
+        }else{
+            $kyc = $account->kycChange;
+        }
+     
 
-        return view('client.accounts.KYC', compact('user', 'account','kyc'));
+
+        return view('client.changeAccount.KYC', compact('user', 'account', 'kyc'));
     }
 
-    public function KycSave(Request $request,$account_id=0)
+    public function KycSave(Request $request, $account_id = 0)
     {
-
+   
         $user = Auth::user();
         $client = $user->client;
         $account = Account::findOrFail($account_id);
-        if ($client->hasClientKYC($account->id)) {
-            $kyc = $client->clientKYC($account->id);
+        if ($account->hasKycChange()) {
+            $kyc =$account->kycChange();
             $kyc->kyc_account_at_NSB_FMC = $request->kyc_account_at_NSB_FMC;
             $kyc->kyc_ownership_of_premises = $request->kyc_ownership_of_premises;
             $kyc->kyc_foreign_address = "";
@@ -697,7 +792,7 @@ class AccountController extends Controller
             $kyc->kyc_pep = $request->kyc_pep;
             $kyc->kyc_us_person = $request->kyc_us_person;
             $kyc->kyc_employment_status = $request->kyc_employment_status;
-            $kyc->kyc_other_employement = $request->kyc_other_employement;
+            $kyc->kyc_other_employment = $request->kyc_other_employement;
             $kyc->kyc_nature_of_business = $request->kyc_nature_of_business;
             $kyc->kyc_nature_of_business_specify = $request->kyc_nature_of_business_specify;
             $kyc->kyc_marital_status = $request->kyc_marital_status;
@@ -707,7 +802,7 @@ class AccountController extends Controller
             $kyc->save();
         } else {
 
-            $kyc = new KYCForm;
+            $kyc = new KYCChange();
             $kyc->client_id = $user->id;
             $kyc->account_id = $account->id;
             $kyc->investment_id = 0;
@@ -728,7 +823,7 @@ class AccountController extends Controller
             $kyc->kyc_source_of_funds = $request->kyc_source_of_funds;
             $kyc->kyc_other_source = $request->kyc_other_source;
             $kyc->kyc_anticipated_volume = $request->kyc_anticipated_volume;
-            $kyc->kyc_expected_mode_of_transacation = $request->kyc_expected_mode_of_transacation;
+            $kyc->kyc_expected_mode_of_transaction = $request->kyc_expected_mode_of_transacation;
             $kyc->kyc_other_connected_businesses = $request->kyc_other_connected_businesses;
             $kyc->kyc_expected_types_of_counterparties = $request->kyc_expected_types_of_counterparties;
             $kyc->kyc_operation_authority = $request->kyc_operation_authority;
@@ -739,7 +834,7 @@ class AccountController extends Controller
             $kyc->kyc_pep = $request->kyc_pep;
             $kyc->kyc_us_person = $request->kyc_us_person;
             $kyc->kyc_employment_status = $request->kyc_employment_status;
-            $kyc->kyc_other_employement = $request->kyc_other_employement;
+            $kyc->kyc_other_employment = $request->kyc_other_employement;
             $kyc->kyc_nature_of_business = $request->kyc_nature_of_business;
             $kyc->kyc_nature_of_business_specify = $request->kyc_nature_of_business_specify;
             $kyc->kyc_marital_status = $request->kyc_marital_status;
@@ -748,51 +843,52 @@ class AccountController extends Controller
 
             $kyc->save();
         }
-        return redirect()->route('client.newAccountStatement',$account_id);
+        return redirect()->route('client.changeAccountStatement', $account_id);
     }
-    public function statement($account_id=0)
+    public function statement($account_id = 0)
     {
         $account = Account::findOrFail($account_id);
 
-        return view('client.accounts.statement',compact('account'));
+        return view('client.changeAccount.statement', compact('account'));
     }
 
-    public function finish(Request $request,$account_id=0)
+    public function finish(Request $request, $account_id = 0)
     {
         $user = Auth::user();
         $client = $user->client;
         $account = Account::findOrFail($account_id);
+        $accountChange = $account->accountChange;
 
-      
+
 
         if ($request->acceptCheck) {
 
-            if ($account->type == 2) {
+            if ($accountChange->type == 2) {
 
-                $jointHolders = JointHolder::where('account_id', $account->id)->where('client_id', $client->id)->get();
+                $jointHolders = JoinHolderChange::where('account_id', $account->id)->where('client_id', $client->id)->get();
 
                 foreach ($jointHolders as $jointHolder) {
 
-                    Mail::send('emails.jointholderKyc', ['name' => $jointHolder->name, 'email' => $jointHolder->email, 'link' => $jointHolder->kyc_link, 'joint_id' => 0], function ($message) use ($jointHolder) {
+                    Mail::send('emails.changeJointholderKyc', ['name' => $jointHolder->name, 'email' => $jointHolder->email, 'link' => $jointHolder->kyc_link, 'joint_id' => 0], function ($message) use ($jointHolder) {
                         $message->to($jointHolder->email);
                         $message->subject('Need to Fill KYC Forms NSB FMC ' . $jointHolder->name);
                     });
                 }
             } else {
 
-                $account->pre = 0;
-                $account->save();
+                $accountChange->pre = 0;
+                $accountChange->save();
             }
         } else {
         }
 
-        return redirect()->route('client.newAccountEnd',$account_id);
+        return redirect()->route('client.changeAccountEnd', $account_id);
     }
 
-    public function end($account_id=0)
+    public function end($account_id = 0)
     {
         $account = Account::findOrFail($account_id);
 
-        return view('client.accounts.finish',compact('account'));
+        return view('client.changeAccount.finish', compact('account'));
     }
 }

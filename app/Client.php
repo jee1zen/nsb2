@@ -83,6 +83,13 @@ class Client extends Model
 
      }
 
+     public function activeAccounts(){
+        return $this->accounts()->where('status','>',7);
+     }
+     public function hasActiveAccounts(){
+        return (bool) $this->activeAccounts()->first();
+     }
+
      public function selectedAccount(){
 
         return $this->hasOne(SelectedAccount::class,'client_id','id');
