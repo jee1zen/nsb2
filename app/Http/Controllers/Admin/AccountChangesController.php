@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\AccountChange;
+use App\AccountChangeProcess;
 use App\Http\Controllers\Controller;
 use App\KYCForm;
 use Illuminate\Http\Request;
@@ -264,6 +265,7 @@ class AccountChangesController extends Controller
 
         $accountChange = AccountChange::findOrFail($id);
 
+
    
         $request_type = $request->request_type;
         $request_comment = $request->request_comment;
@@ -283,10 +285,10 @@ class AccountChangesController extends Controller
 
         $accountChange->save();
 
-        NewInvestmentProcess::create([
+        AccountChangeProcess::create([
 
             'user_id' => $officer->id,
-            'client_id' => $client_id,
+            'account_id' => $accountChange->account_id,
             'previous_state' => $prev_state,
             'current_state' => $prev_state + $request_type,
             'comment' => $request_comment
