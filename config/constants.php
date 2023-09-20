@@ -85,9 +85,14 @@ return [
         1=>'General',
         2=>'Complain',
         3=>'Suggession',
+     ],
+
+     'ACCOUNT_EDIT_STATE'=>[
+      0=>'Officer or manager under review',
+      1=>'middle officer under review',
+      2=>'Changed'
      ]
 
   
 
 ];
-

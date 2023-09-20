@@ -33,6 +33,11 @@ class Account extends Model
         return $this->hasMany(JoinHolderChange::class,'account_id');
     }
 
+    public function hasJoinHolderChanges(){
+        return (bool) $this->joinHolderChanges()->first();
+    }
+
+
     public function employmentChange(){
 
         return $this->hasOne(EmploymentDetailChange::class,'account_id');
@@ -42,6 +47,12 @@ class Account extends Model
 
         return $this->hasMany(bankParticularChanges::class,'account_id');
     }
+
+    public function hasBankParticularChanges(){
+
+        return (bool) $this->bankParticularChanges()->first();
+    }
+
 
     public function otheDetailChanges(){
         return $this->hasOne(OtherDetailChanges::class,'account_id');

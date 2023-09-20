@@ -125,6 +125,11 @@ Route::get('emailVerifyMessage','Registration\PreUserController@verifyEmailMessa
     Route::get('clients/dashboard/{client_id}','ApplicantsController@clientDashboard')->name('clients.dashboard');
 
 
+    //accountEdits
+
+    Route::get('accountEdit','AccountChangesController@index')->name('accountEdit.index');
+    Route::get('accountEdit/show/{id}','AccountChangesController@show')->name('accountEdit.show');
+
     // Client Management
     Route::get('clients_management','ApplicantsController@index')->name('clients.management');
     Route::get('clients_management/{id}','ApplicantsController@fullProfile')->name('clients.profile');

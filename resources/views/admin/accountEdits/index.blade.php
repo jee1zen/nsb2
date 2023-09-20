@@ -11,7 +11,8 @@
     @endcan
     <div class="card">
         <div class="card-header">
-            New Invetment Approval Process
+            Account Changes Approval
+
         </div>
 
         <div class="card-body">
@@ -19,68 +20,104 @@
                 <table class=" table table-bordered table-striped table-hover datatable datatable-User">
                     <thead>
                         <tr>
-                            <th width="10">
+                            <th>
 
                             </th>
                             <th>
-                                CientID
+                                NIC
                             </th>
                             <th>
                                 Name
                             </th>
                             <th>
-                                Account Type
+                                Email
+                            </th>
+                            <th>
+                                Mobile
                             </th>
                             <th>
                                 Type
                             </th>
+                            {{-- <th>
+                           Verification Stage
+                         </th> --}}
                             <th>
-                                Verification Stage
+                                Date
                             </th>
-                            <th>
-                                Requested At
-                            </th>
-
                             <th>
                                 &nbsp;
                             </th>
                         </tr>
                     </thead>
                     <tbody>
-                        @if ($investments)
-                            @foreach ($investments as $key => $investment)
-                                <tr data-entry-id="{{ $investment->id }}">
+                        @if ($accountChanges != '')
+                            @foreach ($accountChanges as $key => $accountChange)
+                                @php
+                                    $account = $accountChange->account;
+                                @endphp
+                                <tr data-entry-id="{{ $accountChange->id }}">
                                     <td>
 
                                     </td>
                                     <td>
-                                        #{{ $investment->id ?? '' }}
+                                        {{ $account->client->nic ?? '' }}
                                     </td>
                                     <td>
-                                        {{ $investment->client->title }} &nbsp; {{ $investment->client->name ?? '' }}
+                                        {{ $account->client->title ?? '' }} {{ $account->client->name ?? '' }} <br>
+                                        @if ($account->hasJointHolders())
+                                            @foreach ($account->jointHolders()->get() as $jointHolder)
+                                                {{ $jointHolder->title }}{{ $jointHolder->name }} (JointHolder)
+                                                @if ($jointHolder->hasKycByInvestmentId(0))
+                                                    <label class="badge kyc-badge badge-success">KYC</label>
+                                                @else
+                                                    <label class="badge kyc-badge badge-warning">No KYC</label>
+                                                @endif
+                                                <br>
+                                            @endforeach
+                                        @endif
+
                                     </td>
                                     <td>
-                                        {{ Config::get('constants.CLIENT_TYPE')[$investment->client->client_type] }}
+                                        {{ $account->client->user->email ?? '' }}
+
                                     </td>
                                     <td>
-                                        {{ $investment->investmentType->short_name }}
+                                        {{ $account->client->mobile ?? '' }}
+
                                     </td>
                                     <td>
-                                        {{ Config::get('constants.WITHDRAW_REQUEST_STATUS')[$investment->status] }}
+                                        {{ Config::get('constants.CLIENT_TYPE')[$account->type] }}
+                                    </td>
+                                    {{-- <td>
+                              @if ($client->verify_type == 0)
+                              {{Config::get('constants.CLIENT_STATUS_PHY')[$client->status]}}
+                              @else
+                              {{ Config::get('constants.CLIENT_STATUS')[$client->status]}}
+                              @endif  
+                             
+                            </td> --}}
+                                    <td>
+                                        {{ $account->created_at->todatestring() }}
                                     </td>
                                     <td>
-                                        {{ $investment->created_at }} &nbsp;({{ $investment->created_at->diffForHumans() }})
-                                    </td>
-                                    <td>
+
                                         @can('client_approval_access')
-                                            @if ($investment->status < 8)
+                                            @if (($officer_role->id == 5 || $officer_role->id == 6) && $accountChange->status == 0)
                                                 <a class="btn btn-xs btn-primary"
-                                                    href="{{ route('admin.newInvestment.show', [$investment->client->id, $investment->id]) }}">
+                                                    href="{{ route('admin.accountEdit.show', $accountChange->id) }}">
                                                     Proceed
                                                 </a>
                                             @endif
-                                        @endcan
 
+
+                                            <a class="btn btn-xs btn-primary" target="_blank"
+                                                href="{{ route('admin.investment.info.client', $account->id) }}">Profile</a>
+                                            &nbsp;
+                                            <a href="{{ route('admin.investment.info.kyc', [$account->id, 0]) }}"
+                                                target="_blank" class="btn btn-xs btn-warning">KYC</a>
+                                            <a href="{{ route('admin.clients.dashboard', $account->id) }}" target="_blank"
+                                                class="btn btn-xs btn-info">DBoard</a>
+                                        @endcan
 
                                         {{-- @can('user_edit')
                                     <a class="btn btn-xs btn-info" href="{{ route('admin.users.edit', $client->user_id) }}">
@@ -95,10 +132,7 @@
                                         <input type="submit" class="btn btn-xs btn-danger" value="{{ trans('global.delete') }}">
                                     </form>
                                 @endcan --}}
-
                                     </td>
-
-
                                 </tr>
                             @endforeach
                         @endif

@@ -17,6 +17,7 @@ use App\BankParticularChanges;
 use App\Branch;
 use App\Client;
 use App\ClientChange;
+use App\EmploymentDetailChange;
 use App\EmploymentDetails;
 use App\InvestmentType;
 use App\JoinHolderChange;
@@ -536,12 +537,15 @@ class ChangeAccountController extends Controller
         $account = Account::findOrFail($account_id);
         $accountChange = $account->accountChange;
         $empDetails = $account->employmentChange;
+
+ 
       
         // dd($empDetails);
         if ($empDetails == null) {
 
-            EmploymentDetails::create([
+            EmploymentDetailChange::create([
                 'id' => $user->id,
+                'account_id'=>$account_id,
                 'occupation' => $request->emp_occupation,
                 'company_name' => $request->emp_company_name,
                 'company_address' => $request->emp_company_address,
@@ -676,11 +680,13 @@ class ChangeAccountController extends Controller
         $account= Account::find($account_id);
         $otherInfo = $account->otheDetailChanges;
 
+        //  dd($account);
+
         if ($otherInfo == null) {
 
             OtherDetailChanges::create([
                 'id' => $user->id,
-                'account'=>$account_id,
+                'account_id'=>$account_id,
                 'nsb_staff_fund_management' => $request->nsb_staff_fund_management,
                 'nsb_staff' => $request->nsb_staff,
                 'related_nsb_staff' => $request->related_nsb_staff,
@@ -720,7 +726,7 @@ class ChangeAccountController extends Controller
             ]);
         } else {
 
-            $realTimeNotification = $client->realTimeNotification;
+            $realTimeNotification = $account->notificationChange;
             $realTimeNotification->update([
                 'on_email' => $request->notification_by_email == true ? 1 : 0,
                 'email' => $request->notification_email,
