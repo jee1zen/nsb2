@@ -3,10 +3,10 @@
     @can('user_create')
         <div style="margin-bottom: 10px;" class="row">
             <!-- <div class="col-lg-12">
-                                                                                    {{-- <a class="btn btn-success" href="{{ route("admin.users.create") }}">
+                                                                                            {{-- <a class="btn btn-success" href="{{ route("admin.users.create") }}">
                 {{ trans('global.add') }} {{ trans('cruds.user.title_singular') }}
             </a> --}}
-                                                                                </div> -->
+                                                                                        </div> -->
         </div>
     @endcan
     <div class="card">
@@ -62,12 +62,12 @@
                                         @if ($account->hasJointHolders())
                                             @foreach ($account->jointHolders()->get() as $jointHolder)
                                                 {{ $jointHolder->title }}{{ $jointHolder->name }} (JointHolder)
-                                                @if ($jointHolder->hasKycByInvestmentId(0))
+                                                {{-- @if ($jointHolder->hasKycByInvestmentId(0))
                                                     <label class="badge kyc-badge badge-success">KYC</label>
                                                 @else
                                                     <label class="badge kyc-badge badge-warning">No KYC</label>
                                                 @endif
-                                                <br>
+                                                <br> --}}
                                             @endforeach
                                         @endif
 

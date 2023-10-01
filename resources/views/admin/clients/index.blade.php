@@ -62,12 +62,12 @@
                                         @if ($account->hasJointHolders())
                                             @foreach ($account->jointHolders()->get() as $jointHolder)
                                                 {{ $jointHolder->title }}{{ $jointHolder->name }} (JointHolder)
-                                                @if ($jointHolder->hasKycByInvestmentId(0))
+                                                {{-- @if ($jointHolder->hasKycByInvestmentId(0))
                                                     <label class="badge kyc-badge badge-success">KYC</label>
                                                 @else
                                                     <label class="badge kyc-badge badge-warning">No KYC</label>
                                                 @endif
-                                                <br>
+                                                <br> --}}
                                             @endforeach
                                         @endif
                                     </td>

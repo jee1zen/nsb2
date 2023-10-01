@@ -60,7 +60,7 @@
                                         {{ $investment->client->title }} &nbsp; {{ $investment->client->name ?? '' }}
                                     </td>
                                     <td>
-                                        {{ Config::get('constants.CLIENT_TYPE')[$investment->client->client_type] }}
+                                        {{ Config::get('constants.CLIENT_TYPE')[$investment->account->type] }}
                                     </td>
                                     <td>
                                         {{ $investment->investmentType->short_name }}

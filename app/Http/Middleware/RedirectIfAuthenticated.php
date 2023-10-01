@@ -29,33 +29,33 @@ class RedirectIfAuthenticated
             //  dd($role->id);
              if($role->id==4){
         
-            // return  '/client/dashboard';
+      //       // return  '/client/dashboard';
            
-             if($client->status==8 || $client->status==9){
-                return redirect(route('client.dashboard'));
-             }else{
+      //        if($client->status==8 || $client->status==9){
+      //           return redirect(route('client.dashboard'));
+      //        }else{
 
-                return redirect(route('client.staging'));
-             }
+      //           return redirect(route('client.staging'));
+      //        }
 
-            }elseif($role->id==8 || $role->id==9){     
+      //       }elseif($role->id==8 || $role->id==9){     
 
-                $checkKYC = Auth::user()->companySignature->client->kyc;
+      //           $checkKYC = Auth::user()->companySignature->client->kyc;
 
-                if($checkKYC==1){
-                    // return redirect(route('client.dashboard'));
-                    return redirect(route('client.dashboard'));
+      //           if($checkKYC==1){
+      //               // return redirect(route('client.dashboard'));
+      //               return redirect(route('client.dashboard'));
     
-                 }else{
+      //            }else{
     
                    
-                    return redirect(route('login'));
-                 }
+      //               return redirect(route('login'));
+      //            }
            
-        }elseif($role->id==10){
+      //   }elseif($role->id==10){
 
 
-            return redirect(route('client.dashboard'));
+       return redirect(route('client.dashboard'));
 
         }
         else{

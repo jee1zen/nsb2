@@ -105,36 +105,53 @@ class User extends Authenticatable
         return $this->hasOne(Client::class, 'id', 'id');
     }
 
-    public function accounts(){
-        return $this->hasMany(Account::class,'client_id','id');
-     }
+    public function accounts()
+    {
+        return $this->hasMany(Account::class, 'client_id', 'id');
+    }
 
-     public function hasAccounts(){
+    public function hasAccounts()
+    {
 
         return (bool) $this->accounts()->first();
+    }
 
-     }
-     public function activeAccounts(){
-        return $this->accounts()->where('status','>',7);
-     }
-     public function hasActiveAccounts(){
+    public function activeAccounts()
+    {
+        return $this->accounts()->where('status', '>', 7);
+    }
+    public function hasActiveAccounts()
+    {
         return (bool) $this->activeAccounts()->first();
-     }
+    }
+    public function jointAccounts()
+    {
+        return $this->belongsToMany(Account::class, 'account_joint_holders', 'client_id', 'account_id');
+    }
+    public function hasJointAccounts()
+    {
 
+        return (bool) $this->jointAccounts()->first();
+    }
+    public function activeJointAccounts()
+    {
 
+        return $this->jointAccounts()->where('status', '>', 7);
+    }
+
+    public function hasActiveJointAccounts()
+    {
+        return (bool) $this->activeJointAccounts()->first();
+    }
     public function remarkOfficer()
     {
         return $this->hasMany(KYCForm::class, 'officer');
     }
 
-
-
     public function hasClient()
     {
         return (bool) $this->client()->first();
     }
-
-
 
     public function JointHolder()
     {
@@ -142,8 +159,9 @@ class User extends Authenticatable
         return $this->hasOne(JointHolder::class, 'user_id');
     }
 
-    public function joinHolderChange(){
-        return $this->hasOne(JoinHolderChange::class,'user_id');
+    public function joinHolderChange()
+    {
+        return $this->hasOne(JoinHolderChange::class, 'user_id');
     }
 
     public function selectedAccount()

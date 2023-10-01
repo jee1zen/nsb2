@@ -114,7 +114,7 @@ class Account extends Model
     }
 
     public function jointHolders(){
-        return $this->hasMany(JointHolder::class,'account_id');
+        return $this->belongsToMany(Client::class, 'account_joint_holders', 'account_id', 'client_id');
     }
     public function hasJointHolders(){
         return (bool) $this->jointHolders()->first();

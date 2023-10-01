@@ -2730,13 +2730,13 @@
                             </tr>
                             <tr>
                                 <th> Customer Type</th>
-                                <td> {{ Config::get('constants.CLIENT_TYPE')[$client->client_type] }} </td>
+                                <td> {{ Config::get('constants.CLIENT_TYPE')[$account->type] }} </td>
                                 @php
-                                    if ($client->client_type == 1) {
+                                    if ($account->type == 1) {
                                         $rate = 0.05;
                                         $color = 'grey';
                                         $label = 'low';
-                                    } elseif ($client->client_type == 2) {
+                                    } elseif ($account->type == 2) {
                                         $rate = 0.1;
                                         $color = 'yellow';
                                         $label = 'Medium';
@@ -2927,9 +2927,9 @@
 
 
                     @foreach ($account->jointHolders()->get() as $jointHolder)
-                        @if ($jointHolder->hasKycByInvestmentId(0))
+                        @if ($jointHolder->hasClientKYC($account->id))
                             @php
-                                $jkyc = $jointHolder->kycByInvestmentId(0);
+                                $jkyc = $jointHolder->clientKYC($account->id);
                                 
                             @endphp
                             <table class="table table-bordered  table-hover">

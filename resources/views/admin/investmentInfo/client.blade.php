@@ -134,7 +134,7 @@
                                 Account Type
                             </th>
                             <td>
-                                {{ Config::get('constants.CLIENT_TYPE')[$client->client_type] }}
+                                {{ Config::get('constants.CLIENT_TYPE')[$account->type] }}
                             </td>
 
                         </tr>

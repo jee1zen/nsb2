@@ -153,6 +153,12 @@ class Client extends Model
     }
 
 
+    public function jointAccounts()
+    {
+        return $this->belongsToMany(Account::class, 'account_joint_holders', 'client_id', 'account_id');
+    }
+
+
     public function bankParticulars(){
         return $this->hasMany(BankParticular::class,'client_id');
     }

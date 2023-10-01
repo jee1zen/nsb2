@@ -50,50 +50,50 @@ class LoginController extends Controller
             // return  '/client/dashboard';
             //  $checkKYC = Auth::user()->client->mainInvestmentWithKyc();
             //  dd($checkKYC);
-             if($client->status==8 || $client->status==9){
+            //  if($client->status==8 || $client->status==9){
            
 
 
-                   if(!Auth::user()->isClientFirstLog()){
+            //        if(!Auth::user()->isClientFirstLog()){
 
-                    return 'profile/password';
+            //         return 'profile/password';
 
-                   }
+            //        }
 
+
+            //     return  'client/dashboard';
+
+            //  }else{
 
                 return  'client/dashboard';
-
-             }else{
-
-                return  'client/dashboard';
-             }
+            //  }
           
            
-        } elseif($role->id==8 || $role->id== 9){
+        // } elseif($role->id==8 || $role->id== 9){
 
-            $checkKYC = Auth::user()->companySignature->client->kyc;
+        //     $checkKYC = Auth::user()->companySignature->client->kyc;
 
-            if($checkKYC==1){
+        //     if($checkKYC==1){
                
-                return  'client/dashboard';
+        //         return  'client/dashboard';
 
-             }else{
+        //      }else{
 
                 
-                return  '/';
-             }
+        //         return  '/';
+        //      }
 
 
-        }elseif($role->id==10){
+        // }elseif($role->id==10){
 
 
 
-            return 'client/dashboard';
+        //     return 'client/dashboard';
 
 
-        }
+        // }
         
-        else{
+        }else{
           
             return '/admin/clients';
         }
