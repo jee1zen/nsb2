@@ -39,9 +39,6 @@ class RequestInvestmentController extends Controller
         $type = $request->investment_type;
 
        
-        
-      
-
            $investment =Investment::create([
                 'client_id'=>$client->id,
                 'account_id' => $account->id,
@@ -61,6 +58,7 @@ class RequestInvestmentController extends Controller
                   $clientKYC = $client->clientKYC($account->id);
 
                   $kyc->client_id = $client->id;
+                  $kyc->account_id = $account->id;
                   $kyc->investment_id = $investment->id;
                   $kyc->kyc_account_at_NSB_FMC = $clientKYC->kyc_account_at_NSB_FMC;
                   $kyc->kyc_ownership_of_premises = $clientKYC->kyc_ownership_of_premises;
@@ -98,11 +96,11 @@ class RequestInvestmentController extends Controller
                   $kyc->kyc_spouse_job = $clientKYC->kyc_spouse_job;
                   $kyc->save();
 
-                  if($client->client_type==2){
+                  if($account->type==2){
 
-                        if($client->hasJointHolders()){
+                        if($account->hasJointHolders()){
 
-                            foreach($client->jointHolders()->get() as $jointHolder)
+                            foreach($account->jointHolders()->get() as $jointHolder)
 
                             $jointKYC = KYCJointForm::where('joint_id',$jointHolder->id)->where('investment_id',0)->first();
 
@@ -198,23 +196,15 @@ class RequestInvestmentController extends Controller
         //  $investment->amount = $request->amount;
         //  $investment->status = 1;
         //  $investment->save();
-        if($account->type==3)
-        {
-            $status = -2;
-            $investment->status =  $status;
-            $investment->save();
-            
+        if($account->type==2 && $account->joint_permission==1){
 
 
-        }else if($account->type==2 && $account->joint_permission==1){
-
-
-            $count = $user->client->jointHolders()->count();
+            $count = $account->jointHolders()->count();
             $status = -$count;
             $investment->status =  $status;
             $investment->save();
 
-            foreach($user->client->joinHoldersWithAccount($account->id)->get() as $jointHolder){
+            foreach($account->jointHolders()->get() as $jointHolder){
                 $approval = new JointInvestmentApproval;
                 $approval->investment_id = $investment->id;
                 $approval->joint_holder_id = $jointHolder->id;
@@ -236,49 +226,22 @@ class RequestInvestmentController extends Controller
 
     public function proceed(){
     
-        $clientUser = Auth::user();
+        $client = Auth::user();
+        $selectedAccount = $client->selectedAccount;
+        $account = $selectedAccount->account;
     
-        $role = $clientUser->roles()->first()->id;
+      
     
-        if($clientUser->hasClient()){
-        $client = $clientUser->client;
-        $is_signatureB = $client->is_signatureB;
-        }
-        else{
-            if($role==10){
-                $client = $clientUser->jointHolder->client;
-                $account = $clientUser->JointHolder->account;
-                $is_signatureB =0;
-            } else{
-                $client = $clientUser->companySignature->client;
-                $is_signatureB =0;
-        
-            }
-        }
-        
-          $withdraws='';
-          $reverseRepos='';
-    
-    
-        if($role == 8 ){
+   
            
-            $newInvestments = $client->investments()->where('status',-1)->paginate(10);
-            
-    
-        }elseif($role==9  || $is_signatureB==1 ){
         
-            $newInvestments = $client->investments()->where('status',-2)->paginate(10);
-    
-        }elseif($role==10 && $account->joint_permission==1){ 
+        
     
           
            $newInvestments = $account->investments()->where('status','<',0)->where('status','<>',-100)->paginate(10);
         //    dd($newInvestments);
             
-        }else{
-    
-    
-        }
+      
     
     
         return view('client.subUser.requests.newInvestments.show',compact('client','newInvestments','newInvestments'));
@@ -291,6 +254,8 @@ class RequestInvestmentController extends Controller
     
         $officer = Auth::user();
         $officer_role = $officer->roles()->first()->id;
+        $selectedAccount = $officer->selectedAccount;
+        $account = $selectedAccount->account;
        
 
 
@@ -316,8 +281,8 @@ class RequestInvestmentController extends Controller
             'comment' => $request_comment
 
         ]);
-        if($officer_role==10){
-            $jointApproval = JointInvestmentApproval::where('investment_id',$investment_id)->where('joint_holder_id',$officer->jointHolder->id)->first();
+        if($officer_role==4 && $account->client_id != $officer->id){
+            $jointApproval = JointInvestmentApproval::where('investment_id',$investment_id)->where('joint_holder_id',$officer->id)->first();
             if($request_type==1){
             $jointApproval->status = 1;
             }else{

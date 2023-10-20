@@ -11,6 +11,7 @@ class AccountJointHolder extends Model
     protected $fillable = [
         'account_id',
         'client_id',
+        'kyc_link',
     ];
 
  

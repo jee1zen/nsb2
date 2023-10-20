@@ -58,6 +58,11 @@
                                     </td>
                                     <td>
                                         {{ $investment->client->title }} &nbsp; {{ $investment->client->name ?? '' }}
+                                        @if ($investment->account->type == 2 && $investment->account->hasJointHolders())
+                                            @foreach ($investment->account->jointHolders()->get() as $jointHolder)
+                                                <br> {{ $jointHolder->title }} &nbsp;{{ $jointHolder->name }}
+                                            @endforeach
+                                        @endif
                                     </td>
                                     <td>
                                         {{ Config::get('constants.CLIENT_TYPE')[$investment->account->type] }}
@@ -69,7 +74,8 @@
                                         {{ Config::get('constants.WITHDRAW_REQUEST_STATUS')[$investment->status] }}
                                     </td>
                                     <td>
-                                        {{ $investment->created_at }} &nbsp;({{ $investment->created_at->diffForHumans() }})
+                                        {{ $investment->created_at }}
+                                        &nbsp;({{ $investment->created_at->diffForHumans() }})
                                     </td>
                                     <td>
                                         @can('client_approval_access')

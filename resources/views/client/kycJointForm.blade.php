@@ -15,7 +15,8 @@
 
 
 
-            <form id="msform" method="POST" action="{{ route('client.kyc.joint', [$jointHolder->id, $investment_id]) }}"
+            <form id="msform" method="POST"
+                action="{{ route('client.kyc.joint', [$account_id, $jointHolder->id, $investment_id]) }}"
                 enctype="multipart/form-data">
                 @csrf
                 <div class="form-card" id="kyc">

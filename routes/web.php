@@ -27,7 +27,7 @@ Route::post('otpCheck/email','Email\OtpController@checkOTP')->name('otp.email.ch
 Route::post('userEmail','ValidationController@userEmailvalidation')->name('user.email.validation');
 
 //joint holders kyc link
-Route::get('jointKyc/{type}/{link}','Client\KYCController@jointKYC')->name('joint.kyc.index');
+Route::get('jointKyc/{account_id}/{client_id}/{link}','Client\KYCController@jointKYC')->name('joint.kyc.index');
 Route::get('jointKycChange/{type}/{link}','Client\KYCController@jointKYCChange')->name('joint.kyc.change');
 
 Route::get('password/expired', 'Auth\ExpiredPasswordController@expired')->name('password.expired');
@@ -363,8 +363,8 @@ Route::group(['prefix' => 'client', 'as' => 'client.', 'namespace' => 'Client', 
     Route::get('kyc','KYCController@index')->name('kyc.index');
     Route::get('kyc/client/{type}','KYCController@clientForm')->name('kyc.client');
     Route::post('kyc/client/{type}','KYCController@store')->name('kyc.client.post');
-    Route::get('kyc/joint/{joint_id}/{id}','KYCController@joint')->name('kyc.joint');
-    Route::post('kyc/joint/{joint_id}/{id}','KYCController@jointStore')->name('kyc.joint.post');
+    Route::get('kyc/joint/{account_id}/{joint_id}/{id}','KYCController@joint')->name('kyc.joint');
+    Route::post('kyc/joint/{account_id}/{joint_id}/{id}','KYCController@jointStore')->name('kyc.joint.post');
     Route::get('changeKyc/joint/{joint_id}/{id}','KYCController@jointChange')->name('kyc.jointChange');
     Route::post('changeKyc/joint/{joint_id}/{id}','KYCController@jointChangeStore')->name('kyc.jointChange.post');
     // Route::get('kyc/signature/{signature_id}','KYCController@signature')->name('kyc.signature');

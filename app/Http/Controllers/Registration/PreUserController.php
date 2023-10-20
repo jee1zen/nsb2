@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Registration;
 
 use App\Account;
+use App\AccountJointHolder;
 use App\AuthorizedPerson;
 use App\Bank;
 use App\BankParticular;
@@ -25,11 +26,11 @@ use Illuminate\Support\Str;
 
 class PreUserController extends Controller
 {
-    public function verifyEmailMessage(){
+    public function verifyEmailMessage()
+    {
 
 
         return view('client.emailVerifyMessage');
-
     }
 
 
@@ -51,19 +52,17 @@ class PreUserController extends Controller
         if ($account != null) {
 
             if ($account->pre == 0) {
-
+                
 
                 return redirect()->route('registration.end');
             } else {
-
+               
                 $account_type = $account->type;
-
-                return view('client.registration.accountType', compact('banksJson', 'branches', 'investment_types', 'banks', 'user', 'account', 'account_type'));
             }
         } else {
             $account_type = 1;
-            return view('client.registration.accountType', compact('banksJson', 'branches', 'investment_types', 'banks', 'user', 'account', 'account_type'));
         }
+        return view('client.registration.accountType', compact('banksJson', 'branches', 'investment_types', 'banks', 'user', 'account', 'account_type'));
     }
 
     public function accountTypeSave(Request $request)
@@ -294,7 +293,7 @@ class PreUserController extends Controller
 
                 $password_joint = Str::random(8);
                 $kyc_link_1 = Str::random(15);
-               
+
 
                 $joint_user = User::where('email', $request->joint_email[$i])->first();
 
@@ -313,7 +312,7 @@ class PreUserController extends Controller
 
                     ]);
 
-                    $joint_user->roles()->attach(10);
+                    $joint_user->roles()->attach(4);
                     $link = $joint_user->id . $kyc_link_1;
                 } else {
 
@@ -322,87 +321,71 @@ class PreUserController extends Controller
                         'password' => Hash::make($password_joint),
                     ]);
                     $link = $joint_user->id . $kyc_link_1;
-
                 }
 
-                $jointHolder = JointHolder::where('user_id',$joint_user->id)->first();
+                $jointHolder = Client::find($joint_user->id);
 
-                    if($jointHolder==null){
-
-
-                        $jointHolder = JointHolder::create([
-                            'client_id' => $user_id,
-                            'account_id' => $account->id,
-                            'user_id' => $joint_user->id,
-                            'password' => $password_joint,
-                            'name' => $request->joint_name[$i],
-                            'name_by_initials' => $request->joint_name_initials[$i],
-                            'title' => $request->joint_title[$i],
-                            'dob' => $request->joint_dob[$i],
-                            'nic' => $request->joint_nic[$i],
-                            'nationality' => $joint_nationality,
-                            'email' => $request->joint_email[$i],
-                            'address_line_1' => $request->joint_address_line_1[$i],
-                            'address_line_2' => $request->joint_address_line_2[$i],
-                            'address_line_3' => $request->joint_address_line_3[$i],
-                            'correspondence_address_line_1' => $request->joint_address_line_1[$i],
-                            'correspondence_address_line_2' => $request->joint_address_line_2[$i],
-                            'correspondence_address_line_3' => $request->joint_address_line_3[$i],
-                            'telephone' => $request->joint_telephone[$i],
-                            'mobile' => $request->full_joint_mobile[$i],
-                            // 'occupation' => $request->joint_emp_occupation[$i],
-                            // 'company_name' => $request->joint_emp_company_name[$i],
-                            // 'company_address' => $request->joint_emp_company_address[$i],
-                            // 'company_telephone' => $request->joint_emp_company_telephone[$i],
-                            // 'company_fax' => $request->joint_emp_fax[$i],
-                            // 'company_nature' => $request->joint_emp_nature[$i],
-                            'kyc_link' =>  $link,
-    
-                        ]);
-                   
-    
+                if ($jointHolder == null) {
 
 
-                    }else{
+                    $jointHolder = Client::create([
+                        'id' => $joint_user->id,
+                        'account_id' => $account->id,
+                        'password' => $password_joint,
+                        'name' => $request->joint_name[$i],
+                        'name_by_initials' => $request->joint_name_initials[$i],
+                        'title' => $request->joint_title[$i],
+                        'dob' => $request->joint_dob[$i],
+                        'nic' => $request->joint_nic[$i],
+                        'nationality' => $joint_nationality,
+                        'email' => $request->joint_email[$i],
+                        'address_line_1' => $request->joint_address_line_1[$i],
+                        'address_line_2' => $request->joint_address_line_2[$i],
+                        'address_line_3' => $request->joint_address_line_3[$i],
+                        'correspondence_address_line_1' => $request->joint_address_line_1[$i],
+                        'correspondence_address_line_2' => $request->joint_address_line_2[$i],
+                        'correspondence_address_line_3' => $request->joint_address_line_3[$i],
+                        'telephone' => $request->joint_telephone[$i],
+                        'mobile' => $request->full_joint_mobile[$i],
+                  
+                     
 
-                        $jointHolder = JointHolder::where('client_id', $user_id)->where('account_id', $account->id)->first();
-                        $jointHolder->update([
-    
-                            'client_id' => $user_id,
-                            'account_id' => $account->id,
-                            'user_id' => $joint_user->id,
-                            'password' => $password_joint,
-                            'name' => $request->joint_name[$i],
-                            'name_by_initials' => $request->joint_name_initials[$i],
-                            'title' => $request->joint_title[$i],
-                            'dob' => $request->joint_dob[$i],
-                            'nic' => $request->joint_nic[$i],
-                            'nationality' => $joint_nationality,
-                            'email' => $request->joint_email[$i],
-                            'address_line_1' => $request->joint_address_line_1[$i],
-                            'address_line_2' => $request->joint_address_line_2[$i],
-                            'address_line_3' => $request->joint_address_line_3[$i],
-                            'correspondence_address_line_1' => $request->joint_address_line_1[$i],
-                            'correspondence_address_line_2' => $request->joint_address_line_2[$i],
-                            'correspondence_address_line_3' => $request->joint_address_line_3[$i],
-                            'telephone' => $request->joint_telephone[$i],
-                            'mobile' => $request->full_joint_mobile[$i],
-    
-                        ]);
+                    ]);
+                } else {
+
+                    
+                    $jointHolder->update([
+
+                      
+                        'account_id' => $account->id,
+                        'user_id' => $joint_user->id,
+                        'password' => $password_joint,
+                        'name' => $request->joint_name[$i],
+                        'name_by_initials' => $request->joint_name_initials[$i],
+                        'title' => $request->joint_title[$i],
+                        'dob' => $request->joint_dob[$i],
+                        'nic' => $request->joint_nic[$i],
+                        'nationality' => $joint_nationality,
+                        'email' => $request->joint_email[$i],
+                        'address_line_1' => $request->joint_address_line_1[$i],
+                        'address_line_2' => $request->joint_address_line_2[$i],
+                        'address_line_3' => $request->joint_address_line_3[$i],
+                        'correspondence_address_line_1' => $request->joint_address_line_1[$i],
+                        'correspondence_address_line_2' => $request->joint_address_line_2[$i],
+                        'correspondence_address_line_3' => $request->joint_address_line_3[$i],
+                        'telephone' => $request->joint_telephone[$i],
+                        'mobile' => $request->full_joint_mobile[$i],
+
+                    ]);
+                }
 
 
-
-
-
-                    }
-
-                 
                 if ($joint_signature_array != null) {
 
                     $joint_signature = $joint_signature_array[$i];
                     $joint_signature_name = time() . '_' . $joint_signature->getClientOriginalName();
                     $joint_signature->move($destinationPath, $joint_signature_name);
-                    JointHolder::where('id', $jointHolder->id)->update([
+                    Client::where('id', $joint_user->id)->update([
 
                         'signature' => $joint_signature_name,
                     ]);
@@ -412,7 +395,7 @@ class PreUserController extends Controller
                     $joint_pro_pic = $joint_pro_pic_array[$i];
                     $joint_pro_pic_name = time() . '_' . $joint_pro_pic->getClientOriginalName();
                     $joint_pro_pic->move($destinationPath, $joint_pro_pic_name);
-                    JointHolder::where('id', $jointHolder->id)->update([
+                    Client::where('id', $joint_user->id)->update([
 
                         'pro_pic' => $joint_pro_pic_name,
                     ]);
@@ -424,7 +407,7 @@ class PreUserController extends Controller
                         $joint_passport_name = time() . '_' . $joint_passport->getClientOriginalName();
                         $joint_passport->move($destinationPath, $joint_passport_name);
 
-                        JointHolder::where('id', $jointHolder->id)->update([
+                        Client::where('id', $joint_user->id)->update([
                             'passport' => $joint_passport_name
 
                         ]);
@@ -439,11 +422,21 @@ class PreUserController extends Controller
                         $joint_nic_back_name = time() . '_' . $joint_nic_back->getClientOriginalName();
                         $joint_nic_back->move($destinationPath, $joint_nic_back_name);
 
-                        JointHolder::where('id', $jointHolder->id)->update([
+                        Client::where('id', $joint_user->id)->update([
                             'nic_front' => $joint_nic_front_name,
                             'nic_back' => $joint_nic_back_name,
                         ]);
                     }
+                }
+
+                $accountJointHolder = AccountJointHolder::where('account_id',$account->id)->where('client_id',$jointHolder->id)->first();
+                if($accountJointHolder==null){
+                    $accountJointHolder = AccountJointHolder::create([
+                        'account_id' =>$account->id,
+                        'client_id' =>$joint_user->id,
+                        'kyc_link' => $link
+                    ]);
+
                 }
 
                 // Mail::send('emails.jointholderKyc', ['name' => $request->joint_name[$i],'email'=>$request->joint_email[$i],'link'=>$link,'joint_id'=>0], function($message) use($request,$i){
@@ -497,31 +490,35 @@ class PreUserController extends Controller
             ]);
         }
 
-  if($account->type ==2){
+        if ($account->type == 2) {
 
-    for ($i = 0; $i < count($request->jointHolder_emp_id); $i++) {
-        JointHolder::where('id', $request->jointHolder_emp_id[$i])->update([
+            for ($i = 0; $i < count($request->jointHolder_emp_id); $i++) {
 
-            'occupation' => $request->joint_emp_occupation[$i],
-            'company_name' => $request->joint_emp_company_name[$i],
-            'company_address' => $request->joint_emp_company_address[$i],
-            'company_telephone' => $request->joint_emp_company_telephone[$i],
-            'company_fax' => $request->joint_emp_fax[$i],
-            'company_nature' => $request->joint_emp_nature[$i],
+                $jointHolderEmpInfo = EmploymentDetails::find($request->jointHolder_emp_id[$i]);
+                if ($jointHolderEmpInfo == null) {
+                    EmploymentDetails::create([
+                        'id' => $request->jointHolder_emp_id[$i],
+                        'occupation' => $request->joint_emp_occupation[$i],
+                        'company_name' => $request->joint_emp_company_name[$i],
+                        'company_address' => $request->joint_emp_company_address[$i],
+                        'company_telephone' => $request->joint_emp_company_telephone[$i],
+                        'company_fax' => $request->joint_emp_fax[$i],
+                        'company_nature' => $request->joint_emp_nature[$i],
+                    ]);
+                } else {
 
+                    EmploymentDetails::where('id', $request->jointHolder_emp_id[$i])->update([
 
-
-        ]);
-
-  }
-       
-
-
+                        'occupation' => $request->joint_emp_occupation[$i],
+                        'company_name' => $request->joint_emp_company_name[$i],
+                        'company_address' => $request->joint_emp_company_address[$i],
+                        'company_telephone' => $request->joint_emp_company_telephone[$i],
+                        'company_fax' => $request->joint_emp_fax[$i],
+                        'company_nature' => $request->joint_emp_nature[$i],
+                    ]);
+                }
+            }
         }
-
-
-
-
 
         // return view('client.registration.employement', compact('user', 'account'));
 
@@ -541,10 +538,10 @@ class PreUserController extends Controller
 
         $branches = Branch::orderBy('name', 'ASC')->get();
         $branches = $branches->toJson();
-        $bankParticulars = BankParticular::where('client_id',$user->id)->where('account_id',$account->id)->get();
+        $bankParticulars = BankParticular::where('client_id', $user->id)->where('account_id', $account->id)->get();
 
 
-        return view('client.registration.bankparticulars', compact('banksJson', 'branches', 'banks', 'user', 'account','bankParticulars'));
+        return view('client.registration.bankparticulars', compact('banksJson', 'branches', 'banks', 'user', 'account', 'bankParticulars'));
     }
 
     public function bankParticularsSave(Request $request)
@@ -553,7 +550,7 @@ class PreUserController extends Controller
 
         $user = Auth::user();
         $account = $user->accounts()->first();
-        BankParticular::where('client_id',$user->id)->where('account_id',$account->id)->delete();
+        BankParticular::where('client_id', $user->id)->where('account_id', $account->id)->delete();
 
         for ($i = 0; $i < count($request->accountType); $i++) {
             if ($request->accountType[$i] != null) {
@@ -580,7 +577,7 @@ class PreUserController extends Controller
         $account = $user->accounts()->first();
 
 
-        return view('client.registration.otherInfo', compact('user', 'account','client'));
+        return view('client.registration.otherInfo', compact('user', 'account', 'client'));
     }
 
     public function otherInfoSave(Request $request)
@@ -656,9 +653,9 @@ class PreUserController extends Controller
         $account = $client->accounts()->first();
         $kyc = $client->clientKYC($account->id);
 
-    //    dd($kyc);
+        //    dd($kyc);
 
-        return view('client.registration.KYC', compact('user', 'account','kyc'));
+        return view('client.registration.KYC', compact('user', 'account', 'kyc'));
     }
 
     public function KycSave(Request $request)
@@ -762,18 +759,20 @@ class PreUserController extends Controller
         $client = $user->client;
         $account = $client->accounts()->first();
 
-      
+
 
         if ($request->acceptCheck) {
 
             if ($account->type == 2) {
 
-                $jointHolders = JointHolder::where('account_id', $account->id)->where('client_id', $client->id)->get();
-
+                $jointHolders = $account->jointHolders()->withPivot('kyc_link')->get();
+             
                 foreach ($jointHolders as $jointHolder) {
+                  $link = $jointHolder->pivot->kyc_link;
+                // dd($jointHolder->pivot->kyc_link);
 
-                    Mail::send('emails.jointholderKyc', ['name' => $jointHolder->name, 'email' => $jointHolder->email, 'link' => $jointHolder->kyc_link, 'joint_id' => 0], function ($message) use ($jointHolder) {
-                        $message->to($jointHolder->email);
+                    Mail::send('emails.jointholderKyc', ['name' => $jointHolder->name, 'email' => $jointHolder->user->email, 'link' => $link,'account_id'=>$account->id,'joint_id'=>$jointHolder->id], function ($message) use ($jointHolder) {
+                        $message->to($jointHolder->user->email);
                         $message->subject('Need to Fill KYC Forms NSB FMC ' . $jointHolder->name);
                     });
                 }

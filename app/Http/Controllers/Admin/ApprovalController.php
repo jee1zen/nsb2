@@ -48,38 +48,39 @@ class ApprovalController extends Controller
     {
         abort_if(Gate::denies('client_approval_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         $officer_role = Auth::user()->roles()->first();
-        // dd($current_user->id);
-
+        
         $clients = '';
 
         if ($officer_role->id == 5) {
 
-            $accounts = Account::where('officer_id', '=', Auth::user()->id)->orWhere('status', '<', 5)->get()->sortByDesc("create_at");
+            // $accounts = Account::where('pre',0)->where('officer_id', '=', Auth::user()->id)->orWhere('status', '<', 5)->get()->sortByDesc("create_at");
+
+            $accounts = Account::where('pre', '=', 0)
+            ->where(function ($query) {
+                $query->where('officer_id', '=', null)
+                    ->orWhere('officer_id', '=', Auth::user()->id)
+                    ->orWhere('status', '<', 5);
+            })
+            
+            ->get()
+            ->sortByDesc('created_at');
         } elseif ($officer_role->id == 6) {
 
-            // $clients = Client::Where('officer_id', '!=', null)->orWhere('officer_id', '=', Auth::user()->id)
-            // ->investments()->where('is_main','=',1)->where('status', '<', 6)->get();
-            // dd($clients);
-
-            // $clients =  Client::select('clients.id as id','clients.title','clients.name','clients.client_type','investments.status','users.name as officerName')
-            //              ->join('users','clients.officer_id','=','users.id')
-            //              ->join('investments','investments.client_id','=','clients.id')
-            //              ->where('investments.status','<',6)->where('is_main','=',1)
-            //              ->Where('officer_id', '!=', null)->orWhere('officer_id', '=', Auth::user()->id)->groupBy('id')
-            //              ->get();
-
-            $accounts = Account::where('officer_id', '=', null)->orWhere('officer_id', '=', Auth::user()->id)->orWhere('status', '<=', 6)->get()->sortByDesc("created_at");
-
-            //  dd($clients);
-
+            // dd("came here");
+            // $accounts = Account::where('pre','=',0)->where('officer_id', '=', null)->orWhere('officer_id', '=', Auth::user()->id)->orWhere('status', '<=', 6)->get()->sortByDesc("created_at");
+            $accounts = Account::where('pre', '=', 0)
+            ->where(function ($query) {
+                $query->where('officer_id', '=', null)
+                    ->orWhere('officer_id', '=', Auth::user()->id)
+                    ->orWhere('status', '<=', 6);
+            })
+            
+            ->get()
+            ->sortByDesc('created_at');
+       
         } elseif ($officer_role->id == 7) {
 
-            // $clients = Client::where('status', '<=', 7)->get();
-
-            // $clients =  Client::select('clients.id as id','clients.title','clients.name','clients.client_type','investments.status','users.name as officerName')
-            //  ->join('users','clients.officer_id','=','users.id')
-            //  ->join('investments','investments.client_id','=','clients.id')->where('is_main','=',1)
-            //  ->where('investments.status','=',7)->get();
+          
             $accounts = Account::where('status', '=', 7)->get()->sortByDesc("created_at");
         } elseif ($officer_role->id == 1) {
             return redirect()->route('admin.clients.management');

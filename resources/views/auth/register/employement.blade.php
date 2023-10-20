@@ -48,12 +48,12 @@
         </div>
     </div>
 
-    @if ($account->type == 2 && $client->hasJointHoldersWithAccount($account->id))
+    @if ($account->type == 2 && $account->hasJointHolders())
 
         <div id="jointEmpInfoDIV">
             <div id="dynamic_emp">
 
-                @foreach ($client->joinHoldersWithAccount($account->id)->get() as $key => $jointHolder)
+                @foreach ($account->jointHolders()->get() as $key => $jointHolder)
                     <input type="hidden" name="jointHolder_emp_id[]" value="{{ $jointHolder->id }}">
                     <div class="row">
                         <div class="col-md-12">

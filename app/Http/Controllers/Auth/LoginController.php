@@ -7,6 +7,7 @@ use App\Providers\RouteServiceProvider;
 use DateTime;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Auth;
+
 class LoginController extends Controller
 {
     /*
@@ -28,80 +29,41 @@ class LoginController extends Controller
      * @var string
      */
     // protected $redirectTo = '/admin/clients_management';
-    public function redirectTo() {
-        //  dd("came here to redirect");
+    public function redirectTo()
+    {
 
-          
-       
 
-            $role =Auth::user()->roles()->first(); 
 
-            if($role->id==11){
 
-                return 'registration/staging';
-            }
-          
-            $client = Auth::user()->client;
+
+        $role = Auth::user()->roles()->first();
+        // dd($role->id);
+
+        if ($role->id == 11) {
             Auth::user()->last_login = new DateTime();
             Auth::user()->save();
-         
-        if($role->id==4){
-        
-            // return  '/client/dashboard';
-            //  $checkKYC = Auth::user()->client->mainInvestmentWithKyc();
-            //  dd($checkKYC);
-            //  if($client->status==8 || $client->status==9){
-           
 
 
-            //        if(!Auth::user()->isClientFirstLog()){
-
-            //         return 'profile/password';
-
-            //        }
+            return 'registration/staging';
+        } elseif ($role->id == 4) {
 
 
-            //     return  'client/dashboard';
-
-            //  }else{
-
-                return  'client/dashboard';
-            //  }
-          
-           
-        // } elseif($role->id==8 || $role->id== 9){
-
-        //     $checkKYC = Auth::user()->companySignature->client->kyc;
-
-        //     if($checkKYC==1){
-               
-        //         return  'client/dashboard';
-
-        //      }else{
-
-                
-        //         return  '/';
-        //      }
-
-
-        // }elseif($role->id==10){
+            Auth::user()->last_login = new DateTime();
+            Auth::user()->save();
 
 
 
-        //     return 'client/dashboard';
+            return  'client/dashboard';
+        } else {
+            // dd("came here");
+            Auth::user()->last_login = new DateTime();
+            Auth::user()->save();
 
 
-        // }
-        
-        }else{
-          
             return '/admin/clients';
         }
-
-
-      
     }
-   
+
     /**
      * Create a new controller instance.
      *
@@ -112,6 +74,4 @@ class LoginController extends Controller
 
         $this->middleware('guest')->except('logout');
     }
-
- 
 }

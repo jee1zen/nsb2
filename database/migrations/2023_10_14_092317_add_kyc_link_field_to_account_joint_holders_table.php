@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class RemoveClientTypeToClientsTable extends Migration
+class AddKycLinkFieldToAccountJointHoldersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class RemoveClientTypeToClientsTable extends Migration
      */
     public function up()
     {
-        Schema::table('clients', function (Blueprint $table) {
-            // $table->dropColumn('client_type');
+        Schema::table('account_joint_holders', function (Blueprint $table) {
+            $table->text('kyc_link')->nullable()->after('client_id');
         });
     }
 
@@ -25,8 +25,8 @@ class RemoveClientTypeToClientsTable extends Migration
      */
     public function down()
     {
-        Schema::table('clients', function (Blueprint $table) {
-            // $table->tinyInteger('client_type')->after('pro_pic_verify');
+        Schema::table('account_joint_holders', function (Blueprint $table) {
+            $table->dropColumn('kyc_link');
         });
     }
 }

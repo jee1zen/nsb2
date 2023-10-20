@@ -196,6 +196,13 @@ class Client extends Model
     }
 
 
+    public function accountsAsJointHolder(){
+        return $this->belongsToMany(Account::class, 'account_joint_holders', 'account_id', 'client_id');
+    }
+    public function isJointHoldersInAccount(){
+        return (bool) $this->accountsAsJointHolder()->first();
+    }
+
 
     public function withdraws(){
         return $this->hasMany(Withdraw::class,'client_id');
