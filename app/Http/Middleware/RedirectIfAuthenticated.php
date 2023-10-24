@@ -19,9 +19,9 @@ class RedirectIfAuthenticated
   {
     if (Auth::guard($guard)->check()) {
 
-      $role = Auth::user()->roles()->get();
+      $role = Auth::user()->roles()->first();
 
-      $client = Auth::user()->client;
+      // $client = Auth::user()->client;
 
       if ($role->id == 11) {
         return redirect(route('registration.staging'));

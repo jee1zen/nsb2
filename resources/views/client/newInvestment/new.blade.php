@@ -12,8 +12,8 @@
                     </div>
                 @endif
 
-                <form method="POST" id="newInvestmentForm" action="{{ route('client.investment.form.post', $investment->id) }}"
-                    enctype="multipart/form-data">
+                <form method="POST" id="newInvestmentForm"
+                    action="{{ route('client.investment.form.post', $investment->id) }}" enctype="multipart/form-data">
                     @method('POST')
                     @csrf
 
@@ -72,7 +72,7 @@
                         </tbody>
                     </table>
 
-                    @if (!$client->hasKycWithInvestmentId($investment->id) && $client->client_type != 3)
+                    @if (!$client->hasKycWithInvestmentId($investment->id, $account->id))
                         <p>You are about to request a new Investment type, before sending request you must submit KYC
                             form(s)</p>
                         <div style="margin-bottom:10px;">
@@ -80,13 +80,11 @@
                                 {{ $client->name }} 's KYC FORM</a> <br>
                         </div>
                     @else
-                        @if ($client->client_type != 3)
-                            <p>You have Filled The KYC form for {{ $client->name }}</p>
-                        @endif
+                        <p>You have Filled The KYC form for {{ $client->name }}</p>
                     @endif
 
 
-                    <div style="margin-bottom:10px;">
+                    {{-- <div style="margin-bottom:10px;">
                         @if ($client->client_type == 3 && !$client->company->hasKycWithInvestmentId($investment->id))
                             <a class="btn btn-primary"
                                 href="{{ route('client.kyc.company', [$client->id, $investment->id]) }}"> Fill -
@@ -96,9 +94,9 @@
                                 <p>You have Filled The KYC form for {{ $client->company->name }}</p>
                             @endif
                         @endif
-                    </div>
+                    </div> --}}
 
-                    @if ($client->hasKycWithInvestmentId($investment->id))
+                    @if ($client->hasKycWithInvestmentId($investment->id, $account->id))
                         <button class="btn btn-default" type="button" id="btn_submit">
                             Submit Request To Add Investment
                         </button>
@@ -151,7 +149,7 @@
                             } else {
                                 alertify.error(
                                     'OTP generating Error, please check the Mobile number You entered,Check whether it is in correct format'
-                                    );
+                                );
                             }
                         }
                     });

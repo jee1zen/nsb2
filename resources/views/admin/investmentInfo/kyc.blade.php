@@ -28,7 +28,7 @@
             </div>
             <h3>KYC INFO</h3>
 
-            @if ($client->hasKycWithInvestmentId($investment_id))
+            @if ($client->hasKycWithInvestmentId($investment_id, $id))
                 <table class="table table-bordered  table-hover">
                     <tbody>
                         <tr>

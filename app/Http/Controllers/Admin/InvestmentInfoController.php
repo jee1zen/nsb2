@@ -246,7 +246,7 @@ public function kyc($id,$investment_id){
 
       
 
-      return view('admin.investmentInfo.kyc',compact('client','investment','investment_id','kyc','account'));
+      return view('admin.investmentInfo.kyc',compact('client','investment','investment_id','kyc','account','id'));
 
 
 }

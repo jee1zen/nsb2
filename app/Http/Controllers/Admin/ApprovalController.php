@@ -553,9 +553,20 @@ class ApprovalController extends Controller
                 });
 
                 if ($account->type == 2) {
+                   
 
-                    foreach ($client->jointHolders()->get() as $jointHolder) {
-                        Mail::send('emails.welcome', ['name' => $jointHolder->title . ' ' . $jointHolder->name, 'email' => $jointHolder->user->email, 'password' => $jointHolder->password], function ($message) use ($jointHolder) {
+                    foreach ($account->jointHolders()->get() as $jointHolder) {
+                       
+                       if($jointHolder->hasAccounts()==false && $jointHolder->jointAccounts()->count() == 1 && $jointHolder->password!=null){
+                     
+                        $password = $jointHolder->password;
+                       }else{
+                      
+                        $password="Your NSB FMC Password";
+                       }
+                    
+
+                        Mail::send('emails.welcome', ['name' => $jointHolder->title . ' ' . $jointHolder->name, 'email' => $jointHolder->user->email, 'password' => $password], function ($message) use ($jointHolder) {
                             $message->to($jointHolder->user->email);
                             $message->subject('Welcome to NSB FMC ' . $jointHolder->title . ' ' . $jointHolder->name);
                         });

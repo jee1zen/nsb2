@@ -175,14 +175,15 @@ class RequestInvestmentController extends Controller
     public function form($id){
 
 
-    $client = Auth::user()->client;    
+    $client = Auth::user()->client; 
+  
     $investment =Investment::findOrFail($id);
+    $account = $investment->account;
 
 
 
 
-
-    return view('client.newInvestment.new',compact('client','investment'));
+    return view('client.newInvestment.new',compact('client','investment','account'));
     }   
 
 

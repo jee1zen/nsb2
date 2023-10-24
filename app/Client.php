@@ -195,7 +195,7 @@ class Client extends Model
         return $this->clientRecords()->where('type',$type)->last()->account_balance;
     }
 
-
+//  if client as jointHolder
     public function accountsAsJointHolder(){
         return $this->belongsToMany(Account::class, 'account_joint_holders', 'account_id', 'client_id');
     }
@@ -304,13 +304,13 @@ class Client extends Model
         return (bool) $this->kyc()->first();
     }
 
-    public function kycByInvestmentid($id){
-        return  $this->kyc()->where('investment_id',$id)->first();
+    public function kycByInvestmentid($id,$account_id){
+        return  $this->kyc()->where('investment_id',$id)->where('account_id',$account_id)->first();
 
     }
 
-    public function hasKycWithInvestmentId($id){
-        return (bool) $this->kyc()->where('investment_id','=',$id)->first();
+    public function hasKycWithInvestmentId($id,$account_id){
+        return (bool) $this->kyc()->where('investment_id','=',$id)->where('account_id',$account_id)->first();
     }
     public function kycWithInvestmentType($type){
         return  $this->kyc()->where('investment_type','=',$type)->first();

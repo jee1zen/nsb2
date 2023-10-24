@@ -85,7 +85,8 @@ class InvestmentController extends Controller
         $client = Client::findOrFail($id);
     
         $investment = Investment::find($investment_id);
-        $kyc = $client->kycByInvestmentid($investment_id);
+        $account = $investment->account;
+        $kyc = $client->kycByInvestmentId($investment_id,$investment->account_id);
         $officer = Auth::user();
         $officer_role = Auth::user()->roles()->first();
         $investments = $client->investments()->where('invested_amount','>',0)->where('method','!=','Maturity')->get();
@@ -97,7 +98,7 @@ class InvestmentController extends Controller
     
 
         return view('admin.investment.show', compact('client','kyc','investment_id',
-        'investment','investments','total_investments','total_maturity','officer_role'));
+        'investment','investments','total_investments','total_maturity','officer_role','account'));
     }
     public function process(Request $request,$id,$investment_id)
     {

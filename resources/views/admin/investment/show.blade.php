@@ -305,7 +305,7 @@
                 </div>
                 <div class="modal-body">
                     <h3>KYC INFO</h3>
-                    @if ($client->hasKycWithInvestmentId($investment_id))
+                    @if ($client->hasKycWithInvestmentId($investment_id, $investment->account_id))
                         <table class="table table-bordered  table-hover">
                             <tbody>
                                 <tr>
@@ -557,11 +557,15 @@
                             </tbody>
                         </table>
                     @endif
-                    @if ($client->hasJointHolders())
-                        @foreach ($client->jointHolders()->get() as $jointHolder)
+                    @if ($account->hasJointHolders())
+                        @foreach ($account->jointHolders()->get() as $jointHolder)
                             <h3>{{ $jointHolder->name }} - Joint Holder</h3>
                             @php
-                                $jkyc = $jointHolder->kycByInvestmentId($investment_id);
+                                $jkyc = $jointHolder->kycByInvestmentId($investment_id , $investment->account_id);
+                                if($jkyc==null){
+                                    $jkyc = $jointHolder->kycByInvestmentId(0, $investment->account_id);
+                                }
+
                             @endphp
 
 

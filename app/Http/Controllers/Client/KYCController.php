@@ -278,23 +278,22 @@ class KYCController extends Controller
         $kyc->kyc_spouse_job = $request->kyc_spouse_job;
         $kyc->save();
 
-            $jointcount = $account->jointHolders()->count();
-            $count = 0;
-            foreach ($account->jointHolders()->get() as $jointHolder) {
+        $jointcount = $account->jointHolders()->count();
+        $count = 0;
+        foreach ($account->jointHolders()->get() as $jointHolder) {
 
-                if ($jointHolder->hasKycByInvestmentId($investment_id)) {
-                    $count = $count + 1;
-                }
+            if ($jointHolder->hasKycWithInvestmentId($investment_id, $account_id)) {
+                $count = $count + 1;
             }
+        }
 
         if ($investment_id == 0) {
-            if($jointcount==$count){
+            if ($jointcount == $count) {
                 $account->kyc = 1;
                 $account->pre = 0;
                 $account->save();
-            
             }
-            
+
             Auth::logout();
             return view('client.jointHolderMessage');
         } else {
