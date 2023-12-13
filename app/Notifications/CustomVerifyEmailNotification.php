@@ -43,14 +43,14 @@ class CustomVerifyEmailNotification extends Notification
     public function toMail($notifiable)
     {
         $verificationUrl = $this->verificationUrl($notifiable);
-        $greeting = 'Hello ' . $notifiable->name . ',';
-        $regards = 'Best Regards, \n NSB FMC Team';
+        $greeting = 'Dear Sir/Madam';
+        $regards = 'Best Regards, NSB FMC Team';
 
         return (new MailMessage)
             ->from('support@nsbfmc.lk', 'NSB FMC') 
             ->subject('Verify your email address')
             ->greeting($greeting) // Use the custom greeting message
-            ->line('Please click the button below to verify your email address.')
+            ->line('Please click the button below to verify your email address. Please consider the link will expire within 3 days.')
             ->action('Verify Email Address', $verificationUrl)
             ->line('If you did not create an account, no further action is required.')
             ->salutation($regards);
@@ -61,7 +61,7 @@ class CustomVerifyEmailNotification extends Notification
     {
         return URL::temporarySignedRoute(
             'verification.verify',
-            Carbon::now()->addMinutes(config('auth.verification.expire', 60)),
+            Carbon::now()->addMinutes(config('auth.verification.expire', 2880)),
             [
                 'id' => $notifiable->getKey(),
                 'hash' => sha1($notifiable->getEmailForVerification()),

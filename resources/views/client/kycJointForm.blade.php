@@ -146,8 +146,8 @@
                     <label class="fieldlabels">Name & Address of Employer : *</label>
                     <textarea type="text" id="kyc_employer_address" name="kyc_employer_address" placeholder=""
                         class="form-control {{ $errors->has('kyc_employment') ? ' is-invalid' : '' }}">
-{{ $jointHolder->company_name }}
-{{ $jointHolder->company_address }}</textarea>
+{{ $jointHolder->employmentDetails->company_address }}
+</textarea>
                     @if ($errors->has('kyc_employer_address'))
                         <div class="invalid-feedback">
                             {{ $errors->first('kyc_employer_address') }}

@@ -199,10 +199,10 @@
                                 </div> <br><br>
                                 <h2 class="purple-text text-center"><strong>Your NSB Account information submitted and Under
                                         review by NSB FMC Team. Will contact later !</strong></h2> <br>
-                                <div class="row justify-content-center">
+                                {{-- <div class="row justify-content-center">
                                     <div class="col-3"> <img src="{{ asset('storage/images/done.gif') }}"
                                             class="fit-image"> </div>
-                                </div> <br><br>
+                                </div> <br><br> --}}
                                 <div class="row justify-content-center">
                                     <div class="col-7 text-center">
                                         <a href="{{ route('client.dashboard') }}">

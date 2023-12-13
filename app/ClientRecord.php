@@ -26,8 +26,8 @@ class ClientRecord extends Model
         'face_value',
         'invested_amount',
         'stock_ref',
-        'method'
-            
+        'method',
+        'trade_date',      
        ];
 
 

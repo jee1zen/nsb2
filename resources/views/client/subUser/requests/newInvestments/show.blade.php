@@ -103,7 +103,7 @@
                                                     } else {
                                                         $is_signatureB = 0;
                                                     }
-                                                    
+
                                                 @endphp
                                                 @if ($newInvestment->status < 0)
                                                     <form class="approvalForm" method="POST"
@@ -111,7 +111,7 @@
                                                         enctype="multipart/form-data">
                                                         @csrf
                                                         <div class="form-group">
-                                                            @if ($client->client->hasKycWithInvestmentId($newInvestment->id))
+                                                            @if ($client->client->hasKycWithInvestmentId($newInvestment->id, $account->id))
                                                                 <button type="button"
                                                                     class="btn btn-success btn-lg btnApprove">
                                                                     Approve</button> &nbsp; &nbsp;<br>
@@ -120,10 +120,6 @@
                                                                     href="{{ route('client.kyc.client', $newInvestment->id) }}">
                                                                     Fill KYC FORM TO Approve</a> <br>
                                                             @endif
-
-
-
-
 
                                                             <br><button type="button"
                                                                 class="btn btn-danger btn-lg btnDecline"> Decline </button>

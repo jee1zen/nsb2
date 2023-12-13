@@ -295,7 +295,7 @@ class KYCController extends Controller
             }
 
             Auth::logout();
-            return view('client.jointHolderMessage');
+            return view('client.jointHolderMessage')->with('message',"KYC Filled by JointHolder");
         } else {
 
             return redirect(route('client.investment.proceed'))->with('message', "KYC filled Now you can Accept Request");
@@ -325,11 +325,6 @@ class KYCController extends Controller
     {
 
         $jointHolder = JoinHolderChange::where('id', $id)->first();
-
-
-
-
-
 
         return view('client.kycJointChangeForm', compact('jointHolder', 'investment_id'));
     }

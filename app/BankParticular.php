@@ -28,6 +28,7 @@ class BankParticular extends Model
         'Account_type',
         'account_no',
         'client_type',
+        'passbook',
         'created_at',
         'updated_at',
     ];

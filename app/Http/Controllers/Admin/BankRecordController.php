@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\BankImport;
 use App\Investment;
+use App\Jobs\GenerateUnMatchedCertificates;
 use App\TempInvestment;
 use App\Withdraw;
 use Barryvdh\DomPDF\Facade as PDF;
@@ -62,10 +63,10 @@ class BankRecordController extends Controller
             // $bankRecords = BankRecord::all();
 
             $matchingRecords = DB::select('SELECT bank_records.*  FROM  bank_records , accounts  WHERE  
-                                          bank_records.account_id = accounts.id And accounts.status!=100 And accounts.status>7');
+                                          bank_records.account_id = accounts.id AND accounts.status!=100 AND accounts.status>7');
 
 
-        
+            // dd($matchingRecords);
              
 
            foreach($matchingRecords as $match){
@@ -120,15 +121,14 @@ class BankRecordController extends Controller
                        
 
                         $clientRecord = ClientRecord::where('ref_no','=',$match->ref_no)->where('invested_amount',$match->invested_amount)->where('method',$match->method)->latest()->first();
-                  
-                   
-                       
+
                             $investment = Investment::where('investment_type_id',$type)->where('client_id',$client_id)->where('account_id',$match->account_id)
                             ->where('amount',$match->invested_amount)->where('value_date',$match->value_date)->where('maturity_date',$match->maturity_date)->where('status','!=',-100)
                             ->where('ref_no',null)->orWhere('ref_no','')->latest()->first();
                         //  dd($investment);
                         $account = Account::find($match->account_id);
                         $client = $account->client;
+                        // dd($client);
                         // dd($client);
                         
                             if($investment==null){
@@ -155,13 +155,16 @@ class BankRecordController extends Controller
                                     // $client = Client::find($match->client_id);
                                     $data = [
                                         'match' => $match,
-                                        'client' => $client,
+                                        'client_title' => $client->title,
+                                        'client_name' => $client->name_by_initials,
+                                        'client_address_line_1' => $client->address_line_1,
+                                        'client_address_line_2' => $client->address_line_2,
+                                        'client_address_line_3' => $client->address_line_3,
                                         'today'  => Carbon::now()->format('j-F-Y'),
-                                        'maturity_date'=>Carbon::createFromFormat('Y-m-d', $match->maturity_date)->format('j-F-Y'),
-                                        'value_date'=>Carbon::createFromFormat('Y-m-d', $match->value_date)->format('j-F-Y'),
-                                        'days_to_maturity'=> Carbon::createFromFormat('Y-m-d H:s:i', $value_ymd)->diffInDays( Carbon::createFromFormat('Y-m-d H:s:i', $maturity_ymd))
+                                        'maturity_date' => Carbon::createFromFormat('Y-m-d', $match->maturity_date)->format('j-F-Y'),
+                                        'value_date' => Carbon::createFromFormat('Y-m-d', $match->value_date)->format('j-F-Y'),
+                                        'days_to_maturity' => Carbon::createFromFormat('Y-m-d H:s:i', $value_ymd)->diffInDays(Carbon::createFromFormat('Y-m-d H:s:i', $maturity_ymd))
                                     ];
-    
     
                                     $client_name = strtoupper($client->name_by_initials);
                                     $passwordNamePart = substr($client_name, strlen($client_name)-3, 3);
@@ -174,14 +177,14 @@ class BankRecordController extends Controller
                                 
                                     if($match->type=='tbill'){
                                         $pdf =  PDF::loadView('certificates.tbill',$data);
-                                        $pdf->setEncryption($doc_password);
-                                        $pdf->setPaper('a4', 'landscape');
+                                        // $pdf->setEncryption($doc_password);
+                                        $pdf->setPaper('a4');
                                         $pdf->save(storage_path('app/public/downloads/'.$match->ref_no.'.pdf'));
     
                                     }elseif($match->type=='tbond'){
                                         $pdf =  PDF::loadView('certificates.tbond',$data);
-                                        $pdf->setEncryption($doc_password);
-                                        $pdf->setPaper('a4', 'landscape');
+                                        // $pdf->setEncryption($doc_password);
+                                        $pdf->setPaper('a4');
                                         $pdf->save(storage_path('app/public/downloads/'.$match->ref_no.'.pdf'));    
                                     }else{
                                         // PDF::loadView('certificates.repo',$data)->save(storage_path('app/public/downloads/'.$match->ref_no.'.pdf'));
@@ -309,15 +312,19 @@ class BankRecordController extends Controller
                                 $today_ymd =  Carbon::now()->format('Y-m-d H:s:i');
                                 $value_ymd =  Carbon::createFromFormat('Y-m-d H:s:i',$valueDate);
                                 $maturity_ymd  = Carbon::createFromFormat('Y-m-d H:s:i',$maturityDate);
-                                // $account = Account::find($match->account_id);
-                                // $client = $account->client;
+                                $account = Account::find($match->account_id);
+                                $client = $account->client;
                                 $data = [
                                     'match' => $match,
-                                    'client' => $client,
+                                    'client_title' => $client->title,
+                                    'client_name' => $client->name_by_initials,
+                                    'client_address_line_1' => $client->address_line_1,
+                                    'client_address_line_2' => $client->address_line_2,
+                                    'client_address_line_3' => $client->address_line_3,
                                     'today'  => Carbon::now()->format('j-F-Y'),
-                                    'maturity_date'=>Carbon::createFromFormat('Y-m-d', $match->maturity_date)->format('j-F-Y'),
-                                    'value_date'=>Carbon::createFromFormat('Y-m-d', $match->value_date)->format('j-F-Y'),
-                                    'days_to_maturity'=> Carbon::createFromFormat('Y-m-d H:s:i', $value_ymd)->diffInDays( Carbon::createFromFormat('Y-m-d H:s:i', $maturity_ymd))
+                                    'maturity_date' => Carbon::createFromFormat('Y-m-d', $match->maturity_date)->format('j-F-Y'),
+                                    'value_date' => Carbon::createFromFormat('Y-m-d', $match->value_date)->format('j-F-Y'),
+                                    'days_to_maturity' => Carbon::createFromFormat('Y-m-d H:s:i', $value_ymd)->diffInDays(Carbon::createFromFormat('Y-m-d H:s:i', $maturity_ymd))
                                 ];
 
 
@@ -332,14 +339,14 @@ class BankRecordController extends Controller
                             
                                 if($match->type=='tbill'){
                                     $pdf =  PDF::loadView('certificates.tbill',$data);
-                                    $pdf->setEncryption($doc_password);
-                                    $pdf->setPaper('a4', 'landscape');
+                                    // $pdf->setEncryption($doc_password);
+                                    $pdf->setPaper('a4');
                                     $pdf->save(storage_path('app/public/downloads/'.$match->ref_no.'.pdf'));
 
                                 }elseif($match->type=='tbond'){
                                     $pdf =  PDF::loadView('certificates.tbond',$data);
-                                    $pdf->setEncryption($doc_password);
-                                    $pdf->setPaper('a4', 'landscape');
+                                    // $pdf->setEncryption($doc_password);
+                                    $pdf->setPaper('a4');
                                     $pdf->save(storage_path('app/public/downloads/'.$match->ref_no.'.pdf'));    
                                 }else{
                                     // PDF::loadView('certificates.repo',$data)->save(storage_path('app/public/downloads/'.$match->ref_no.'.pdf'));
@@ -387,6 +394,16 @@ class BankRecordController extends Controller
                                
         
            }
+
+           $unMatchingRecords = DB::select('SELECT *  FROM  bank_records  WHERE  
+           bank_records.account_id =0');
+
+
+            $job = new GenerateUnMatchedCertificates([
+                'unMatchingRecords' => $unMatchingRecords,
+            ]);
+
+            $job->handle(['unMatchingRecords' => $unMatchingRecords]);
 
     
         // DB::commit();

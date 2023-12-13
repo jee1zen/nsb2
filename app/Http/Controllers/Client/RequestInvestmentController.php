@@ -245,7 +245,7 @@ class RequestInvestmentController extends Controller
       
     
     
-        return view('client.subUser.requests.newInvestments.show',compact('client','newInvestments','newInvestments'));
+        return view('client.subUser.requests.newInvestments.show',compact('client','newInvestments','newInvestments','account'));
     
        }
 

@@ -24,6 +24,8 @@ Route::post('otp/email','Email\OtpController@OTP')->name('otp.email');
 Route::post('otpCheck/email','Email\OtpController@checkOTP')->name('otp.email.check');
 
 
+
+
 Route::post('userEmail','ValidationController@userEmailvalidation')->name('user.email.validation');
 
 //joint holders kyc link
@@ -246,19 +248,31 @@ Route::group(['prefix' => 'registration', 'as' => 'registration.', 'namespace' =
     Route::get('staging','PreUserController@index')->name('staging');
     Route::post('accountType','PreUserController@accountTypeSave')->name('accountType');
     Route::get('basicInfo','PreUserController@basicInfoShow')->name('basicInfo');
+    //Adding Existing User ajax
+    Route::post('checkExistingUser','PreUserController@checkJointUser')->name('checkJointUser');
+    Route::post('addExistingUser','PreUserController@addExistingUserAsJointParty')->name('addExistingUser');
+    //...
     Route::post('basicInfo','PreUserController@basicinfoSave')->name('basicInfo');
+    //joint Holder 
+    Route::get('jointInfo','PreUserController@jointHolderShow')->name('jointInfo');
+    Route::post('jointInfo','PreUserController@jointHolderSave')->name('jointInfo');
+    //Employmenet Information
     Route::get('empInfo','PreUserController@employmentDetailsShow')->name('empInfo');
     Route::post('empInfo','PreUserController@employmentDetailsSave')->name('empInfo');
+    //Bank information
     Route::get('bank','PreUserController@bankParticularsShow')->name('bank');
     Route::post('bank','PreUserController@bankParticularsSave')->name('bank');
+    //Other Information
     Route::get('otherInfo','PreUserController@otherInfoShow')->name('otherInfo');
     Route::post('otherInfo','PreUserController@otherInfoSave')->name('otherInfo');
+    //KYC of Main Holder
     Route::get('kyc','PreUserController@KycShow')->name('kyc');
     Route::post('kyc','PreUserController@KycSave')->name('kyc');
+    //Ending
     Route::get('statement','PreUserController@statement')->name('statement');
     Route::post('finish','PreUserController@finish')->name('finish');
     Route::get('end','PreUserController@end')->name('end');
-
+    
 });
 
 Route::group(['prefix' => 'client', 'as' => 'client.', 'namespace' => 'Client', 'middleware' => ['auth','password_expired']], function () {

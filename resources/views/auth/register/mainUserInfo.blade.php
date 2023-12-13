@@ -3,7 +3,12 @@
         <h2 class="fs-title">Basic Information</h2>
     </div>
     <div class="col-5">
-        <h2 class="steps">Step 3 - 7</h2>
+        @if ($account_type == 2)
+            <h2 class="steps">Step 2 - 8</h2>
+        @else
+            <h2 class="steps">Step 2 - 7</h2>
+        @endif
+
     </div>
 </div>
 <div class="row">
@@ -14,7 +19,8 @@
 <div class="row">
     <div class="col-md-2">
         <label class="fieldlabels">Title</label>
-        <select name="title" id="title" class="field Required">
+        <select name="title" id="title" class="field Required" required>
+            <option value="">Select</option>
             <option value="Mr.">Mr</option>
             <option value="Mrs.">Mrs</option>
             <option value="Miss.">Miss</option>
@@ -24,11 +30,11 @@
     </div>
     <div class="col-md-4">
         <label class="fieldlabels">Name With Initials</label>
-        <input type="text" name="name"placeholder="" id="name" class="fieldRequired" />
+        <input type="text" name="name"placeholder="" id="name" class="fieldRequired" required />
     </div>
     <div class="col-md-6">
         <label class="fieldlabels">Name In Full</label>
-        <input type="text" name="name_initials" placeholder="" id="name_initials" class="fieldRequired" />
+        <input type="text" name="name_initials" placeholder="" id="name_initials" class="fieldRequired" required />
     </div>
 </div>
 <div>
@@ -41,7 +47,7 @@
         </div> --}}
         <div class="col-md-6">
             <label class="fieldlabels">NIC Or Passport</label>
-            <input type="text" id="nic" name="nic"placeholder="" class="fieldRequired" />
+            <input type="text" id="nic" name="nic"placeholder="" class="fieldRequired" required />
         </div>
     </div>
 </div>
@@ -49,25 +55,19 @@
 
 <div class="row">
     <div class="col-md-6">
-        <div id="occupation_DIV">
-            <label class="fieldlabels">Occupation</label>
-            <input type="text" name="occupation" id="occupation" placeholder="" class="" />
-        </div>
-    </div>
-    <div class="col-md-6">
         <label class="fieldlabels">Date Of Birth</label>
         <input type="text" name="dob" id="dob" placeholder="YYYY-MM-DD" data-inputmask="'alias': 'date'"
-            class="fieldRequired" />
+            class="fieldRequired" required />
     </div>
 </div>
 <div class="row">
     <div class="col-md-6">
         <label class="fieldlabels">Address Line 1</label>
-        <input type="text" name="address_line_1" id="address_line_1" placeholder="" class="fieldRequired" />
+        <input type="text" name="address_line_1" id="address_line_1" placeholder="" class="fieldRequired" required />
     </div>
     <div class="col-md-6">
         <label class="fieldlabels">Address Line 2</label>
-        <input type="text" name="address_line_2" id="address_line_2" placeholder="" class="fieldRequired" />
+        <input type="text" name="address_line_2" id="address_line_2" placeholder="" class="fieldRequired" required />
     </div>
 </div>
 <div class="row">
@@ -98,8 +98,8 @@
         </div>
         <div class="col-md-6">
             <label class="fieldlabels">Corresponding Address Line 2</label>
-            <input type="text" name="corresponding_address_line_2" id="corresponding_address_line_2"
-                placeholder="" class="" />
+            <input type="text" name="corresponding_address_line_2" id="corresponding_address_line_2" placeholder=""
+                class="" />
         </div>
     </div>
     <div class="row">
@@ -126,11 +126,10 @@
     <div class="col-md-6">
         <input type="hidden" name="full_mobile">
         <label class="fieldlabels">Mobile</label>
-        <input type="tel" name="mobile" id="mobile" class="fieldRequired OTP" />
-        <input type="hidden" value="">
+        <input type="tel" name="mobile" id="mobile" class="fieldRequired OTP" required />
+        <input type="hidden" name="full_mobile" id="full_mobile" value="=" />
     </div>
 </div>
-
 
 <div class="row">
     <div class="col-md-6">
@@ -244,3 +243,11 @@
         </div>
     </div>
 </div>
+{{-- <div id="addExistingJointHolderDiv">
+    <div class="row">
+        <button class="btn btn-secondary btn-md" id="btnAddExistingJoint"><i class="fas fa-plus-circle"></i>Add
+            Existing User AS A
+            Joint Holder</button>
+    </div>
+
+</div> --}}

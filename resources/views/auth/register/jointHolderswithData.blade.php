@@ -1,164 +1,173 @@
 <div id="jointHoldersDiv">
     <hr />
-
-
     @php
         $count = 0;
     @endphp
     <div id="dynamic_container">
-        @foreach ($client->joinHoldersWithAccount($account->id)->get() as $jointHolder)
+        @foreach ($account->jointHolders()->get() as $jointHolder)
             @php
-                
+
                 $count = $count + 1;
             @endphp
-            <div id="append_no_{{ $count }}" class="animated bounceInLeft">
-                <hr />
-                <h2> Joint Holder {{ $count }} info </h2>
-                <input type="hidden" name="jointHolder_info_id[]" value="{{ $jointHolder->id }}">
-                <div class="row">
-                    <div class="col-md-2">
-                        <div class="input-group">
-                            <label class="fieldlabels">Title </label>
-                            <select name="joint_title[]" id="joint_title[]" class="field Required">
-                                <option value="Mr." {{ $jointHolder->title == 'Mr.' ? 'selected' : '' }}>Mr</option>
-                                <option value="Mrs." {{ $jointHolder->title == 'Mrs.' ? 'selected' : '' }}>Mrs
-                                </option>
-                                <option value="Miss."{{ $jointHolder->title == 'Miss.' ? 'selected' : '' }}>Miss
-                                </option>
-                                <option value="Rev." {{ $jointHolder->title == 'Rev.' ? 'selected' : '' }}>Rev
-                                </option>
-                                <option value="Dr."{{ $jointHolder->title == 'Dr.' ? 'selected' : '' }}>Dr</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <label class="fieldlabels">Name With Initials: * </label>
-                        <input type="text" name="joint_name[]" placeholder="Joint Holder Name" class="form-control"
-                            value="{{ $jointHolder->name }}" />
-                    </div>
-                    <div class="col-md-4">
-                        <label class="fieldlabels">Name In Full : * </label>
-                        <input type="text" name="joint_name_initials[]" placeholder="Name by Intitials"
-                            class="form-control" value="{{ $jointHolder->name_by_initials }}" />
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <label class="fieldlabels">Address Line 1 :*</label>
-                        <input type="text" name="joint_address_line_1[]" placeholder="Address Line 1"
-                            class="form-control" value="{{ $jointHolder->address_line_1 }}" />
-                    </div>
-                    <div class="col-md-6">
-                        <label class="fieldlabels">Address Line 2 :*</label>
-                        <input type="text" name="joint_address_line_2[]" placeholder="Address Line 2 "
-                            class="form-control" value="{{ $jointHolder->address_line_2 }}" />
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <label class="fieldlabels">Address Line 3 :*</label>
-                        <input type="text" name="joint_address_line_3[]" placeholder="Address Line 3 "
-                            class="form-control" value="{{ $jointHolder->address_line_3 }}" />
-                    </div>
-                    <div class="col-md-6">
-                        <label class="fieldlabels">Email: *</label>
-                        <input type="text" name="joint_email[]"placeholder="email" class="form-control joint_email"
-                            value="{{ $jointHolder->email }}" />
-                        <input type="hidden" value="">
 
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <label class="fieldlabels">Date Of Birth: *</label>
-                        <input type="text" name="joint_dob[]" placeholder="YYYY-MM-DD" class="form-control jointDob"
-                            value="{{ $jointHolder->dob }}" />
-                    </div>
-                    <div class="col-md-6">
-                        <label class="fieldlabels">NIC/Passport: *</label>
-                        <input type="text" name="joint_nic[]"placeholder="nic" class="form-control"
-                            value="{{ $jointHolder->nic }}" />
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <label class="fieldlabels">Nationality *</label>
-                        <select class="joint_nationality" name="joint_nationality[]">
-                            <option value="Sri Lankan" {{ $jointHolder->nationality == 'Sri Lankan' ? 'select' : '' }}>
-                                Sri Lankan</option>
-                            <option value="other" {{ $jointHolder->nationality != 'Sri Lankan' ? 'select' : '' }}>
-                                Other
-                            </option>
-                        </select>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="joint_nationality_div">
-                            <label class="fieldlabels">Nationality *</label>
-                            <input type="text" name="joint_nationality_other[]"placeholder="Nationality"
-                                class="form-control" value="{{ $jointHolder->nationality }}" />
+            <div class="row gutters-sm">
+                <div class="col-md-3 mb-3">
+                    <div class="card">
+                        <div class="card-title">
+                            <h2>Joint Holder {{ $count }}</h2>
+                        </div>
+                        <div class="card-body">
+                            <div class="d-flex flex-column align-items-center ">
+                                <img src="{{ asset('storage/uploads/' . $jointHolder->pro_pic) }}" alt="profile-picture"
+                                    class="img-fluid" width="100">
+                                <div class="mt-3">
+                                    <h4>{{ $jointHolder->title }}
+                                        {{ $jointHolder->name_by_initials }} </h4>
+                                    <p class="mb-1">{{ $jointHolder->name }} <br>
+                                        {{ $jointHolder->address_line_1 }} <br>
+                                        {{ $jointHolder->address_line_2 }} <br>
+                                        {{ $jointHolder->address_line_3 }}</p>
+
+                                    <button class="btn btn-danger">Remove</button>
+                                    <button class="btn btn-outline-danger">Edit</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <label class="fieldlabels">Land Phone: *</label>
-                        <input type="text" name="joint_telephone[]"placeholder="land line" class="form-control"
-                            value="{{ $jointHolder->telephone }}" />
-                    </div>
-                    <div class="col-md-6">
-                        <input type="hidden" name="full_joint_mobile[]" />
-                        <label class="fieldlabels">Mobile: *</label>
-                        <input type="tel" name="joint_mobile[]" placeholder="mobile"
-                            class="form-control joint_mobile OTP" />
-                        <input type="hidden" value="">
+                <div class="col-md-5">
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-sm-5">
+                                    <h6 class="mb-0">NIC / Passport</h6>
+                                </div>
+                                <div class="col-sm-7">
+                                    {{ $jointHolder->nic }}
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-5">
+                                    <h6 class="mb-0">Date of Birth</h6>
+                                </div>
+                                <div class="col-sm-7">
+                                    {{ $jointHolder->dob }}
+                                </div>
+                            </div>
+                            <hr>
+
+                            <div class="row">
+                                <div class="col-sm-5">
+                                    <h6 class="mb-0">Nationality</h6>
+                                </div>
+                                <div class="col-sm-7">
+                                    {{ $jointHolder->nationality }}
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-5">
+                                    <h6 class="mb-0">Email</h6>
+                                </div>
+                                <div class="col-sm-7">
+                                    {{ $jointHolder->user->email }}
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-5">
+                                    <h6 class="mb-0">Mobile</h6>
+                                </div>
+                                <div class="col-sm-7">
+                                    {{ $jointHolder->mobile }}
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-5">
+                                    <h6 class="mb-0">Land Phone</h6>
+                                </div>
+                                <div class="col-sm-7">
+                                    {{ $jointHolder->telephone }}
+                                </div>
+                            </div>
+                            <hr>
+                        </div>
                     </div>
                 </div>
-                <div class="joint_nic_div">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <label class="fieldlabels">NIC Front Side: *</label>
-                            <input type="file" name="joint_nic_front[]" accept="image/*" class="imgLoad">
-                            <img id="joint_nic_front" src="{{ asset('storage/uploads/' . $jointHolder->nic_front) }}"
-                                class="img_preview" />
+                <div class="col-md-4">
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-sm-5">
+                                    <h6 class="mb-0">Mobile</h6>
+                                </div>
+                                <div class="col-sm-7">
+                                    {{ $jointHolder->mobile }}
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-5">
+                                    <h6 class="mb-0">Land Phone</h6>
+                                </div>
+                                <div class="col-sm-7">
+                                    {{ $jointHolder->telephone }}
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-5">
+                                    <h6 class="mb-0">Nic Front</h6>
+                                </div>
+                                <div class="col-sm-7">
+                                    <img id="joint_passport_preview"
+                                        src="{{ asset('storage/uploads/' . $jointHolder->nic_front) }}"
+                                        class="img_preview" />
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-5">
+                                    <h6 class="mb-0">Nic Back</h6>
+                                </div>
+                                <div class="col-sm-7">
+                                    <img id="joint_passport_preview"
+                                        src="{{ asset('storage/uploads/' . $jointHolder->nic_back) }}"
+                                        class="img_preview" />
+                                </div>
+                            </div>
+                            <hr>
+                            @if (isset($jointHolder->passport))
+                                <div class="row">
+                                    <div class="col-sm-5">
+                                        <h6 class="mb-0">Passport</h6>
+                                    </div>
+                                    <div class="col-sm-7">
+                                        <img id="joint_passport_preview"
+                                            src="{{ asset('storage/uploads/' . $jointHolder->passport) }}"
+                                            class="img_preview" />
+                                    </div>
+                                </div>
+                                <hr>
+                            @endif
+                            <div class="row">
+                                <div class="col-sm-5">
+                                    <h6 class="mb-0">Signature</h6>
+                                </div>
+                                <div class="col-sm-7">
+                                    <img id="joint_passport_preview"
+                                        src="{{ asset('storage/uploads/' . $jointHolder->signature) }}"
+                                        class="img_preview" />
+                                </div>
+                            </div>
+                            <hr>
+
                         </div>
-                        <div class="col-md-6">
-                            <label class="fieldlabels">NIC Back Side: *</label>
-                            <input type="file" name="joint_nic_back[]" accept="image/*" class="imgLoad">
-                            <img id="joint_nic_back_preview"
-                                src="{{ asset('storage/uploads/' . $jointHolder->nic_back) }}" class="img_preview" />
-                        </div>
-                    </div>
-                </div>
-                <div class="joint_passport_div">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <label class="fieldlabels">Passport: *</label>
-                            <input type="file" name="joint_passport[]" accept="image/*" class="imgLoad">
-                            <img id="joint_passport_preview"
-                                src="{{ asset('storage/uploads/' . $jointHolder->passport) }}" class="img_preview" />
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <label class="fieldlabels">Signature: *</label>
-                        <input type="file" name="joint_signature[]" accept="image/*" class="imgLoad">
-                        <img id="joint_passport_preview"
-                            src="{{ asset('storage/uploads/' . $jointHolder->signature) }}" class="img_preview" />
-                    </div>
-                    <div class="col-md-6">
-                        <label class="fieldlabels">Profile picture </label>
-                        <input type="file" id="joint_profile_pic[]" name="joint_pro_pic[]" accept="image/*"
-                            class="imgLoad">
-                        <img id="signature_preview" src="{{ asset('storage/uploads/' . $jointHolder->pro_pic) }}"
-                            class="img_preview" />
                     </div>
                 </div>
             </div>
         @endforeach
-
     </div>
-
-    <a class="btn btn-secondary btn-md" id="add_more"><i class="fas fa-plus-circle"></i>Add Joint Holder</a>
-    <a class="btn btn-secondary btn-md" id="remove_more"><i class="fas fa-trash-alt"></i>Remove Joint Holder</a>
 </div>

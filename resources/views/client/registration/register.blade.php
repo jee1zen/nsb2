@@ -1524,6 +1524,13 @@
                         }
                     }
 
+                    // $('.joint_email').focusout(function() {
+                    //     // if ($(this).val().length < 5) {
+                    //     // alert("Username must be at least 5 characters long");
+                    //     // }
+                    //     alert("Checking EMail");
+                    // });
+
                     //   return isValid=false;   
 
 
@@ -2187,6 +2194,14 @@
 
                 }
             });
+
+            //Joint Email Derrive information..
+            $(document).on("blur", ".joint_email", function() {
+                alert("Email checking now....");
+
+            });
+
+
 
 
 

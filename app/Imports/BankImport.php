@@ -40,7 +40,7 @@ class BankImport implements ToModel,WithValidation, SkipsOnFailure,WithStartRow
         //  dd($row[0],$row[1],$row[2],$row[3],$row[4],$row[5],$row[6],$row[7],$row[8],$row[9]);
 
         $data=[
-            'account_id'=>$row[0],
+            'account_id'=>$row[0] ?? 0,
             'ref_no'=>$row[1],
             'nic'=>$row[2],
             'type'=>$row[3],
@@ -58,11 +58,13 @@ class BankImport implements ToModel,WithValidation, SkipsOnFailure,WithStartRow
             'invested_amount'=>str_replace(",", "", $row[15]),
             'stock_ref'=> str_replace(",", "", $row[16]),
             'method' => $row[17],
-            'ref_investment' => $row[18]
-
+            'ref_investment' => $row[18],
+            'email' => $row[19],
+            'address_line_1'=>$row[20], 
+            'address_line_2'=>$row[21],
+            'address_line_3'=>$row[22],
         ];
         
-       
         return new BankRecord($data);
     }
 }

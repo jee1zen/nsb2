@@ -30,21 +30,21 @@
     @php
         $user = Auth::user();
         $client = $user->client;
-        
+
         $allAccounts = collect([]);
         $mainAccounts = collect([]);
         $jointAccounts = collect([]);
         $role = 'MainHolder';
-        
+
         if ($user->hasActiveAccounts()) {
             $mainAccounts = $user->activeAccounts()->get();
         }
         if ($user->hasActiveJointAccounts()) {
             $jointAccounts = $user->activeJointAccounts()->get();
         }
-        
+
         $allAccounts = $mainAccounts->merge($jointAccounts);
-        
+
         if (empty($allAccounts)) {
             //for now logout must ->redirect to a message where has a timeout and logout
             Auth::logout();
@@ -52,7 +52,7 @@
             if (!$user->hasSelectedAccount()) {
                 $selectedAccount = 0;
                 $account_id = 0;
-        
+
                 $account = $user->accounts()->first();
                 if ($account == null) {
                     $account = $user->jointAccounts()->first();
@@ -67,7 +67,7 @@
                     $account = $user->jointAccounts()->first();
                     $role = 'JointHolder';
                 }
-        
+
                 $account_id = $account->id;
                 if ($account->type == 2 && $account->client_id == $user->id) {
                     $account_name = $client->name . ' & ' . $account->jointHolders()->first()->name . ' (Joint Account)';
@@ -78,7 +78,7 @@
                 }
             }
         }
-        
+
         // if (!$user->hasSelectedAccount()) {
         //     $selectedAccount = 0;
         //     $account_id = 0;
@@ -95,7 +95,7 @@
         //         $account_name = $client->name . ' (Individual)';
         //     }
         // }
-        
+
         // $role = $user->roles()->first()->id;
         // if ($role == 4) {
         //     $client = App\Client::findOrFail($user->id);
@@ -119,7 +119,7 @@
         //     }
         // } elseif ($role == 10) {
         //     $client = $user->jointHolder;
-        
+
         //     $client_id = $user->id;
         //     $mainClient = $client->client;
         //     $mainClientUser = $mainClient->user;
@@ -134,13 +134,13 @@
         //         $account = App\Account::findOrFail($selectedAccount);
         //         $account_id = $account->id;
         //     }
-        
+
         //     $account_name = $client->name . ' & ' . $mainClient->name . ' (Joint Acccount) ';
         // } else {
         //     $client = App\CompanySignature::where('user_id', '=', $user->id);
         // }
         // dd($user->hasSelectedAccount());
-        
+
     @endphp
     <nav class="navbar navbar-default navbar-static-top">
         <div class="container-fluid">
@@ -233,7 +233,7 @@
                                 <ul class="nav navbar-nav">
                                     <li class="active"><a href="{{ route('client.dashboard') }}"><span
                                                 class="glyphicon glyphicon-dashboard"></span>Dashboard</a></li>
-                                    @if ($account->client_id == $user->id && $account->status == 9)
+                                    @if ($account->status == 9)
                                         <li><a href="{{ route('client.allAccounts') }}"><span
                                                     class="glyphicon glyphicon-briefcase"></span>Account Management</a>
                                         </li>
@@ -294,12 +294,12 @@
                                         <li><a href="{{ route('client.requests.proceed') }}"><span
                                                     class="glyphicon glyphicon-th-list"></span>Maturity Requests</a>
                                         </li>
-                                        <li><a href="{{ route('client.reverseRepo.proceed') }}"><span
+                                        {{-- <li><a href="{{ route('client.reverseRepo.proceed') }}"><span
                                                     class="glyphicon glyphicon-th-list"></span>ReverseRepo Requests</a>
                                         </li>
                                         <li><a href="{{ route('client.settleReverseRepo.proceed') }}"><span
                                                     class="glyphicon glyphicon-th-list"></span>Settle ReverseRepo
-                                                Requests</a></li>
+                                                Requests</a></li> --}}
                                         <li><a href="{{ route('client.investment.proceed') }}"><span
                                                     class="glyphicon glyphicon-th-list"></span>Investment Requests</a>
                                         </li>
