@@ -410,7 +410,7 @@
             //when mobile otp entered and proceed
             $('#btnOtpSubmit').click(function() {
                 let otpVerify = $('#mobileOTP').val();
-                var mobile = $('#mobile').intlTelInput("getNumber");
+                var mobile = $('#joint_mobile').intlTelInput("getNumber");
 
                 var data = {
                     "mobile": mobile,
@@ -427,6 +427,7 @@
                         console.log('data');
                         if (data.success) {
                             // submitForm("basicInfoForm");
+                            emailOTP();
 
                         } else {
                             alertify.error(
@@ -495,7 +496,7 @@
                     success: function(data) {
                         console.log('data');
                         if (data.success) {
-
+                            submitForm();
                         } else {
                             alertify.error(
                                 "The OTP You Entered Is Invalid, Please Try again");
@@ -515,8 +516,6 @@
                 const form = document.getElementById(formId);
                 let fullmobile = $('#joint_mobile').intlTelInput("getNumber");
                 $('#full_mobile').val(fullmobile);
-
-
                 // Get form data
                 const formData = new FormData(form);
                 let token = $('meta[name="csrf-token"]').attr('content');
@@ -543,7 +542,6 @@
                     },
                 });
             }
-
 
             $(window).keydown(function(event) {
                 if (event.keyCode == 13) {
@@ -574,7 +572,7 @@
                 }
             });
 
-            $('#dob').mask('0000-00-00');
+            $('#joint_dob').mask('0000-00-00');
             $('#authorizedDiv').hide();
             $('#other_nationalityDIV').hide();
             // $('#jointHoldersDiv').hide();

@@ -58,7 +58,7 @@
     <div class="row">
         <div class="col-md-6">
             <label class="fieldlabels">Nationality *</label>
-            <select class="joint_nationality" name="joint_nationality joint_nationality">
+            <select class="form-control joint_nationality" name="joint_nationality joint_nationality" required>
                 <option value="Sri Lankan">Sri Lankan</option>
                 <option value="other">Other</option>
             </select>
