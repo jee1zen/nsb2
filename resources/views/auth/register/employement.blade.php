@@ -66,38 +66,38 @@
                             <label class="fieldlabels">Occupation: *</label>
                             <input type="text" name="joint_emp_occupation[]" id="joint_emp_occupation[]"
                                 placeholder="" class=""
-                                value="{{ $jointHolder->employmentDetails->occupation }}" />
+                                value="{{ $jointHolder->employmentDetails->occupation ?? "" }}" />
                         </div>
                         <div class="col-md-6">
                             <label class="fieldlabels">Company Name:*</label>
                             <input type="text" name="joint_emp_company_name[]" placeholder="" class=""
-                                value="{{ $jointHolder->employmentDetails->company_name }}" />
+                                value="{{ $jointHolder->employmentDetails->company_name ?? "" }}" />
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-12">
                             <label class="fieldlabels">Company Address: *</label>
                             <input type="text" name="joint_emp_company_address[]" placeholder="" class=""
-                                value="{{ $jointHolder->employmentDetails->company_address }}" />
+                                value="{{ $jointHolder->employmentDetails->company_address ?? "" }}" />
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6">
                             <label class="fieldlabels">Company Telephone: *</label>
                             <input type="text" name="joint_emp_company_telephone[]" placeholder="" class=""
-                                value="{{ $jointHolder->employmentDetails->telephone }}" />
+                                value="{{ $jointHolder->employmentDetails->telephone ?? "" }}" />
                         </div>
                         <div class="col-md-6">
                             <label class="fieldlabels">Fax: *</label>
                             <input type="text" name="joint_emp_fax[]" placeholder="Fax" class=""
-                                value="{{ $jointHolder->employmentDetails->fax }}" />
+                                value="{{ $jointHolder->employmentDetails->fax ?? "" }}" />
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-12">
                             <label class="fieldlabels">Nature Of Business: *</label>
                             <input type="text" name="joint_emp_nature[]" placeholder="" class=""
-                                value="{{ $jointHolder->employmentDetails->nature }}" />
+                                value="{{ $jointHolder->employmentDetails->nature ?? "" }}" />
                         </div>
                     </div>
                 @endforeach

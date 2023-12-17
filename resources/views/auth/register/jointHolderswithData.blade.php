@@ -19,7 +19,7 @@
                         <div class="card-body">
                             <div class="d-flex flex-column align-items-center ">
                                 <img src="{{ asset('storage/uploads/' . $jointHolder->pro_pic) }}" alt="profile-picture"
-                                    class="img-fluid" width="100">
+                                    class="img-fluid" style="max-width: 50px">
                                 <div class="mt-3">
                                     <h4>{{ $jointHolder->title }}
                                         {{ $jointHolder->name_by_initials }} </h4>

@@ -139,7 +139,7 @@
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <form id="jointform" method="POST" action="{{ route('registration.jointInfo') }}"
-                    enctype="multipart/form-data">
+                enctype="multipart/form-data">
                     @csrf
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLongTitle">Add New Joint Holder</h5>
@@ -158,8 +158,9 @@
                             data-dismiss="modal">Close</button>
                         <button type="submit" id="btnNewSubmit" class="btn btn-primary">Submit</button>
                     </div>
+                </form>
             </div>
-            </form>
+            
         </div>
     </div>
 
@@ -427,6 +428,7 @@
                         console.log('data');
                         if (data.success) {
                             // submitForm("basicInfoForm");
+                            $('#mobileOTPModal').modal('hide');
                             emailOTP();
 
                         } else {
@@ -496,7 +498,8 @@
                     success: function(data) {
                         console.log('data');
                         if (data.success) {
-                            submitForm();
+                            $('#emailOTPModal').modal('hide');
+                            submitForm("jointform");
                         } else {
                             alertify.error(
                                 "The OTP You Entered Is Invalid, Please Try again");

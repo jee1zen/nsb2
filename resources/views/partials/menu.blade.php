@@ -100,17 +100,7 @@
                     </a>
                 </li>
             @endcan
-            @can('client_management_access')
-                <li class="nav-item">
-                    <a href="{{ route('admin.accountEdit.index') }}"
-                        class="nav-link {{ request()->is('admin/accountEdit') || request()->is('admin/accountEdit/*') ? 'active' : '' }}">
-                        <i class="fa fa-address-book">
-
-                        </i>
-                        {{-- {{ trans('cruds.transaction.title') }} --}} Accounts Changes
-                    </a>
-                </li>
-            @endcan
+         
             @can('sync_bank_records')
                 <li class="nav-item nav-dropdown">
                     <a class="nav-link  nav-dropdown-toggle" href="#">

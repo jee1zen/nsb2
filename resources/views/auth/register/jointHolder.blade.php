@@ -41,7 +41,7 @@
         </div>
         <div class="col-md-6">
             <label class="fieldlabels">Email: *</label>
-            <input type="text" name="joint_email"placeholder="email" class="form-control joint_email" required />
+            <input type="text" id="joint_email" name="joint_email" placeholder="email" class="form-control joint_email" required />
 
         </div>
     </div>
@@ -77,7 +77,7 @@
             <input type="text" name="joint_telephone"placeholder="land line" class="form-control joint_telephone" />
         </div>
         <div class="col-md-6">
-            <input type="hidden" name="full_joint_mobile" />
+          
             <label class="fieldlabels">Mobile: *</label>
             <input type="tel" name="joint_mobile" id="joint_mobile" placeholder="mobile"
                 class="form-control joint_mobile OTP" required />
@@ -120,7 +120,7 @@
         </div>
         <div class="col-md-6">
             <label class="fieldlabels">Profile picture </label>
-            <input type="file" id="joint_profile_pic" name="joint_pro_pic[]" accept="image/*"
+            <input type="file" id="joint_profile_pic" name="joint_pro_pic" accept="image/*"
                 class="imgLoad joint_pro_pic">
             <img id="signature_preview" src="{{ asset('storage/images/pro_pic.png') }}" class="img_preview" />
         </div>
