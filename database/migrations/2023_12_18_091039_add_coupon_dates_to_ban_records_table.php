@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSynRefsTable extends Migration
+class AddCouponDatesToBanRecordsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,8 @@ class CreateSynRefsTable extends Migration
      */
     public function up()
     {
-        Schema::create('sync_refs', function (Blueprint $table) {
-            $table->id();
-            $table->string('ref');
-            $table->string('name');
-            $table->string('email');
-            $table->timestamps();
+        Schema::table('bank_records', function (Blueprint $table) {
+            $table->string('coupon_dates')->after('trade_date')->nullable();
         });
     }
 
@@ -29,6 +25,8 @@ class CreateSynRefsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('sync_refs');
+        Schema::table('bank_records', function (Blueprint $table) {
+            $table->dropColumn('coupon_dates');
+        });
     }
 }

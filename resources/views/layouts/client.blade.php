@@ -30,6 +30,7 @@
     @php
         $user = Auth::user();
         $client = $user->client;
+       
 
         $allAccounts = collect([]);
         $mainAccounts = collect([]);
@@ -44,6 +45,7 @@
         }
 
         $allAccounts = $mainAccounts->merge($jointAccounts);
+
 
         if (empty($allAccounts)) {
             //for now logout must ->redirect to a message where has a timeout and logout
@@ -60,13 +62,13 @@
                 }
             } else {
                 $_selectedAccount = $user->selectedAccount;
-                // dd($_selectedAccount);
                 $selectedAccount = $_selectedAccount->account_id;
                 $account = App\Account::findOrFail($selectedAccount);
                 if ($account == null) {
                     $account = $user->jointAccounts()->first();
                     $role = 'JointHolder';
                 }
+                // dd($account->jointHolders()->get());
 
                 $account_id = $account->id;
                 if ($account->type == 2 && $account->client_id == $user->id) {

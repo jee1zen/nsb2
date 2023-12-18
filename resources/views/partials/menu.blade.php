@@ -119,6 +119,15 @@
                                 Sync Tbill/TBond
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a href="{{ route('admin.empty.index') }}"
+                                class="nav-link {{ request()->is('admin/empty') || request()->is('admin/empty/*') ? 'active' : '' }}">
+                                <i class="fa-fw fas fa-battery-empty nav-icon">
+
+                                </i>
+                                Empty Emails
+                            </a>
+                        </li>
 
 
                         <li class="nav-item">

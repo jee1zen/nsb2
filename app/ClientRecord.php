@@ -27,7 +27,8 @@ class ClientRecord extends Model
         'invested_amount',
         'stock_ref',
         'method',
-        'trade_date',      
+        'trade_date', 
+        'coupon_dates'     
        ];
 
 

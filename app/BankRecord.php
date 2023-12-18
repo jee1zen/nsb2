@@ -35,5 +35,6 @@ class BankRecord extends Model
         'address_line_3',
         'address_line_4',
         'trade_date',
+        'coupon_dates'
     ];
 }

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSynRefsTable extends Migration
+class CreateEmptyEmailsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,11 @@ class CreateSynRefsTable extends Migration
      */
     public function up()
     {
-        Schema::create('sync_refs', function (Blueprint $table) {
+        Schema::create('empty_emails', function (Blueprint $table) {
             $table->id();
             $table->string('ref');
+            $table->string('cus_id');
             $table->string('name');
-            $table->string('email');
             $table->timestamps();
         });
     }
@@ -29,6 +29,6 @@ class CreateSynRefsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('sync_refs');
+        Schema::dropIfExists('empty_emails');
     }
 }

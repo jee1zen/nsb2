@@ -24,7 +24,7 @@
 
 <body>
     <div class="page-break">
-        <table width="100%" style="float:right; margin-top:-35px !important; margin-left:-25px;">
+        <table width="100%" style="float:right; margin-top:-35px !important; margin-left:-25px; margin-bottom:2px;">
             <tr>
                 <td>
 
@@ -46,15 +46,19 @@
         </table>
 
         <div class="clearfix"></div>
-        <hr class="solid">
-        <table class="table_data">
+        <hr class="solid" style="margin-top: 1px !important; margin-bottom 2px !important;">
+        <table class="table_data" style="margin-bottom: 1px!important">
             <tr>
                 <td>Customer ID</td>
                 <td> &nbsp; <b> {{ $match->cus_id1 }} </b></td>
             </tr>
+            <tr>
+                <td>Ref No</td>
+                <td><b> {{ $match->ref_no }} </b></td>
+            </tr>
         </table>
         <div>
-            <table width="49%" style="float:left; margin-bottom: 5px;" class="table_data">
+            <table width="49%" style="float:left; margin-bottom: 2px;" class="table_data">
                 <tr>
                     <th>
                         <u>SELLER</u>
@@ -103,6 +107,24 @@
                 <tr>
                     <td>{{ $client_address_line_3 ?? '' }}</td>
                 </tr>
+                @isset($client_address_line_4)
+                    <tr>
+                        <td>{{ $client_address_line_4 ?? '' }}</td>
+                    </tr>
+                @endisset
+                @isset($match->cus_id2)
+                    <tr>
+                        <td> <u>Joint Holders</u></td>
+                    </tr>
+                    <tr>
+                        <td>{{ $match->cus_id2 }}</td>
+                    </tr>
+                    @isset($match->cus_id2)
+                        <tr>
+                            <td>{{ $match->cus_id3 }}</td>
+                        </tr>
+                    @endisset
+                @endisset
             </table>
 
         </div>
@@ -157,6 +179,10 @@
             <tr>
                 <td>Cost of the Security</td>
                 <td>@money($match->invested_amount)</td>
+            </tr>
+            <tr>
+                <td>Trade Date</td>
+                <td>{{ $trade_date }}</td>
             </tr>
             {{-- <tr>
               <td>  

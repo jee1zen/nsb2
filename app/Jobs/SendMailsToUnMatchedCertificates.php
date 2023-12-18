@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\SyncRef;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -31,22 +32,37 @@ class SendMailsToUnMatchedCertificates implements ShouldQueue
      */
     public function handle($jobData)
     {
-        foreach ($jobData['unMatchingRecords'] as $unMatch) {
-            if ($unMatch->method == 'New') {
-                Mail::send(
-                    'emails.accountActivate',
-                    [
-                        'name' => $unMatch->name,
-                        'email' => $unMatch->email,
-                        'investment' => $unMatch->type,
-                        'today' => date('Y-m-d')
-                    ],
-                    function ($message) use ($unMatch) {
-                        $message->to($unMatch->email);
-                        $message->subject('Customer Confirmation' . $unMatch->type)->attach(storage_path('app/public/downloads/' . $unMatch->ref_no . '.pdf'));
-                    }
-                );
-            }
+        foreach ($jobData as $unMatch) {
+
+                  if($unMatch->type=="tbill"){
+                    $type = "TBill";
+                  }else{
+                    $type="TBond";
+                  }
+          
+                    Mail::send(
+                        'emails.accountActivate',
+                        [
+                            'name' => $unMatch->name,
+                            'email' => $unMatch->email,
+                            'investment' => $unMatch->type,
+                            'today' => date('Y-m-d')
+                        ],
+                        function ($message) use ($unMatch,$type) {
+                            $message->to($unMatch->email);
+                            $message->subject('Customer Confirmation  ' . $type)->attach(storage_path('app/public/downloads/' . $unMatch->ref_no . '.pdf'));
+                        }
+                    );
+
+
+                    SyncRef::create([
+                        'ref'=>$unMatch->ref_no,
+                        'name'=>$unMatch->name,
+                        'email'=>$unMatch->email,
+                    ]);
+                  
+                
+            
         }
     }
 }

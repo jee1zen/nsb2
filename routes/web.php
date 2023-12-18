@@ -91,6 +91,8 @@ Route::get('emailVerifyMessage','Registration\PreUserController@verifyEmailMessa
     Route::post('csv/import','BankRecordController@fileImport')->name('csv.import');
     Route::get('csv/sync','BankRecordController@synchronize')->name('csv.sync');
     Route::get('bankRecords/view','BankRecordController@viewRecords')->name('bankRecords.view');
+      //empty emails
+      Route::get('empty','EmptyEmailsController@index')->name('empty.index');
 
     
     //bank Repo client  records sync & view
