@@ -6,8 +6,8 @@
             padding: 20px;
         }
     </style>
-    <div class="d-flex justify-content-center">
-        <div class="col-md-6">
+       <div class="d-flex justify-content-center bg-opacity-50">
+        <div class="col-md-8 bg-light bg-gradient text-dark bg-opacity-60">
 
 
 

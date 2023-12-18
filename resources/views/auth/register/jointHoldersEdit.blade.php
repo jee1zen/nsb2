@@ -12,31 +12,31 @@
         </div>
         <div class="col-md-4">
             <label class="fieldlabels">Name With Initials: * </label>
-            <input type="text" id="joint_name" name="joint_name" placeholder="Joint Holder Name" class="form-control joint_name"
+            <input type="text" name="joint_name" placeholder="Joint Holder Name" class="form-control joint_name"
                 required />
         </div>
         <div class="col-md-4">
             <label class="fieldlabels">Name In Full : * </label>
-            <input type="text" id="joint_name_initials" name="joint_name_initials" placeholder="Name by Intitials"
+            <input type="text" name="joint_name_initials" placeholder="Name by Intitials"
                 class="form-control joint_name_by_initials" required />
         </div>
     </div>
     <div class="row">
         <div class="col-md-6">
             <label class="fieldlabels">Address Line 1 :*</label>
-            <input type="text" id="joint_address_line_1" name="joint_address_line_1" placeholder="Address Line 1"
+            <input type="text" name="joint_address_line_1" placeholder="Address Line 1"
                 class="form-control joint_address_line_1" required />
         </div>
         <div class="col-md-6">
             <label class="fieldlabels">Address Line 2 :*</label>
-            <input type="text"  id="joint_address_line_2" name="joint_address_line_2" placeholder="Address Line 2 "
+            <input type="text" name="joint_address_line_2" placeholder="Address Line 2 "
                 class="form-control joint_address_line_2" required />
         </div>
     </div>
     <div class="row">
         <div class="col-md-6">
             <label class="fieldlabels">Address Line 3 :*</label>
-            <input type="text"  id="joint_address_line_3" name="joint_address_line_3" placeholder="Address Line 3 "
+            <input type="text" name="joint_address_line_3" placeholder="Address Line 3 "
                 class="form-control joint_address_line_3" />
         </div>
         <div class="col-md-6">
@@ -52,13 +52,13 @@
         </div>
         <div class="col-md-6">
             <label class="fieldlabels">NIC/Passport: *</label>
-            <input type="text" id="joint_nic" name="joint_nic"placeholder="nic" class="form-control joint_nic" required />
+            <input type="text" name="joint_nic"placeholder="nic" class="form-control joint_nic" required />
         </div>
     </div>
     <div class="row">
         <div class="col-md-6">
             <label class="fieldlabels">Nationality *</label>
-            <select class="form-control joint_nationality" id="joint_nationality" name="joint_nationality" required>
+            <select class="form-control joint_nationality" name="joint_nationality joint_nationality" required>
                 <option value="Sri Lankan">Sri Lankan</option>
                 <option value="other">Other</option>
             </select>
@@ -66,7 +66,7 @@
         <div class="col-md-6">
             <div class="joint_nationality_div">
                 <label class="fieldlabels">Nationality *</label>
-                <input type="text" name="joint_nationality_other"  id="joint_nationality_other" placeholder="Nationality"
+                <input type="text" name="joint_nationality_other"placeholder="Nationality"
                     class="form-control joint_nationality_other" />
             </div>
         </div>
@@ -74,7 +74,7 @@
     <div class="row">
         <div class="col-md-6">
             <label class="fieldlabels">Land Phone: *</label>
-            <input type="text" id="joint_telephone"  name="joint_telephone"placeholder="land line" class="form-control joint_telephone" />
+            <input type="text" name="joint_telephone"placeholder="land line" class="form-control joint_telephone" />
         </div>
         <div class="col-md-6">
           
@@ -90,7 +90,7 @@
             <div class="col-md-6">
                 <label class="fieldlabels">NIC Front Side: *</label>
                 <input type="file" name="joint_nic_front" accept="image/*" class="imgLoad joint_nic_front">
-                <img id="joint_nic_front_preview" src="{{ asset('storage/images/nic_front_preview.jpg') }}"
+                <img id="joint_nic_front" src="{{ asset('storage/images/nic_front_preview.jpg') }}"
                     class="img_preview" />
             </div>
             <div class="col-md-6">
@@ -114,15 +114,15 @@
     <div class="row">
         <div class="col-md-6">
             <label class="fieldlabels">Signature: *</label>
-            <input type="file" name="joint_signature" id="joint_signature" accept="image/*" class="imgLoad joint_signature">
-            <img id="joint_signature_preview" src="{{ asset('storage/images/signature_preview.png') }}"
+            <input type="file" name="joint_signature" accept="image/*" class="imgLoad joint_signature">
+            <img id="joint_passport_preview" src="{{ asset('storage/images/signature_preview.png') }}"
                 class="img_preview" />
         </div>
         <div class="col-md-6">
             <label class="fieldlabels">Profile picture </label>
-            <input type="file" id="joint_profile_pic" name="joint_pro_pic"  id="joint_pro_pic" accept="image/*"
+            <input type="file" id="joint_profile_pic" name="joint_pro_pic" accept="image/*"
                 class="imgLoad joint_pro_pic">
-            <img id="pro_pic_preview" src="{{ asset('storage/images/pro_pic.png') }}" class="img_preview" />
+            <img id="signature_preview" src="{{ asset('storage/images/pro_pic.png') }}" class="img_preview" />
         </div>
     </div>
 </div>

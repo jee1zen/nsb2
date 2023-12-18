@@ -36,9 +36,9 @@
                     <div class="col-xs-12 col-sm-6 col-md-6">
                         <div class="well well-sm">
                             <div class="row">
-                                <div class="col-sm-6 col-md-4">
+                                <div class="col-sm-6 col-md-3">
                                     <img src="{{ asset('storage/uploads/' . $investment->client->pro_pic) }}" alt=""
-                                        class="img-rounded img-responsive" width="50px" height="100px" />
+                                        class="img-rounded img-responsive" style="max-height: 80px" />
 
                                 </div>
                                 <div class="col-sm-6 col-md-8">

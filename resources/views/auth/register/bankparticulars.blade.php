@@ -50,7 +50,7 @@
             </thead>
             <tbody>
                 @forelse ($bankParticulars as $key => $bankParticular)
-                    <tr id='addr0' data-id="0" class="hidden" style="cursor: move;">
+                    <tr>
                         <input type="hidden" name="bankParticular_id[]" value="{{ $bankParticular->id }}">
                         <td data-name="AccountyType">
 
@@ -76,12 +76,20 @@
                             {{ $bankParticular->account_no }}
                         </td>
                         <td>
+                            <a href="{{ asset('storage/uploads/passBooks/' . $bankParticular->passbook) }}" target="_blank">
                             PassBook
+                            </a>
                         </td>
-                        <td data-name="del">
-                            <button name="del0" type="button"
-                                class='btn btn-danger glyphicon glyphicon-remove row-remove'><span
-                                    aria-hidden="true">X</span></button>
+                        <td>
+                            <form action="{{ route('registration.bank.delete') }}" method="Post" >
+                                @csrf
+                                <input type="hidden" value="{{$bankParticular->id}}" name="id"/>
+                                <button name="removeBtn[]" type="submit"
+                                class='btn btn-danger glyphicon glyphicon-remove'><span
+                                  >X</span></button>
+
+                            </form>
+                    
                         </td>
                     </tr>
                 @empty

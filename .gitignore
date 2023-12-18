@@ -3,3 +3,5 @@ nbproject
 nsbfm.zip
 .env
 public/storage
+composer.lock
+composer.lock

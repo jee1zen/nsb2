@@ -14,8 +14,8 @@
                     @include('client.registration.common.registerHead')
                     <div id="msform">
                         @include('client.registration.common.sectionProgress')
-                        <form id="bankForm" enctype="multipart/form-data">
-                            @csrf
+                     
+                          
                             <fieldset id="bankparticularSection">
                                 @include('auth.register.bankparticulars')
                                 <a id="btnBank" name="next" class="next action-button" value="Next"
@@ -23,7 +23,7 @@
                                 <a name="previous" class="previous action-button-previous"
                                     href="{{ route('registration.empInfo') }}">Back</a>
                             </fieldset>
-                        </form>
+                       
 
                     </div>
                 </div>
@@ -92,7 +92,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="passbook" class="form-label">PassBook</label>
-                            <input type="file" class="form-control" id="passbook">
+                            <input type="file" class="form-control" id="passbook" name="passbook">
                         </div>
                     </form>
                 </div>

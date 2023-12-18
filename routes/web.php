@@ -256,12 +256,16 @@ Route::group(['prefix' => 'registration', 'as' => 'registration.', 'namespace' =
     //joint Holder 
     Route::get('jointInfo','PreUserController@jointHolderShow')->name('jointInfo');
     Route::post('jointInfo','PreUserController@jointHolderSave')->name('jointInfo');
+    Route::post('deleteJoint','PreUserController@removeJointHolder')->name('jointInfo.delete');
+
     //Employmenet Information
     Route::get('empInfo','PreUserController@employmentDetailsShow')->name('empInfo');
     Route::post('empInfo','PreUserController@employmentDetailsSave')->name('empInfo');
     //Bank information
     Route::get('bank','PreUserController@bankParticularsShow')->name('bank');
     Route::post('bank','PreUserController@bankParticularsSave')->name('bank');
+    Route::post('deleteBank','PreUserController@bankParticularDelete')->name('bank.delete');
+
     //Other Information
     Route::get('otherInfo','PreUserController@otherInfoShow')->name('otherInfo');
     Route::post('otherInfo','PreUserController@otherInfoSave')->name('otherInfo');

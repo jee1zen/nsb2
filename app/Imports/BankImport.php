@@ -63,6 +63,9 @@ class BankImport implements ToModel,WithValidation, SkipsOnFailure,WithStartRow
             'address_line_1'=>$row[20], 
             'address_line_2'=>$row[21],
             'address_line_3'=>$row[22],
+            'address_line_4' => $row[23],
+            'trade_date' => Carbon::createFromFormat('m/d/Y', ltrim($row[24]))->format('Y-m-d'),
+            'coupon_dates'=>$row[25]
         ];
         
         return new BankRecord($data);

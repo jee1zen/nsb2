@@ -239,7 +239,8 @@
                                         </li>
                                         {{-- <li><a href="{{route('client.reverseRepo.create')}}"><span class="glyphicon glyphicon-import"></span>Obtain A Reverse Repo</a></li> --}}
                                     @endif
-                                    @if ($account->client_id == $user->id && $account->status >= 8)
+                                    @if (($account->client_id != $user->id && $account->joint_permission == 0 && $account->status >= 8) ||
+                                    ($account->client_id == $user->id  && $account->status >= 8))
                                         <li><a href="{{ route('client.investment.index') }}"><span
                                                     class="glyphicon glyphicon-plus"></span>Add Investment </a></li>
                                         <li><a href="{{ route('client.bid') }}"><span

@@ -1523,6 +1523,7 @@
                                         <th>Bank</th>
                                         <th>Branch</th>
                                         <th>Account No</th>
+                                        <th>Passbook</th>
                                         <th> Verify </th>
                                     </tr>
                                     @foreach ($account->bankParticulars()->get() as $bankParticulars)
@@ -1532,6 +1533,18 @@
                                             <td> {{ $bankParticulars->bank_name }} </td>
                                             <td> {{ $bankParticulars->branch }} </td>
                                             <td> {{ $bankParticulars->account_no }} </td>
+                                            <td> 
+                                                @if($bankParticulars->passbook!='')
+                                                <a href="{{ asset('/storage/uploads/passBooks/' . $bankParticulars->passbook) }}"
+                                                    target="_blank">
+                                                    <img src="{{ asset('storage/uploads/passBooks/' . $bankParticulars->passbook) }}"
+                                                        class="img-fluid" width="50px" height="100px"
+                                                        alt="Responsive image">
+                                                        </a>
+                                                @endif
+                                               
+                                        
+                                        </td>
                                             <td>
                                                 <input type="checkbox" class="checkBoxVerify"
                                                     {{ $bankParticulars->verified == 0 ? '' : 'checked' }}

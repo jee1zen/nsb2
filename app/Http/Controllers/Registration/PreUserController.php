@@ -358,12 +358,43 @@ class PreUserController extends Controller
         }
     }
 
+    public function removeJointHolder(Request $request)
+    {
+
+        $user = Auth::user();
+        $account = $user->accounts()->first();
+        $checkOtherAccountsOfJointHolder = AccountJointHolder::where('client_id', $request->id)->where('account_id', '!=', $account->id)->first();
+        $ownAccount = Account::where('client_id', $request->id)->first();
+
+        if ($checkOtherAccountsOfJointHolder == null && $ownAccount == null) {
+
+            //delete user and client and all information  & remove from joint holder account
+            $thisJointConnection = AccountJointHolder::where('client_id', $request->id)->where('account_id', $account->id)->first();
+            $thisJointConnection->delete();
+
+            $jointClient = Client::find($request->id);
+            $jointClient->forceDelete();
+
+            $jointUser = User::find($request->id);
+            $jointUser->forceDelete();
+
+        } else {
+         
+
+            $thisJointConnection = AccountJointHolder::where('client_id', $request->id)->where('account_id', $account->id)->first();
+            $thisJointConnection->delete();
+        }
+        $send['success'] = true;
+        return response()->json($send);
+
+    }
+
 
     public function jointHolderSave(Request $request)
     {
-       
-    
-       
+
+
+
         $user = Auth::user();
         $account = $user->accounts()->first();
         $destinationPath = storage_path('app/public/uploads/');
@@ -515,10 +546,10 @@ class PreUserController extends Controller
         $user = Auth::user();
         $client = $user->client;
         $account = $user->accounts()->first();
-        $title ='employment';
+        $title = 'employment';
         $account_type = $account->type;
 
-        return view('client.registration.employement', compact('user', 'account', 'client','title','account_type'));
+        return view('client.registration.employement', compact('user', 'account', 'client', 'title', 'account_type'));
     }
     public function employmentDetailsSave(Request $request)
     {
@@ -597,9 +628,9 @@ class PreUserController extends Controller
         $branches = Branch::orderBy('name', 'ASC')->get();
         $branches = $branches->toJson();
         $bankParticulars = BankParticular::where('client_id', $user->id)->where('account_id', $account->id)->get();
-        $title ='bank';
+        $title = 'bank';
         $account_type = $account->type;
-        return view('client.registration.bankparticulars', compact('banksJson', 'branches', 'banks', 'user', 'account', 'bankParticulars','bank','account_type'));
+        return view('client.registration.bankparticulars', compact('banksJson', 'branches', 'banks', 'user', 'account', 'bankParticulars', 'title', 'account_type'));
     }
 
     public function bankParticularsSave(Request $request)
@@ -639,17 +670,27 @@ class PreUserController extends Controller
         return redirect()->back();
     }
 
+    public function bankParticularDelete(Request $request){
+         
+      
+      
+         $bankParticular = BankParticular::find($request->id);
+         $bankParticular->delete();
+         return redirect()->back();
+
+    }
+
     public function otherInfoShow()
     {
 
         $user = Auth::user();
         $client = $user->client;
         $account = $user->accounts()->first();
-        $title ='other';
+        $title = 'other';
         $account_type = $account->type;
 
 
-        return view('client.registration.otherInfo', compact('user', 'account', 'client','account_type'));
+        return view('client.registration.otherInfo', compact('user', 'account', 'client', 'account_type','title'));
     }
 
     public function otherInfoSave(Request $request)
@@ -816,14 +857,9 @@ class PreUserController extends Controller
         $client = $user->client;
         $account = $client->accounts()->first();
 
-
-
         if ($request->acceptCheck) {
-
             if ($account->type == 2) {
-
                 $jointHolders = $account->jointHolders()->withPivot('kyc_link')->get();
-
                 foreach ($jointHolders as $jointHolder) {
                     $link = $jointHolder->pivot->kyc_link;
                     // dd($jointHolder->pivot->kyc_link);

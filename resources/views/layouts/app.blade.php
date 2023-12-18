@@ -34,7 +34,7 @@
 </head>
 
 <body class="header-fixed sidebar-fixed aside-menu-fixed aside-menu-hidden login-page"
-    style="background-image: url('../img/colombo.jpg'); background-size:cover;">
+    style="background-image: url('{{ asset('img/colombo.jpg') }}'); background-size:cover;">
 
     {{-- <img src="./img/fmc.jpg" alt="" style="width:150px; height:auto"> --}}
 

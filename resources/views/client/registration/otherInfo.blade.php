@@ -16,7 +16,7 @@
                                 @csrf
                                 @include('auth.register.otherInfo')
                                 <input type="submit" id="btnOther" name="next" class="next action-button"
-                                    value=" Saven & Next" />
+                                    value="Save & Next" />
                                 <a name="previous" class="previous action-button-previous"
                                     href="{{ route('registration.bank') }}">Back</a>
                             </form>
@@ -83,15 +83,7 @@
                     $loading.hide();
                 });
 
-            $(function() {
-                // $("#msform").saveMyForm();
-            });
-
-            $(function() {
-                // $("#msform").saveMyForm({
-                //     resetOnSubmit: false
-                // });
-            });
+          
 
 
             $(".progress-bar")

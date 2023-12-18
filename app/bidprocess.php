@@ -5,7 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Bidprocess extends Model
+class BidProcess extends Model
 {
     use HasFactory;
     protected $fillable=[

@@ -6,8 +6,8 @@
             padding: 20px;
         }
     </style>
-    <div class="d-flex justify-content-center">
-        <div class="col-md-6">
+    <div class="d-flex justify-content-center bg-opacity-50">
+        <div class="col-md-8 bg-light bg-gradient text-dark bg-opacity-60">
             <div class="text-center">
                 <img src="{{ asset('storage/images/fmc.jpg') }}" class="rounded-logo" alt="...">
             </div>
@@ -30,7 +30,7 @@
                     <input type="hidden" name="investment_id" value="{{ $investment_id }}" />
                     <label class="fieldlabels">Name in Full : *</label>
                     <input type="text" id="kyc_name" name="kyc_name" placeholder="" value="{{ $jointHolder->name }}"
-                        class="fieldRequired {{ $errors->has('kyc_name') ? ' is-invalid' : '' }}" />
+                        class="fieldRequired {{ $errors->has('kyc_name') ? ' is-invalid' : '' }}" required />
                     @if ($errors->has('kyc_name'))
                         <div class="invalid-feedback">
                             {{ $errors->first('kyc_name') }}
@@ -38,7 +38,7 @@
                     @endif
                     <label class="fieldlabels">NIC Number / Passport Number : *</label>
                     <input type="text" id="kyc_nic" name="kyc_nic" placeholder="" value="{{ $jointHolder->nic }}"
-                        class="fieldRequired {{ $errors->has('kyc_nic') ? ' is-invalid' : '' }}" />
+                        class="fieldRequired {{ $errors->has('kyc_nic') ? ' is-invalid' : '' }}"  required/>
                     @if ($errors->has('kyc_nic'))
                         <div class="invalid-feedback">
                             {{ $errors->first('kyc_nic') }}
@@ -136,8 +136,8 @@
 
                     <label class="fieldlabels">Occupation/Employement/Position Held : *</label>
                     <input type="text" id="kyc_employment" name="kyc_employment" placeholder=""
-                        value="{{ $jointHolder->occupation }}"
-                        class="form-control {{ $errors->has('kyc_employment') ? ' is-invalid' : '' }}" />
+                        value="{{ $jointHolder->employmentDetails->occupation ?? "" }}"
+                        class="form-control {{ $errors->has('kyc_employment') ? ' is-invalid' : '' }}" required />
                     @if ($errors->has('kyc_employment'))
                         <div class="invalid-feedback">
                             {{ $errors->first('kyc_employment') }}
@@ -191,7 +191,7 @@
                     </div>
 
                     <label class="fieldlabels">Status Of Residential Address : *</label>
-                    <select name="kyc_ownership_of_premises" id="kyc_ownership_of_premises" class="fieldRequired">
+                    <select name="kyc_ownership_of_premises" id="kyc_ownership_of_premises" class="fieldRequired" required>
                         <option value="Owner">Owner</option>
                         <option value="Parent's">Parent's</option>
                         <option value="Lease/Rent">Lease/Rent</option>
@@ -202,7 +202,7 @@
 
                     <label class="fieldlabels">Permanet Address : *</label>
                     <textarea type="text" id="kyc_permanent_address" name="kyc_permanent_address" placeholder=""
-                        class="fieldRequired {{ $errors->has('kyc_permanent_address') ? ' is-invalid' : '' }}">{{ $jointHolder->address_line_1 }}
+                        class="fieldRequired {{ $errors->has('kyc_permanent_address') ? ' is-invalid' : '' }}" required>{{ $jointHolder->address_line_1 }}
 {{ $jointHolder->address_line_2 }}
 {{ $jointHolder->address_line_3 }}
       </textarea>
@@ -395,7 +395,7 @@
                     @endif
                     <label class="fieldlabels"> Expected Mode of Transactions/ Delivery Channels: *</label>
                     <select name="kyc_expected_mode_of_transacation"
-                        id="kyc_expected_mode_of_transacation"class="form-control{{ $errors->has('kyc_expected_types_of_counterparties') ? ' is-invalid' : '' }}">
+                        id="kyc_expected_mode_of_transacation"class="form-control{{ $errors->has('kyc_expected_types_of_counterparties') ? ' is-invalid' : '' }}" required>
                         <option value="">Select</option>
                         <option value="Cash">Cash</option>
                         <option value="Cheque">Cheque</option>

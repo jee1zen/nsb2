@@ -148,10 +148,7 @@
                         </button>
                     </div>
                     <div class="modal-body">
-
-
                         @include('auth.register.jointHolder')
-
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" id="btnNewModalClose"
@@ -163,6 +160,7 @@
             
         </div>
     </div>
+
 
     <!-- Modal Existing User as Joint Holder -->
     <div class="modal fade" id="existingUserModal" tabindex="-1" role="dialog" aria-labelledby="existingUserModal"
@@ -204,6 +202,7 @@
     {{-- <script src="{{ asset('js/saveMyForm.jquery.min.js') }}"></script> --}}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/js/intlTelInput-jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/js/utils.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script> --}}
 
     <script>
@@ -258,6 +257,95 @@
                 $('#existingUserModal').modal('show');
 
             });
+
+
+            
+
+
+            $('.btnJointRemove').click(function() {
+                let id = $(this).prev().val();
+                let jointName = $(this).prev().prev().val();
+
+                Swal.fire({
+                        title: "Are you sure?",
+                        text: "Remove This JointHolder "+jointName +" ?",
+                        type: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#DD6B55",
+                        confirmButtonText:"Yes",
+                        cancelButtonText: "No",
+                        closeOnConfirm: false,
+                        closeOnCancel: false
+                    }).then(function(result) {
+                        if (result.value) {
+                            var data = {
+                                        "id": id,
+                                        "_token": "{{ csrf_token() }}"
+                                    }; //data to send to server
+                                    var dataType = "json" //expected datatype from server
+                                    //   $('#loader').show();
+                                        $.post({
+                                            url: "{{ route('registration.jointInfo.delete') }}", //url of the server which stores time data
+                                            data: data,
+                                            beforeSend: function() {
+
+                                            },
+                                            success: function(data) {
+                                                if (data.success) {
+                                                    Swal.fire("Removed!", jointName+" - Joint Holder Has Been Removed!", "success");
+                                                    window.location.reload();
+                                                
+                                                } else {
+                                                    swal("Error", "Cannot Delete", "error");
+                                                }
+                                            },
+                                        });
+                        
+                        } else if (result.dismiss === "cancel") {
+                      
+                        }
+                        });
+                });
+
+               
+
+                $('.btnJointEdit').on('click', function() {
+                    let buttonId = $(this).attr('id');
+                        // Extract the part after "-"
+                    let modalIdSuffix = buttonId.substring(buttonId.indexOf('-') + 1);
+
+                    let jointHolderInformationArray =  JSON.parse('{!! json_encode($account->jointHolders()->get() ?? '') !!}');
+                    let jointEmail =  JSON.parse('{!! json_encode($account->jointHolders()->get()->first()->user->email ?? '') !!}');
+                    console.log('email is',jointEmail)
+                    console.log(jointHolderInformationArray);
+
+                    let  filteredData = jointHolderInformationArray.filter(holder => holder.id == modalIdSuffix);
+                   let jointHolderData = filteredData[0];
+                 //loading data
+                    $('#joint_title').val(jointHolderData.title);
+                    $('#joint_name').val(jointHolderData.name);
+                    $('#joint_name_initials').val(jointHolderData.name_by_initials);
+                    $('#joint_address_line_1').val(jointHolderData.address_line_1);
+                    $('#joint_address_line_2').val(jointHolderData.address_line_2);
+                    $('#joint_address_line_3').val(jointHolderData.address_line_3);
+                    $('#joint_email').val(jointEmail);
+                    $('#joint_dob').val(jointHolderData.dob);
+                    $('#joint_nic').val(jointHolderData.nic);
+                    $('#joint_nationality').val(jointHolderData.nationality);
+                    $('#joint_telephone').val(jointHolderData.telephone);
+                    $('#joint_nic_front_preview').attr("src","{{asset('storage/uploads/')}}/"+jointHolderData.nic_front);
+                    $('#joint_nic_back_preview').attr("src","{{asset('storage/uploads/')}}/"+jointHolderData.nic_back);
+                    $('#joint_passport_preview').attr("src","{{asset('storage/uploads/')}}/"+jointHolderData.passport);
+                    $('#joint_signature_preview').attr("src","{{asset('storage/uploads/')}}/"+jointHolderData.signature);
+                    $('#pro_pic_preview').attr("src","{{asset('storage/uploads/')}}/"+jointHolderData.pro_pic);
+                    //show Modal
+                    $('#newUserModal').modal('show');
+
+                
+                   
+                });
+
+
 
 
             //submitting exising user
@@ -358,6 +446,26 @@
 
             $('#add_new').click(function(event) {
                 event.preventDefault();
+
+
+                   $('#joint_title').val("");
+                    $('#joint_name').val("");
+                    $('#joint_name_initials').val("");
+                    $('#joint_address_line_1').val("");
+                    $('#joint_address_line_2').val("");
+                    $('#joint_address_line_3').val("");
+                    $('#joint_email').val("");
+                    $('#joint_dob').val("");
+                    $('#joint_nic').val("");
+                    $('#joint_nationality').val("");
+                    $('#joint_telephone').val("");
+                    $('#joint_nic_front_preview').attr("src","{{asset('storage/images/nic_front_preview.jpg')}}");
+                    $('#joint_nic_back_preview').attr("src","{{asset('storage/images/nic_back_preview.jpg')}}");
+                    $('#joint_passport_preview').attr("src","{{asset('storage/images/nic_back_preview.jpg')}}");
+                    $('#joint_signature_preview').attr("src","{{asset('storage/images/signature_preview.png')}}");
+                    $('#pro_pic_preview').attr("src","{{asset('storage/images/pro_pic.png')}}");
+
+
 
                 $('#newUserModal').modal('show');
 
@@ -1036,344 +1144,6 @@
 
 
 
-            // $(".next").click(function() {
-            //     // alert($(this).parent().attr('id'));
-            //     $(this).prev('div').find('.fieldRequired').each(function() {
-
-            //         if ($(this).val() === '') {
-            //             var label = $(this).prev('.fieldlabels').text();
-
-            //             alertify.error(`${label} cannot be Empty!`);
-
-            //             isValid = false;
-
-            //         } else {
-            //             isValid = true;
-
-            //         }
-            //         return isValid;
-            //     });
-            //     // if($(this).attr('id')==='btnJoint'){
-
-
-            //     // }
-
-            //     if ($(this).attr('id') === 'btnBasicInfo') {
-
-
-
-
-
-            //         isValidDate($('#dob').val(), 'Date of Birth');
-
-            //         // if ($('#mobile').val() === '') {
-            //         //     alertify.error(`mobile  cannot be Empty!`);
-            //         //     isValid = false;
-            //         //     return;
-            //         // }
-
-            //         // if($('#telephone').val()===''){
-            //         //     alertify.error(`mobile  cannot be Empty!`);
-            //         //     isValid=false;
-            //         //     return;
-            //         // }            
-
-
-            //         // if ($('#email').val() === '') {
-            //         //     alertify.error(`email  cannot be Empty!`);
-            //         //     isValid = false;
-            //         //     return;
-            //         // }
-            //         if ($('#address_line_1').val() === '') {
-            //             alertify.error(`address line 1   cannot be Empty!`);
-            //             isValid = false;
-            //             return;
-            //         }
-
-            //         if ($('#address_line_2').val() === '') {
-            //             alertify.error(`address line 2   cannot be Empty!`);
-            //             isValid = false;
-            //             return;
-            //         }
-
-            //         if ($('#nationality').val() === 'other') {
-
-            //             if ($('#passport').val() === '') {
-            //                 alertify.error(`passport image cannot be Empty!`);
-            //                 isValid = false;
-            //                 return;
-
-            //             }
-            //             if ($('#other_nationality').val() === '') {
-            //                 alertify.error(`Nationailty  cannot be Empty!`);
-            //                 isValid = false;
-            //                 return;
-
-            //             }
-            //             if ($('#authorized_name').val() === '') {
-            //                 alertify.error(`Authorized Person Name cannot be Empty!`);
-            //                 isValid = false;
-            //                 return;
-
-            //             }
-            //             if ($('#authorized_address').val() === '') {
-            //                 alertify.error(`Authorized Person Address cannot be Empty!`);
-            //                 isValid = false;
-            //                 return;
-
-            //             }
-            //             if ($('#authorized_telephone').val() === '') {
-            //                 alertify.error(`Authorized Person Telephone cannot be Empty!`);
-            //                 isValid = false;
-            //                 return;
-
-            //             }
-            //             if ($('#authorized_nic').val() === '') {
-            //                 alertify.error(`Authorized Person NIC cannot be Empty!`);
-            //                 isValid = false;
-            //                 return;
-
-            //             }
-            //         } else {
-            //             if ($('#nic_front').val() === '' && ("{{ $client->nic_front ?? '' }}" == null)) {
-            //                 alertify.error(`NIC front image cannot be Empty!`);
-            //                 isValid = false;
-            //                 return;
-
-            //             }
-            //             //   console.log('nic_filesize '+ $('#nic_front').files[0].size);
-            //             if ($('#nic_back').val() === '' && ("{{ $client->nic_back ?? '' }}" == null)) {
-            //                 alertify.error(`NIC back image cannot be Empty!`);
-            //                 isValid = false;
-            //                 return;
-
-            //             }
-            //         }
-
-            //         if ($('#signature').val() === '' && ("{{ $client->signature ?? '' }}" == null)) {
-            //             alertify.error(`Signature cannot be Empty!`);
-            //             isValid = false;
-            //             return;
-
-            //         }
-
-            //         if ($('#profile_pic').val() === '' && ("{{ $client->signature ?? '' }}" == null)) {
-            //             alertify.error(`Profile cannot be Empty!`);
-            //             isValid = false;
-            //             return;
-
-            //         }
-
-            //         if (ACtype == 2) {
-
-            //             // $('.joint_name').each(function(){
-            //             //         //if statement here 
-            //             //         // use $(this) to reference the current div in the loop
-            //             //         //you can try something like...
-            //             //         if($(this).val()===""){
-            //             //             alertify.error(`Joint Holder Name Cannot be Empty`);
-
-
-            //             //         isValid=false;
-            //             //         return false
-
-            //             //         }
-            //             //         if(isValid){
-            //             //             return true
-            //             //         }else{
-            //             //             return false
-            //             //         }
-
-
-
-            //             //     });
-
-            //             if ($('.joint_name').val() === "") {
-            //                 alertify.error(`Joint Holder Name Cannot be Empty`);
-            //                 isValid = false;
-            //                 return;
-            //             }
-            //             if ($('.joint_name_by_initials').val() === "") {
-            //                 alertify.error(`Joint Holder Name By Initials Cannot be Empty`);
-            //                 isValid = false;
-            //                 return;
-            //             }
-            //             if ($('.joint_address_line_1').val() === "") {
-            //                 alertify.error(`Joint Holder Address Line 1  Cannot be Empty`);
-            //                 isValid = false;
-            //                 return;
-            //             }
-            //             if ($('.joint_address_line_2').val() === "") {
-            //                 alertify.error(`Joint Holder Address Line 2 Cannot be Empty`);
-            //                 isValid = false;
-            //                 return;
-            //             }
-            //             if ($('.joint_email').val() === "") {
-            //                 alertify.error(`Joint Holder Email  Cannot be Empty`);
-            //                 isValid = false;
-            //                 return;
-            //             }
-
-            //             if ($('.joint_email').val() === $('#email').val()) {
-
-            //                 alertify.error(`Joint Holder Email Cannot Be Same As Main Holder Email`);
-            //                 isValid = false;
-            //                 return;
-
-
-            //             }
-
-            //             if ($('.joint_dob').val() === "") {
-            //                 alertify.error(`Joint Holder Date of Birth  Cannot be Empty`);
-            //                 isValid = false;
-            //                 return;
-            //             }
-            //             if ($('.joint_nic').val() === "") {
-            //                 alertify.error(`Joint Holder NIC/Passport  Cannot be Empty`);
-            //                 isValid = false;
-            //                 return;
-            //             }
-            //             if ($('.joint_mobile').val() === "") {
-            //                 alertify.error(`Joint Holder Mobile  Cannot be Empty`);
-            //                 isValid = false;
-            //                 return;
-            //             }
-
-            //             if ($('.joint_signature').val() === "") {
-            //                 alertify.error(`Joint Holder Signature  Cannot be Empty`);
-            //                 isValid = false;
-            //                 return;
-
-            //             }
-            //             if ($('.joint_pro_pic').val() === "") {
-            //                 alertify.error(`Joint Holder Profile Picture  Cannot be Empty`);
-            //                 isValid = false;
-            //                 return;
-
-            //             }
-
-            //             if ($('.joint_nationality').val() === "other") {
-            //                 if ($('.joint_passport').val() === "") {
-            //                     alertify.error(`Joint Holder passport must be uploaded`);
-            //                     isValid = false;
-            //                     return;
-            //                 }
-            //                 if ($('.joint_nationality_other').val() === "") {
-            //                     alertify.error(`Joint Holder Nationality Must be Mentioned`);
-            //                     isValid = false;
-            //                     return;
-            //                 }
-
-            //             } else {
-            //                 if ($('.joint_nic_front').val() === "") {
-            //                     alertify.error(`Joint NIC front image should be uploaded`);
-            //                     isValid = false;
-            //                     return;
-            //                 }
-            //                 if ($('.joint_nic_back').val() === "") {
-            //                     alertify.error(`Joint Holder NIC back image should be uploaded`);
-            //                     isValid = false;
-            //                     return;
-            //                 }
-
-            //             }
-
-            //         }
-
-            //         //   return isValid=false;   
-
-
-            //         //setting full mobile values..
-            //         let _telInput = $(".OTP");
-            //         _telInput.each(function() {
-
-            //             let fullmobile = $(this).intlTelInput("getNumber");
-
-            //             $(this).parents('div').prev().prev().val(fullmobile);
-            //         });
-
-            //         // //email verification          
-            //         // if (!isValidEmailAddress($('#email').val())) {
-            //         //     alertify.error(`Invalid Email Address`);
-
-            //         //     isValid = false;
-            //         // } else {
-
-            //         //     var email_temp = $('#email').val();
-            //         //     var data = {
-            //         //         "email": email_temp,
-            //         //         "_token": "{{ csrf_token() }}"
-            //         //     }; //data to send to server
-            //         //     var dataType = "json" //expected datatype from server
-            //         //     //  let watchID = 0;
-            //         //     var request = $.post({
-            //         //         url: "{{ route('user.email.validation') }}", //url of the server which stores time data
-            //         //         data: data,
-            //         //         async: false,
-            //         //         cache: false,
-            //         //         timeout: 30000,
-
-            //         //         success: function(data) {
-
-            //         //             // alert(data.state);
-            //         //             if (data.state === false) {
-            //         //                 isValid = false;
-            //         //                 alertify.error(`This Email Already Exists In NSB FMC`);
-            //         //                 //    alert("email already exists in nSB FMc");
-            //         //             } else {
-            //         //                 isValid = true;
-
-
-            //         //             }
-            //         //         }
-            //         //     });
-
-
-            //         // }
-
-            //         //generate OTP
-
-            //         if (isValid) {
-            //             OTP();
-            //         }
-
-
-            //     }
-
-
-
-
-            //     if ($(this).attr('id') === 'btnOther') {
-            //         isValid = true;
-            //     }
-            //     if ($(this).attr('id') === 'btnStatement') {
-            //         isValid = true;
-            //     }
-
-
-            //     current_fs = $(this).parent();
-            //     if (current_fs.attr('id') === 'basicinfoSection' && ACtype == 3) {
-            //         next_fs = $(this).parent().next().next();
-
-            //     } else if ((current_fs.attr('id') === 'empinfoSection' && ACtype == 2) || (current_fs
-            //             .attr('id') === 'empinfoSection' && ACtype == "Indivitual")) {
-            //         next_fs = $(this).parent().next().next();
-
-
-            //     } else {
-
-
-            //         next_fs = $(this).parent().next();
-            //     }
-
-            //     if (isValid) {
-            //         console.log("came here at isvaild");
-
-
-            //         $('#basicInfoForm').submit();
-            //     }
-            // });
-
 
             //Nationality Select on Applicant
             $('#nationality').change(function() {
@@ -1817,451 +1587,11 @@
                 }
             });
 
-
-
-            //bank account types changes
-
-
-            $(document).on("change", ".accountType", function() {
-
-                var selectedValue = $(this).val();
-                if (selectedValue === 'RTGS') {
-
-                    $(this).closest('td').next('td').find('select').hide();
-                    $(this).closest('td').next('td').next('td').find('select').hide();
-                } else {
-
-                    $(this).closest('td').next('td').find('select').show();
-                    $(this).closest('td').next('td').next('td').find('select').show();
-                }
-
-            });
-            //joint holders finding emails
             $(document).on("blur", ".joint_email", function() {
                 alert("Email checking now....");
 
             });
 
-            //  dynamic form code
-            var i = 0;
-            $('#add_more').on('click', function() {
-                var colorR = Math.floor((Math.random() * 256));
-                var colorG = Math.floor((Math.random() * 256));
-                var colorB = Math.floor((Math.random() * 256));
-                i++;
-                var html = '<div id="append_no_' + i + '" class="animated bounceInLeft">' +
-                    '<hr/>' +
-                    '<h2> Joint Holder ' + parseInt(i + 1) + ' info </h2>' +
-                    '<div class="row">' +
-                    '<div class="col-md-2">' +
-                    '<div class="input-group">' +
-                    '<label class="fieldlabels">Title </label>' +
-                    '<select name="joint_title[]" id="joint_title[]" class="field Required">' +
-                    '<option value="Mr.">Mr</option>' +
-                    '<option value="Mrs.">Mrs</option>' +
-                    '<option value="Miss.">Miss</option>' +
-                    '<option value="Rev.">Rev</option>' +
-                    '<option value="Dr.">Dr</option>' +
-                    '</select>' +
-                    '</div>' +
-                    '</div>' +
-                    '<div class="col-md-4">' +
-                    '<label class="fieldlabels">Name in Full: * </label>' +
-                    '<input type="text" name="joint_name[]" placeholder="Joint Holder Name" class="form-control joint_name"/>' +
-                    '</div>' +
-                    '  <div class="col-md-4">' +
-                    '<label class="fieldlabels">Name Donated By Initials : * </label>' +
-                    '<input type="text" name="joint_name_initials[]" placeholder="Name by Intitials" class="form-control joint_name_initials"/>' +
-                    '</div>' +
-                    '</div>' +
-                    '<div class="row">' +
-                    '<div class="col-md-6">' +
-                    '<label class="fieldlabels">Address Line 1 :*</label>' +
-                    '<input type="text" name="joint_address_line_1[]" placeholder="Address Line 1" class="form-control joint_address_line_1"/>' +
-                    '</div>' +
-                    '<div class="col-md-6">' +
-                    '<label class="fieldlabels">Address Line 2 :*</label>' +
-                    '<input type="text" name="joint_address_line_2[]" placeholder="Address Line 2 " class="form-control joint_address_line_2"/>' +
-                    '</div>' +
-                    '</div>' +
-                    '<div class="row">' +
-                    '<div class="col-md-6">' +
-                    '<label class="fieldlabels">Address Line 3 :*</label>' +
-                    '<input type="text" name="joint_address_line_3[]" placeholder="Address Line 3 " class="form-control joint_address_line_3"/>' +
-                    '</div>' +
-                    '<div class="col-md-6">' +
-                    '<label class="fieldlabels">Email: *</label>' +
-                    '<input type="text" name="joint_email[]"placeholder="email" class="form-control joint_email"/>' +
-                    '<input type="hidden" value="">' +
-                    '</div>' +
-                    '</div>' +
-                    '<div class="row">' +
-                    '<div class="col-md-6">' +
-                    '<label class="fieldlabels">Date Of Birth: *</label>' +
-                    '<input type="text" name="joint_dob[]" placeholder="YYYY-MM-DD" class="form-control jointDob"/>' +
-                    '</div>' +
-                    '<div class="col-md-6">' +
-                    '<label class="fieldlabels">NIC/Passport: *</label>' +
-                    '<input type="text" name="joint_nic[]"placeholder="nic" class="form-control joint_nic"/>' +
-                    '</div>' +
-                    '</div>' +
-                    '<div class="row">' +
-                    '<div class="col-md-6">' +
-                    '<label class="fieldlabels">Nationality *</label>' +
-                    '<select class="joint_nationality" name="joint_nationality[]">' +
-                    '<option value="Sri Lankan">Sri Lankan</option>' +
-                    '<option value="other">Other</option>' +
-                    '</select>' +
-                    '</div>' +
-                    '<div class="col-md-6">' +
-                    '<div class="joint_nationality_div">' +
-                    '<label class="fieldlabels">Nationality *</label>' +
-                    '<input type="text" name="joint_nationality_other[]"placeholder="Nationality" class="form-control"/>' +
-                    '</div>' +
-                    '</div>' +
-                    '</div>' +
-                    '<div class="row">' +
-                    '<div class="col-md-6">' +
-                    '<label class="fieldlabels">Land Phone: *</label>' +
-                    '<input type="text" name="joint_telephone[]"placeholder="land line" class="form-control"/>' +
-                    '</div>' +
-                    '<div class="col-md-6">' +
-                    '<input type="hidden" name="full_joint_mobile[]"/>' +
-                    '<label class="fieldlabels">Mobile: *</label>' +
-                    '<input type="tel" name="joint_mobile[]" placeholder="mobile" class="form-control joint_mobile OTP"/>' +
-                    '<input type="hidden" value="">' +
-                    '</div>' +
-                    '</div>' +
-                    '<div class ="joint_nic_div" >' +
-                    '<div class="row">' +
-                    '<div class="col-md-6">' +
-                    '<label class="fieldlabels">NIC Front Side: *</label>' +
-                    '<input type="file" name="joint_nic_front[]"  accept="image/*" class="imgLoad joint_nic_front">' +
-                    '<img id="joint_nic_front" src="' +
-                    "{{ asset('storage/images/nic_front_preview.jpg') }}" +
-                    '" class="img_preview" />' +
-                    '</div>' +
-                    '<div class="col-md-6">' +
-                    '<label class="fieldlabels">NIC Back Side: *</label>' +
-                    '<input type="file" name="joint_nic_back[]" accept="image/*" class="imgLoad joint_nic_back">' +
-                    '<img id="joint_nic_back_preview" src="' +
-                    "{{ asset('storage/images/nic_back_preview.jpg') }}" +
-                    '" class="img_preview" />' +
-                    '</div>' +
-                    '</div>' +
-                    '</div>' +
-                    '<div class="joint_passport_div">' +
-                    '<div class="row">' +
-                    '<div class="col-md-6">' +
-                    '<label class="fieldlabels">Passport: *</label>' +
-                    '<input type="file" name="joint_passport[]" accept="image/*" class="imgLoad joint_passport">' +
-                    '<img id="joint_passport_preview" src="' +
-                    "{{ asset('storage/images/nic_back_preview.jpg') }}" +
-                    '" class="img_preview" />' +
-                    '</div>' +
-                    '</div>' +
-                    '</div>' +
-                    '<div class="row">' +
-                    '<div class="col-md-6">' +
-                    '<label class="fieldlabels">Signature: *</label>' +
-                    '<input type="file" name="joint_signature[]" accept="image/*" class="imgLoad joint_signature">' +
-                    '<img id="joint_passport_preview" src="' +
-                    "{{ asset('storage/images/signature_preview.png') }}" +
-                    '" class="img_preview" />' +
-                    '</div>' +
-                    '<div class="col-md-6">' +
-                    '<label class="fieldlabels">Profile picture </label>' +
-                    '<input type="file" id="joint_profile_pic[]" name="joint_pro_pic[]" accept="image/*"  class="imgLoad joint_profile_pic">' +
-                    '<img id="signature_preview" src="' +
-                    "{{ asset('storage/images/pro_pic.png') }}" +
-                    '" class="img_preview" />' +
-                    '</div>' +
-                    '</div>';
-
-                var empHtml = '<div id="jappend_no_' + i + '" class="animated bounceInLeft">' +
-                    '<div class="row">' +
-                    '<div class="col-md-12">' +
-                    '<h3> Joint Holder ' + parseInt(i + 1) + ' Employement Info</h3>' +
-                    '</div>' +
-                    '</div>' +
-                    '<div class="row">' +
-                    '<div class="col-md-6">' +
-                    '<label class="fieldlabels">Occupation: *</label>' +
-                    '<input type="text" name="joint_emp_occupation[]" id="joint_emp_occupation[]" placeholder=""  class=""/>' +
-                    '</div>' +
-                    '<div class="col-md-6">' +
-                    '<label class="fieldlabels">Company Name:*</label>' +
-                    '<input type="text" name="joint_emp_company_name[]" placeholder="" class=""/>' +
-                    '</div>' +
-                    '</div>' +
-                    '<div class="row">' +
-                    '<div class="col-md-12">' +
-                    '<label class="fieldlabels">Company Address: *</label>' +
-                    '<input type="text" name="joint_emp_company_address[]" placeholder="" class="" />' +
-                    '</div>' +
-                    '</div>' +
-                    '<div class="row">' +
-                    '<div class="col-md-6">' +
-                    '<label class="fieldlabels">Company Telephone: *</label>' +
-                    '<input type="text" name="joint_emp_company_telephone[]" placeholder=""  class=""/>' +
-                    '</div>' +
-                    '<div class="col-md-6">' +
-                    '<label class="fieldlabels">Fax: *</label>' +
-                    '<input type="text" name="joint_emp_fax[]" placeholder="Fax"  class=""/>' +
-                    '</div>' +
-                    '</div>' +
-                    '<div class="row">' +
-                    '<div class="col-md-12">' +
-                    '<label class="fieldlabels">Nature Of Business: *</label>' +
-                    '<input type="text" name="joint_emp_nature[]" placeholder=""  class=""/>' +
-                    '</div>' +
-                    '</div>';
-
-
-
-
-                $('#dynamic_container').append(html);
-                $('.joint_mobile').intlTelInput({
-                    initialCountry: "lk",
-                    // nationalMode: false,
-                    separateDialCode: true,
-                    // preferredCountries: ["ua", "pl", "us"],
-                    // geoIpLookup: function(success, failure) {
-                    //     $.get("https://ipinfo.io", function() {}, "jsonp").always(function(resp) {
-                    //     var countryCode = (resp && resp.country) ? resp.country : "us";
-                    //     success(countryCode);
-                    //     });
-                    // },
-
-                });
-                $('#dynamic_emp').append(empHtml);
-
-                $('#remove_more').fadeIn(function() {
-                    $(this).show();
-                });
-            });
-            $('#remove_more').on('click', function() {
-
-                $('#append_no_' + i).removeClass('bounceInLeft').addClass('bounceOutRight')
-                    .fadeOut(function() {
-                        $(this).remove();
-                    });
-                $('#jappend_no_' + i).removeClass('bounceInLeft').addClass('bounceOutRight')
-                    .fadeOut(function() {
-                        $(this).remove();
-                    });
-                i--;
-                if (i == 0) {
-                    $('#remove_more').fadeOut(function() {
-                        $(this).hide()
-                    });
-                }
-
-
-            });
-
-            //beneficials....
-            var i2 = 0;
-            $('#add_bene_more').on('click', function() {
-                var colorR = Math.floor((Math.random() * 256));
-                var colorG = Math.floor((Math.random() * 256));
-                var colorB = Math.floor((Math.random() * 256));
-                i2++;
-                var html_bene = '<div id="bene_append_no_' + i2 +
-                    '" class="animated bounceInLeft">' +
-                    '<hr/>' +
-                    '<h2> Benefactor  ' + parseInt(i2 + 1) + ' info </h2>' +
-                    '<div class="row">' +
-                    '<div class="col-md-6">' +
-                    '<div class="input-group">' +
-                    '<label class="fieldlabels">Title </label>' +
-                    '<select name="bene_title[]" id="bene_title[]" class="field Required">' +
-                    '<option value="Mr.">Mr</option>' +
-                    '<option value="Mrs.">Mrs</option>' +
-                    '<option value="Miss.">Miss</option>' +
-                    '<option value="Rev.">Rev</option>' +
-                    '<option value="Dr.">Dr</option>' +
-                    '</select>' +
-                    '</div>' +
-                    '</div>' +
-                    '<div class="col-md-6">' +
-                    '<label class="fieldlabels">Name in Full: * </label>' +
-                    '<input type="text" name="bene_name[]" placeholder="Name" class="form-control"/>' +
-                    '</div>' +
-                    '</div>' +
-                    '<div class="row">' +
-                    '<div class="col-md-6">' +
-                    '<label class="fieldlabels">Designation: * </label>' +
-                    '<input type="text" name="bene_designation[]" placeholder="Name" class="form-control"/>' +
-                    '</div>' +
-
-                    '</div>' +
-                    '<div class="row">' +
-                    '<div class="col-md-6">' +
-                    '<label class="fieldlabels">Date Of Birth: *</label>' +
-                    '<input type="text" name="bene_dob[]" placeholder="YYYY-MM-DD" class="form-control beneDob"/>' +
-                    '</div>' +
-                    '<div class="col-md-6">' +
-                    '<label class="fieldlabels">NIC/Passport: *</label>' +
-                    '<input type="text" name="bene_nic[]"placeholder="nic" class="form-control"/>' +
-                    '</div>' +
-                    '</div>' +
-                    '<div class="row">' +
-                    '<div class="col-md-6">' +
-                    '<label class="fieldlabels">Address Line 1 :*</label>' +
-                    '<input type="text" name="bene_address_line1[]" placeholder="Address Line 1" class="form-control"/>' +
-                    '</div>' +
-                    '<div class="col-md-6">' +
-                    '<label class="fieldlabels">Address Line 2 :*</label>' +
-                    '<input type="text" name="bene_address_line_2[]" placeholder="Address Line 2 " class="form-control"/>' +
-                    '</div>' +
-                    '</div>' +
-                    '<div class="row">' +
-                    '<div class="col-md-6">' +
-                    '<label class="fieldlabels">Address Line 3 :*</label>' +
-                    '<input type="text" name="bene_address_line_3[]" placeholder="Address Line 3 " class="form-control"/>' +
-                    '</div>' +
-                    '<div class="col-md-6">' +
-                    '<label class="fieldlabels"> Country of Issue & CitizenShip *</label>' +
-                    '<input type="text" name="bene_citizenship[]"placeholder="Citizenship" class="form-control"/>' +
-                    ' </div>' +
-                    ' </div>' +
-                    '<div class="row">' +
-                    '<div class="col-md-6">' +
-                    '<label class="fieldlabels"> Source of Beneficial Ownership (Effective Control/Person on whose behalf account is operated)</label>' +
-                    '<input type="text" name="bene_source_of_beneficial[]" placeholder="Citizenship" class="form-control"/>' +
-                    '</div>' +
-                    '<label class="fieldlabels"> Politically Exposed Person (PEP) *</label>' +
-                    '<select name="bene_pep" id="bene_pep">' +
-                    '<option value="0">No</option>' +
-                    '<option value="1">Yes</option>' +
-                    '</select>' +
-
-                    ' </div>';
-
-
-
-
-                $('#dynamic_bene').append(html_bene);
-
-
-                $('#remove_bene').fadeIn(function() {
-                    $(this).show();
-                });
-            });
-            $('#remove_bene').on('click', function() {
-
-                $('#bene_append_no_' + i2).removeClass('bounceInLeft').addClass(
-                        'bounceOutRight')
-                    .fadeOut(function() {
-                        $(this).remove();
-                    });
-
-                i2--;
-                if (i2 == 0) {
-                    $('#remove_bene').fadeOut(function() {
-                        $(this).hide()
-                    });
-                }
-
-
-            });
-
-            //..... natural person..
-
-            var i3 = 0;
-            $('#add_natural').on('click', function() {
-                var colorR = Math.floor((Math.random() * 256));
-                var colorG = Math.floor((Math.random() * 256));
-                var colorB = Math.floor((Math.random() * 256));
-                i3++;
-                var html_bene = '<div id="natural_append_no_' + i3 +
-                    '" class="animated bounceInLeft">' +
-                    '<hr/>' +
-                    '<h2> Person  ' + parseInt(i3 + 1) + ' info </h2>' +
-                    '<div class="row">' +
-                    '<div class="col-md-6">' +
-                    '<div class="input-group">' +
-                    '<label class="fieldlabels">Title </label>' +
-                    '<select name="natural_title[]" id="natural_title[]" class="field Required">' +
-                    '<option value="Mr.">Mr</option>' +
-                    '<option value="Mrs.">Mrs</option>' +
-                    '<option value="Miss.">Miss</option>' +
-                    '<option value="Rev.">Rev</option>' +
-                    '<option value="Dr.">Dr</option>' +
-                    '</select>' +
-                    '</div>' +
-                    '</div>' +
-                    '<div class="col-md-6">' +
-                    '<label class="fieldlabels">Name in Full: * </label>' +
-                    '<input type="text" name="natural_name[]" placeholder="Name" class="form-control"/>' +
-                    '</div>' +
-                    '</div>' +
-                    '<div class="row">' +
-                    '<div class="col-md-6">' +
-                    '<label class="fieldlabels">Designation: * </label>' +
-                    '<input type="text" name="natural_designation[]" placeholder="Designation" class="form-control"/>' +
-                    '</div>' +
-                    '<div class="col-md-6">' +
-                    '<label class="fieldlabels">Mobile: *</label>' +
-                    '<input type="text" name="natural_mobile[]" placeholder="mobile" class="form-control natural_mobile"/>' +
-                    '<input type="hidden" value="">' +
-                    '</div>' +
-                    ' </div>' +
-                    '<div class="row">' +
-                    '<div class="col-md-6">' +
-                    '<label class="fieldlabels">NIC/Passport: *</label>' +
-                    '<input type="text" name="natural_nic[]" placeholder="nic" class="form-control"/>' +
-                    '</div>' +
-                    '<div class="col-md-6">' +
-                    '<label class="fieldlabels">Signature: *</label>' +
-                    '<input type="file" name="natural_signature[]" accept="image/*" class="imgLoad">' +
-                    '<img id="natural_passport_preview" src="' +
-                    "{{ asset('storage/images/signature_preview.png') }}" +
-                    '" class="img_preview" />' +
-                    '</div>' +
-                    ' </div>';
-
-
-
-
-                $('#dynamic_natural').append(html_bene);
-
-
-                $('#remove_natural').fadeIn(function() {
-                    $(this).show();
-                });
-            });
-            $('#remove_natural').on('click', function() {
-
-                $('#natural_append_no_' + i3).removeClass('bounceInLeft').addClass(
-                        'bounceOutRight')
-                    .fadeOut(function() {
-                        $(this).remove();
-                    });
-
-                i3--;
-                if (i3 == 0) {
-                    $('#remove_natural').fadeOut(function() {
-                        $(this).hide()
-                    });
-                }
-
-
-            });
-
-
-
-
-
-
-
-
-            //  $(document).on("load",".joint_nationality_div" function(){
-            //     $(this).hide();
-            //  });
-
-            // intially Joint Sri Lankan..
             $('.joint_nic_div').show();
             $('.joint_nationality_div').hide();
             $('.joint_passport_div').hide();
@@ -2278,205 +1608,6 @@
 
                 }
             });
-
-
-
-
-
-            $("#add_row").on("click", function() {
-                // Dynamic Rows Code
-
-                // Get max row id and set new id
-                var newid = 0;
-                $.each($("#tab_logic tr"), function() {
-                    if (parseInt($(this).data("id")) > newid) {
-                        newid = parseInt($(this).data("id"));
-                    }
-                });
-                newid++;
-
-                var tr = $("<tr></tr>", {
-                    id: "addr" + newid,
-                    "data-id": newid
-                });
-
-                // loop through each td and create new elements with name of newid
-                $.each($("#tab_logic tbody tr:nth(0) td"), function() {
-                    var td;
-                    var cur_td = $(this);
-
-                    var children = cur_td.children();
-
-                    // add new td and element if it has a nane
-                    if ($(this).data("name") !== undefined) {
-                        td = $("<td></td>", {
-                            "data-name": $(cur_td).data("name")
-                        });
-
-                        var c = $(cur_td).find($(children[0]).prop('tagName')).clone()
-                            .val("");
-                        c.attr("name", $(cur_td).data("name[]"));
-                        c.appendTo($(td));
-                        td.appendTo($(tr));
-                    } else {
-                        td = $("<td></td>", {
-                            'text': $('#tab_logic tr').length
-                        }).appendTo($(tr));
-                    }
-                });
-
-
-                // add the new row
-                $(tr).appendTo($('#tab_logic'));
-
-                $(tr).find("td button.row-remove").on("click", function() {
-                    $(this).closest("tr").remove();
-                });
-            });
-
-            //contact table
-            $("#add_contact_row").on("click", function() {
-                // Dynamic Rows Code
-                // alert('hi there');
-                // Get max row id and set new id
-                var newid = 0;
-                $.each($("#tab_contact tr"), function() {
-                    if (parseInt($(this).data("id")) > newid) {
-                        newid = parseInt($(this).data("id"));
-                    }
-                });
-                newid++;
-
-                var tr = $("<tr></tr>", {
-                    id: "addrow" + newid,
-                    "data-id": newid
-                });
-
-                // loop through each td and create new elements with name of newid
-                $.each($("#tab_contact tbody tr:nth(0) td"), function() {
-                    var td;
-                    var cur_td = $(this);
-
-                    var children = cur_td.children();
-
-                    // add new td and element if it has a nane
-                    if ($(this).data("name") !== undefined) {
-                        td = $("<td></td>", {
-                            "data-name": $(cur_td).data("name")
-                        });
-
-                        var c = $(cur_td).find($(children[0]).prop('tagName')).clone()
-                            .val("");
-                        c.attr("name", $(cur_td).data("name[]"));
-                        c.appendTo($(td));
-                        td.appendTo($(tr));
-                    } else {
-                        td = $("<td></td>", {
-                            'text': $('#tab_contact tr').length
-                        }).appendTo($(tr));
-                    }
-                });
-
-
-                // add the new row
-                $(tr).appendTo($('#tab_contact'));
-
-                $(tr).find("td button.row-remove").on("click", function() {
-                    $(this).closest("tr").remove();
-                });
-            });
-
-
-
-
-            //money format
-            $("input[data-type='currency']").on({
-                keyup: function() {
-                    formatCurrency($(this));
-                },
-                blur: function() {
-                    formatCurrency($(this), "blur");
-                }
-            });
-
-
-            function formatNumber(n) {
-                // format number 1000000 to 1,234,567
-                return n.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-            }
-
-
-            function formatCurrency(input, blur) {
-                // appends $ to value, validates decimal side
-                // and puts cursor back in right position.
-
-                // get input value
-                var input_val = input.val();
-
-                // don't validate empty input
-                if (input_val === "") {
-                    return;
-                }
-
-                // original length
-                var original_len = input_val.length;
-
-                // initial caret position 
-                var caret_pos = input.prop("selectionStart");
-
-                // check for decimal
-                if (input_val.indexOf(".") >= 0) {
-
-                    // get position of first decimal
-                    // this prevents multiple decimals from
-                    // being entered
-                    var decimal_pos = input_val.indexOf(".");
-
-                    // split number by decimal point
-                    var left_side = input_val.substring(0, decimal_pos);
-                    var right_side = input_val.substring(decimal_pos);
-
-                    // add commas to left side of number
-                    left_side = formatNumber(left_side);
-
-                    // validate right side
-                    right_side = formatNumber(right_side);
-
-                    // On blur make sure 2 numbers after decimal
-                    if (blur === "blur") {
-                        right_side += "00";
-                    }
-
-                    // Limit decimal to only 2 digits
-                    right_side = right_side.substring(0, 2);
-
-                    // join number by .
-                    input_val = left_side + "." + right_side;
-
-                } else {
-                    // no decimal entered
-                    // add commas to number
-                    // remove all non-digits
-                    input_val = formatNumber(input_val);
-                    input_val = input_val;
-
-                    // final formatting
-                    if (blur === "blur") {
-                        input_val += ".00";
-                    }
-                }
-
-                // send updated string to input
-                input.val(input_val);
-
-                // put caret back in the right position
-                var updated_len = input_val.length;
-                caret_pos = updated_len - original_len + caret_pos;
-                input[0].setSelectionRange(caret_pos, caret_pos);
-            }
-
-
-
         });
     </script>
 @endsection
