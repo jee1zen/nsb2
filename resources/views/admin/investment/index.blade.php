@@ -57,7 +57,7 @@
                                         #{{ $investment->id ?? '' }}
                                     </td>
                                     <td>
-                                        {{ $investment->client->title }} &nbsp; {{ $investment->client->name ?? '' }}
+                                        {{ $investment->account->client->title }} &nbsp; {{ $investment->account->client->name ?? '' }}
                                         @if ($investment->account->type == 2 && $investment->account->hasJointHolders())
                                             @foreach ($investment->account->jointHolders()->get() as $jointHolder)
                                                 <br> {{ $jointHolder->title }} &nbsp;{{ $jointHolder->name }}

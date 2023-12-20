@@ -14,7 +14,7 @@
                         @include('client.registration.common.sectionProgress')
 
                         <fieldset id="empinfoSection">
-                            <form id="basicInfoForm" method="POST" action="{{ route('registration.empInfo') }}"
+                            <form id="empInfoForm" method="POST" action="{{ route('registration.empInfo.save') }}"
                                 enctype="multipart/form-data">
                                 @csrf
                                 @include('auth.register.employement')

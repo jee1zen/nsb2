@@ -79,10 +79,10 @@
 
                                     </td>
                                     <td>
-                                        @if ($account->status == 9)
+                                        {{-- @if ($account->status == 9)
                                             <a class="btn btn-warning"
                                                 href="{{ route('client.changeAccountStaging', $account->id) }}">Edit</a>
-                                        @endif
+                                        @endif --}}
 
                                     </td>
 

@@ -17,12 +17,15 @@ class RequestInvestmentController extends Controller
     public function index(){
 
         $client = Auth::user()->client;
+        $selectedAccount = $client->selectedAccount;
+        $account = $selectedAccount->account;
 
         $investmentTypes = InvestmentType::all();
-        $bankAccounts = $client->bankParticulars()->get();
+        $bankAccounts = $account->bankParticulars()->get();
+        
 
 
-        return view('client.newInvestment.add',compact('client','investmentTypes','bankAccounts'));
+        return view('client.newInvestment.add',compact('client','investmentTypes','bankAccounts','account'));
         
 
 

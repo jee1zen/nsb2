@@ -13,7 +13,7 @@
                         @include('client.registration.common.sectionProgress')
                         <fieldset id="basicinfoSection">
                             <div class="form-card">
-                                <form id="basicInfoForm" method="POST" action="{{ route('registration.basicInfo') }}"
+                                <form id="basicInfoForm" method="POST" action="{{ route('registration.basicInfo.save') }}"
                                     enctype="multipart/form-data">
                                     @csrf
                                     @include('auth.register.mainUserInfo')
@@ -337,7 +337,7 @@
                 let token = $('meta[name="csrf-token"]').attr('content');
                 // Send AJAX POST request
                 $.ajax({
-                    url: "{{ route('registration.basicInfo') }}", // Replace with your actual route
+                    url: "{{ route('registration.basicInfo.save') }}", // Replace with your actual route
                     method: "POST",
                     data: formData,
                     contentType: false,
@@ -362,41 +362,6 @@
                 });
             }
 
-            $('#btnExistingSubmit').click(function(event) {
-                let existingEmail = $('#existingjointEmail').val();
-                if (existingEmail === "") {
-                    alertify.error(
-                        'The Email You Entered Is Invaid, Please Enter A proper Email Address!'
-                    );
-                } else {
-                    var data = {
-                        "existingjointEmail": existingEmail,
-                        "_token": "{{ csrf_token() }}"
-                    }; //data to send to server
-                    var dataType = "json" //expected datatype from server
-
-
-                    //   $('#loader').show();
-                    $.post({
-                        url: "{{ route('registration.addExistingUser') }}", //url of the server which stores time data
-                        data: data,
-                        beforeSend: function() {
-
-                        },
-
-                        success: function(data) {
-                            if (data.success) {
-                                location.reload();
-
-                            } else {
-                                alertify.error(
-                                    'The Email You Entered Does Not Exists in NSB FMC , Please Re-Enter the Email'
-                                );
-                            }
-                        },
-                    });
-                }
-            });
 
             $(window).keydown(function(event) {
                 if (event.keyCode == 13) {

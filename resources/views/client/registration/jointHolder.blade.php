@@ -632,7 +632,7 @@
                 let token = $('meta[name="csrf-token"]').attr('content');
                 // Send AJAX POST request
                 $.ajax({
-                    url: "{{ route('registration.jointInfo') }}", // Replace with your actual route
+                    url: "{{ route('registration.jointInfo.save') }}", // Replace with your actual route
                     method: "POST",
                     data: formData,
                     contentType: false,

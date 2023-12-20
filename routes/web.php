@@ -1,6 +1,6 @@
 <?php
 
-
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::redirect('/', '/login');
@@ -239,8 +239,8 @@ Route::get('emailVerifyMessage','Registration\PreUserController@verifyEmailMessa
     Route::get('banks/deleteBranches/{id}','BankController@deleteBranch')->name('banks.deleteBranch');
 
     //inquries 
-    Route::get('inquiries','ClientsController@inquiries')->name('inquiries.index');
-    Route::get('inquiries/show/{id}','ClientsController@inquirieShow')->name('inquiries.show');
+    Route::get('inquiries','InquriesController@inquiries')->name('inquiries.index');
+    Route::get('inquiries/show/{id}','InquriesController@inquirieShow')->name('inquiries.show');
 
 
 });
@@ -250,30 +250,31 @@ Route::group(['prefix' => 'registration', 'as' => 'registration.', 'namespace' =
     Route::get('staging','PreUserController@index')->name('staging');
     Route::post('accountType','PreUserController@accountTypeSave')->name('accountType');
     Route::get('basicInfo','PreUserController@basicInfoShow')->name('basicInfo');
+    Route::post('basicInfoSave','PreUserController@basicinfoSave')->name('basicInfo.save');
     //Adding Existing User ajax
     Route::post('checkExistingUser','PreUserController@checkJointUser')->name('checkJointUser');
     Route::post('addExistingUser','PreUserController@addExistingUserAsJointParty')->name('addExistingUser');
     //...
-    Route::post('basicInfo','PreUserController@basicinfoSave')->name('basicInfo');
+
     //joint Holder 
     Route::get('jointInfo','PreUserController@jointHolderShow')->name('jointInfo');
-    Route::post('jointInfo','PreUserController@jointHolderSave')->name('jointInfo');
+    Route::post('jointInfo','PreUserController@jointHolderSave')->name('jointInfo.save');
     Route::post('deleteJoint','PreUserController@removeJointHolder')->name('jointInfo.delete');
 
     //Employmenet Information
     Route::get('empInfo','PreUserController@employmentDetailsShow')->name('empInfo');
-    Route::post('empInfo','PreUserController@employmentDetailsSave')->name('empInfo');
+    Route::post('empInfo','PreUserController@employmentDetailsSave')->name('empInfo.save');
     //Bank information
     Route::get('bank','PreUserController@bankParticularsShow')->name('bank');
-    Route::post('bank','PreUserController@bankParticularsSave')->name('bank');
+    Route::post('bank','PreUserController@bankParticularsSave')->name('bank.save');
     Route::post('deleteBank','PreUserController@bankParticularDelete')->name('bank.delete');
 
     //Other Information
     Route::get('otherInfo','PreUserController@otherInfoShow')->name('otherInfo');
-    Route::post('otherInfo','PreUserController@otherInfoSave')->name('otherInfo');
+    Route::post('otherInfo','PreUserController@otherInfoSave')->name('otherInfo.save');
     //KYC of Main Holder
     Route::get('kyc','PreUserController@KycShow')->name('kyc');
-    Route::post('kyc','PreUserController@KycSave')->name('kyc');
+    Route::post('kyc','PreUserController@KycSave')->name('kyc.save');
     //Ending
     Route::get('statement','PreUserController@statement')->name('statement');
     Route::post('finish','PreUserController@finish')->name('finish');
@@ -293,37 +294,37 @@ Route::group(['prefix' => 'client', 'as' => 'client.', 'namespace' => 'Client', 
     //all accounts view
     Route::get('allAccounts','AccountController@all')->name('allAccounts');
 
-    //new account
-    Route::get('changeAccountStaging/{account_id}','ChangeAccountController@index')->name('changeAccountStaging');
-    Route::post('changeAccountAccountType/{account_id}','ChangeAccountController@accountTypeSave')->name('changeAccountAccountType');
-    Route::get('changeAccountBasicInfo/{account_id}','ChangeAccountController@basicInfoShow')->name('changeAccountBasicInfo');
-    Route::post('changeAccountBasicInfo/{account_id}','ChangeAccountController@basicinfoSave')->name('changeAccountBasicInfo');
-    Route::get('changeAccountEmpInfo/{account_id}','ChangeAccountController@employmentDetailsShow')->name('changeAccountEmpInfo');
-    Route::post('changeAccountEmpInfo/{account_id}','ChangeAccountController@employmentDetailsSave')->name('changeAccountEmpInfo');
-    Route::get('changeAccountBank/{account_id}','ChangeAccountController@bankParticularsShow')->name('changeAccountBank');
-    Route::post('changeAccountBank/{account_id}','ChangeAccountController@bankParticularsSave')->name('changeAccountBank');
-    Route::get('changeAccountOtherInfo/{account_id}','ChangeAccountController@otherInfoShow')->name('changeAccountOtherInfo');
-    Route::post('changeAccountOtherInfo/{account_id}','ChangeAccountController@otherInfoSave')->name('changeAccountOtherInfo');
-    Route::get('changeAccountKyc/{account_id}','ChangeAccountController@KycShow')->name('changeAccountKyc');
-    Route::post('changeAccountKyc/{account_id}','ChangeAccountController@KycSave')->name('changeAccountKyc');
-    Route::get('changeAccountStatement/{account_id}','ChangeAccountController@statement')->name('changeAccountStatement');
-    Route::post('changeAccountfinish/{account_id}','ChangeAccountController@finish')->name('changeAccountfinish');
-    Route::get('changeAccountEnd/{account_id}','ChangeAccountController@end')->name('changeAccountEnd');
+    // //new Change
+    // Route::get('changeAccountStaging/{account_id}','ChangeAccountController@index')->name('changeAccountStaging');
+    // Route::post('changeAccountAccountType/{account_id}','ChangeAccountController@accountTypeSave')->name('changeAccountAccountType');
+    // Route::get('changeAccountBasicInfo/{account_id}','ChangeAccountController@basicInfoShow')->name('changeAccountBasicInfo');
+    // Route::post('changeAccountBasicInfo/{account_id}','ChangeAccountController@basicinfoSave')->name('changeAccountBasicInfo');
+    // Route::get('changeAccountEmpInfo/{account_id}','ChangeAccountController@employmentDetailsShow')->name('changeAccountEmpInfo');
+    // Route::post('changeAccountEmpInfo/{account_id}','ChangeAccountController@employmentDetailsSave')->name('changeAccountEmpInfo');
+    // Route::get('changeAccountBank/{account_id}','ChangeAccountController@bankParticularsShow')->name('changeAccountBank');
+    // Route::post('changeAccountBank/{account_id}','ChangeAccountController@bankParticularsSave')->name('changeAccountBank');
+    // Route::get('changeAccountOtherInfo/{account_id}','ChangeAccountController@otherInfoShow')->name('changeAccountOtherInfo');
+    // Route::post('changeAccountOtherInfo/{account_id}','ChangeAccountController@otherInfoSave')->name('changeAccountOtherInfo');
+    // Route::get('changeAccountKyc/{account_id}','ChangeAccountController@KycShow')->name('changeAccountKyc');
+    // Route::post('changeAccountKyc/{account_id}','ChangeAccountController@KycSave')->name('changeAccountKyc');
+    // Route::get('changeAccountStatement/{account_id}','ChangeAccountController@statement')->name('changeAccountStatement');
+    // Route::post('changeAccountfinish/{account_id}','ChangeAccountController@finish')->name('changeAccountfinish');
+    // Route::get('changeAccountEnd/{account_id}','ChangeAccountController@end')->name('changeAccountEnd');
 
 
-    //changeAccount
+    //newAccount
     Route::get('newAccountStaging/{account_id}','AccountController@index')->name('newAccountStaging');
-    Route::post('newAccountAccountType/{account_id}','AccountController@accountTypeSave')->name('newAccountAccountType');
+    Route::post('newAccountAccountType/{account_id}','AccountController@accountTypeSave')->name('newAccountAccountType.save');
     Route::get('newAccountBasicInfo/{account_id}','AccountController@basicInfoShow')->name('newAccountBasicInfo');
-    Route::post('newAccountBasicInfo/{account_id}','AccountController@basicinfoSave')->name('newAccountBasicInfo');
+    Route::post('newAccountBasicInfo/{account_id}','AccountController@basicinfoSave')->name('newAccountBasicInfo.save');
     Route::get('newAccountEmpInfo/{account_id}','AccountController@employmentDetailsShow')->name('newAccountEmpInfo');
-    Route::post('newAccountEmpInfo/{account_id}','AccountController@employmentDetailsSave')->name('newAccountEmpInfo');
+    Route::post('newAccountEmpInfo/{account_id}','AccountController@employmentDetailsSave')->name('newAccountEmpInfo.save');
     Route::get('newAccountBank/{account_id}','AccountController@bankParticularsShow')->name('newAccountBank');
-    Route::post('newAccountBank/{account_id}','AccountController@bankParticularsSave')->name('newAccountBank');
+    Route::post('newAccountBank/{account_id}','AccountController@bankParticularsSave')->name('newAccountBank.save');
     Route::get('newAccountOtherInfo/{account_id}','AccountController@otherInfoShow')->name('newAccountOtherInfo');
-    Route::post('newAccountOtherInfo/{account_id}','AccountController@otherInfoSave')->name('newAccountOtherInfo');
+    Route::post('newAccountOtherInfo/{account_id}','AccountController@otherInfoSave')->name('newAccountOtherInfo.save');
     Route::get('newAccountKyc/{account_id}','AccountController@KycShow')->name('newAccountKyc');
-    Route::post('newAccountKyc/{account_id}','AccountController@KycSave')->name('newAccountKyc');
+    Route::post('newAccountKyc/{account_id}','AccountController@KycSave')->name('newAccountKyc.save');
     Route::get('newAccountStatement/{account_id}','AccountController@statement')->name('newAccountStatement');
     Route::post('newAccountfinish/{account_id}','AccountController@finish')->name('newAccountfinish');
     Route::get('newAccountEnd/{account_id}','AccountController@end')->name('newAccountEnd');

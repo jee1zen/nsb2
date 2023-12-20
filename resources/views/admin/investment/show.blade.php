@@ -37,21 +37,21 @@
                         <div class="well well-sm">
                             <div class="row">
                                 <div class="col-sm-6 col-md-3">
-                                    <img src="{{ asset('storage/uploads/' . $investment->client->pro_pic) }}" alt=""
+                                    <img src="{{ asset('storage/uploads/' . $investment->account->client->pro_pic) }}" alt=""
                                         class="img-rounded img-responsive" style="max-height: 80px" />
 
                                 </div>
                                 <div class="col-sm-6 col-md-8">
                                     <h4>
-                                        {{ $investment->client->name }}</h4>
-                                    <small><cite title="San Francisco, USA">{{ $investment->client->residence_address }} <i
+                                        {{ $investment->account->client->name }}</h4>
+                                    <small><cite title="San Francisco, USA">{{ $investment->account->client->residence_address }} <i
                                                 class="glyphicon glyphicon-map-marker">
                                             </i></cite></small>
                                     <p>
                                         <span class="input-group-addon"><i class="fa fa-phone"></i></span>
-                                        <label for="">{{ $investment->client->mobile }}</label>
+                                        <label for="">{{ $investment->account->client->mobile }}</label>
                                         <br />
-                                        <i class="fa fa-envelope"></i>{{ $investment->client->user->email }}
+                                        <i class="fa fa-envelope"></i>{{ $investment->account->client->user->email }}
                                         <br />
                                         <i class="fa fa-globe"></i><a
                                             href="{{ route('admin.investment.info.client', $investment->account->id) }}"

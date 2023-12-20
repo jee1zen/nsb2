@@ -11,7 +11,7 @@
                     <div id="msform">
                         @include('client.registration.common.sectionProgress')
                         <fieldset id="otherdetailsSection">
-                            <form id="basicInfoForm" method="POST" action="{{ route('registration.otherInfo') }}"
+                            <form id="basicInfoForm" method="POST" action="{{ route('registration.otherInfo.save') }}"
                                 enctype="multipart/form-data">
                                 @csrf
                                 @include('auth.register.otherInfo')

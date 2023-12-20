@@ -74,7 +74,7 @@
                             <div class="form-group" id="divBankAccount">
                                 <label for="">Bank Account</label>
                                 <select name="bank_id" id="bank_id" class="form-control">
-                                   @if ($client->hasBankParticulars())
+                                   @if ($account->hasBankParticulars())
                                     @foreach ($bankAccounts as $bankAccount)
                                     <option value="{{$bankAccount->id}}">{{$bankAccount->bank_name}} | {{$bankAccount->account_no}} </option>
                                     @endforeach
