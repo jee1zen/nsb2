@@ -549,7 +549,6 @@ class AccountController extends Controller
             ]);
         } else {
 
-
             $empDetails->update([
                 'occupation' => $request->emp_occupation,
                 'company_name' => $request->emp_company_name,
@@ -557,21 +556,32 @@ class AccountController extends Controller
                 'telephone' => $request->emp_company_telephone,
                 'fax' => $request->emp_fax,
                 'nature' => $request->emp_nature
-
             ]);
         }
 
         if ($account->type == 2) {
             for ($i = 0; $i < count($request->jointHolder_emp_id); $i++) {
-                JointHolder::where('id', $request->jointHolder_emp_id[$i])->update([
-
-                    'occupation' => $request->joint_emp_occupation[$i],
-                    'company_name' => $request->joint_emp_company_name[$i],
-                    'company_address' => $request->joint_emp_company_address[$i],
-                    'company_telephone' => $request->joint_emp_company_telephone[$i],
-                    'company_fax' => $request->joint_emp_fax[$i],
-                    'company_nature' => $request->joint_emp_nature[$i],
-                ]);
+                $jointHolderEmpInfo = EmploymentDetails::find($request->jointHolder_emp_id[$i]);
+                if ($jointHolderEmpInfo == null) {
+                    EmploymentDetails::create([
+                        'id' => $request->jointHolder_emp_id[$i],
+                        'occupation' => $request->joint_emp_occupation[$i],
+                        'company_name' => $request->joint_emp_company_name[$i],
+                        'company_address' => $request->joint_emp_company_address[$i],
+                        'telephone' => $request->joint_emp_company_telephone[$i],
+                        'fax' => $request->joint_emp_fax[$i],
+                        'nature' => $request->joint_emp_nature[$i],
+                    ]);
+                } else {
+                    EmploymentDetails::where('id', $request->jointHolder_emp_id[$i])->update([
+                        'occupation' => $request->joint_emp_occupation[$i],
+                        'company_name' => $request->joint_emp_company_name[$i],
+                        'company_address' => $request->joint_emp_company_address[$i],
+                        'telephone' => $request->joint_emp_company_telephone[$i],
+                        'fax' => $request->joint_emp_fax[$i],
+                        'nature' => $request->joint_emp_nature[$i],
+                    ]);
+                }
             }
         }
 

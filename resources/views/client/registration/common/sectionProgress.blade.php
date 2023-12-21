@@ -7,7 +7,6 @@
          <li class="{{ $title == 'joint' ? 'active' : '' }}" id="joint"><strong>Joint Info</strong></li>
      @endif
      <li class="{{ $title == 'employment' ? 'active' : '' }}" id="employment"><strong>Employment Info</strong></li>
-     <li class="{{ $title == 'benefactor' ? 'active' : '' }}" id="benefactor"><strong>Benefactor Info</strong></li>
      <li class="{{ $title == 'bank' ? 'active' : '' }}" id="bank"><strong>Bank Particulars</strong></li>
      <li class="{{ $title == 'other' ? 'active' : '' }}" id="other"><strong>Other Info</strong></li>
      <li class="{{ $title == 'KYC' ? 'active' : '' }}" id="KYC"><strong>KYC</strong></li>

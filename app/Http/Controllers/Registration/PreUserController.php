@@ -750,10 +750,12 @@ class PreUserController extends Controller
         $client = $user->client;
         $account = $client->accounts()->first();
         $kyc = $client->clientKYC($account->id);
+        $title='KYC';
+        
 
         //    dd($kyc);
 
-        return view('client.registration.KYC', compact('user', 'account', 'kyc'));
+        return view('client.registration.KYC', compact('user', 'account', 'kyc','title'));
     }
 
     public function KycSave(Request $request)
@@ -847,8 +849,8 @@ class PreUserController extends Controller
     }
     public function statement()
     {
-
-        return view('client.registration.statement');
+        $title= 'confirm';
+        return view('client.registration.statement',compact('title'));
     }
 
     public function finish(Request $request)
