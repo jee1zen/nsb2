@@ -16,6 +16,7 @@ class BankParticularChanges extends Model
         'branch',
         'Account_type',
         'account_no',
+        'passbook',
         'verified',
     ];
 
