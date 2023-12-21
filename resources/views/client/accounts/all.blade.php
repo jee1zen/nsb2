@@ -3,16 +3,10 @@
     <div class="col-md-10 content">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <a href="{{ route('client.newAccountStaging', 0) }}" class="btn btn-danger" style="float:right">Create New
+                <a href="{{ route('client.newAccountInit',[0]) }}" class="btn btn-danger" style="float:right">Create New
                     Account</a>
                 <h2>All Accounts</h2>
-
-
-
-
-
             </div>
-
             @if (Session::has('message'))
                 <div class="alert alert-success">
                     {{ Session::get('message') }}
@@ -84,6 +78,12 @@
                                                 href="{{ route('client.changeAccountStaging', $account->id) }}">Edit</a>
                                         @endif --}}
 
+                                         @if ($account->pre == 1)
+                                            <a class="btn btn-warning"
+                                                href="{{ route('client.newAccountInit', $account->id) }}">Edit</a>
+                                        @endif
+
+
                                     </td>
 
                                 </tr>
@@ -98,7 +98,6 @@
                     </table>
 
                 </div>
-
 
             </div>
         </div>
