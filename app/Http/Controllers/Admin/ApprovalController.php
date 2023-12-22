@@ -585,7 +585,7 @@ class ApprovalController extends Controller
 
             $account->status = 100;
             // if ($officer_role->id != 7) {
-                Mail::send('emails.applicationRejected', ['name' => $client->title . ' ' . $client->name, 'email' => $client->user->email, 'id' => $client->id], function ($message) use ($client) {
+                Mail::send('emails.applicationRejected', ['name' => $client->title . ' ' . $client->name, 'email' => $client->user->email, 'id' => $account->id], function ($message) use ($client) {
                     $message->to($client->user->email);
                     $message->subject(' Your Application is Rejected - Please Refill Your Application');
                 });

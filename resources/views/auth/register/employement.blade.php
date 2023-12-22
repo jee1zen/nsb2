@@ -12,19 +12,19 @@
             <div class="col-md-6">
                 <label class="fieldlabels">Occupation: *</label>
                 <input type="text" name="emp_occupation" id="emp_occupation" placeholder="" class=""
-                    value="{{ $client->employmentDetails->occupation ?? '' }}" />
+                    value="{{ $client->employmentDetails->occupation ?? '' }}" required />
             </div>
             <div class="col-md-6">
                 <label class="fieldlabels">Company Name:*</label>
                 <input type="text" name="emp_company_name" placeholder="" class=""
-                    value="{{ $client->employmentDetails->company_name ?? '' }}" />
+                    value="{{ $client->employmentDetails->company_name ?? '' }}" required/>
             </div>
         </div>
         <div class="row">
             <div class="col-md-12">
                 <label class="fieldlabels">Company Address: *</label>
                 <input type="text" name="emp_company_address" placeholder="" class=""
-                    value="{{ $client->employmentDetails->company_address ?? '' }}" />
+                    value="{{ $client->employmentDetails->company_address ?? '' }}" required/>
             </div>
         </div>
         <div class="row">
@@ -43,7 +43,7 @@
             <div class="col-md-12">
                 <label class="fieldlabels">Nature Of Business: *</label>
                 <input type="text" name="emp_nature" placeholder="" class=""
-                    value="{{ $client->employmentDetails->nature ?? '' }}" />
+                    value="{{ $client->employmentDetails->nature ?? '' }}" required />
             </div>
         </div>
     </div>
@@ -66,19 +66,19 @@
                             <label class="fieldlabels">Occupation: *</label>
                             <input type="text" name="joint_emp_occupation[]" id="joint_emp_occupation[]"
                                 placeholder="" class=""
-                                value="{{ $jointHolder->employmentDetails->occupation ?? "" }}" />
+                                value="{{ $jointHolder->employmentDetails->occupation ?? "" }}" required/>
                         </div>
                         <div class="col-md-6">
                             <label class="fieldlabels">Company Name:*</label>
                             <input type="text" name="joint_emp_company_name[]" placeholder="" class=""
-                                value="{{ $jointHolder->employmentDetails->company_name ?? "" }}" />
+                                value="{{ $jointHolder->employmentDetails->company_name ?? "" }}" required />
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-12">
                             <label class="fieldlabels">Company Address: *</label>
                             <input type="text" name="joint_emp_company_address[]" placeholder="" class=""
-                                value="{{ $jointHolder->employmentDetails->company_address ?? "" }}" />
+                                value="{{ $jointHolder->employmentDetails->company_address ?? "" }}" required />
                         </div>
                     </div>
                     <div class="row">
@@ -97,7 +97,7 @@
                         <div class="col-md-12">
                             <label class="fieldlabels">Nature Of Business: *</label>
                             <input type="text" name="joint_emp_nature[]" placeholder="" class=""
-                                value="{{ $jointHolder->employmentDetails->nature ?? "" }}" />
+                                value="{{ $jointHolder->employmentDetails->nature ?? "" }}"  required/>
                         </div>
                     </div>
                 @endforeach

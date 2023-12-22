@@ -309,9 +309,9 @@
                         // Extract the part after "-"
                     let modalIdSuffix = buttonId.substring(buttonId.indexOf('-') + 1);
 
-                    let jointHolderInformationArray =  JSON.parse('{!! json_encode($account->jointHolders()->get() ?? '') !!}');
-                    let jointEmail =  JSON.parse('{!! json_encode($account->jointHolders()->get()->first()->user->email ?? '') !!}');
-                    console.log('email is',jointEmail)
+                    let jointHolderInformationArray =  JSON.parse('{!! json_encode($jointHolders ?? '') !!}');
+                 
+                   
                     console.log(jointHolderInformationArray);
 
                     let  filteredData = jointHolderInformationArray.filter(holder => holder.id == modalIdSuffix);
@@ -323,7 +323,7 @@
                     $('#joint_address_line_1').val(jointHolderData.address_line_1);
                     $('#joint_address_line_2').val(jointHolderData.address_line_2);
                     $('#joint_address_line_3').val(jointHolderData.address_line_3);
-                    $('#joint_email').val(jointEmail);
+                    $('#joint_email').val(jointHolderData.user.email);
                     $('#joint_dob').val(jointHolderData.dob);
                     $('#joint_nic').val(jointHolderData.nic);
                     $('#joint_nationality').val(jointHolderData.nationality);

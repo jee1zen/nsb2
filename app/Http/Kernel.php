@@ -45,5 +45,8 @@ class Kernel extends HttpKernel
         'password.confirm' => \Illuminate\Auth\Middleware\RequirePassword::class,
         'auth.basic'       => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'password_expired' => \App\Http\Middleware\PasswordExpired::class,
+        'admin'      => \App\Http\Middleware\AdminMiddleware::class,
+        'client'      => \App\Http\Middleware\clientMiddleWare::class,
+        'preUser'      => \App\Http\Middleware\preUserMiddleWare::class,
     ];
 }

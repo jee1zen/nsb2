@@ -15,6 +15,7 @@ use App\InvestmentType;
 use App\JointHolder;
 use App\KYCForm;
 use App\OtherDetails;
+use App\Process;
 use App\RealTimeNotificationSetting;
 use App\User;
 use Illuminate\Http\Request;
@@ -23,39 +24,38 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 
-class AccountController extends Controller
+class ResetController extends Controller
 {
-    public function all()
-    {
+    // public function all()
+    // {
 
-        $user = Auth::user();
-        $client = $user->client;
-        $accounts = $client->accounts()->get();
+    //     $user = Auth::user();
+    //     $client = $user->client;
+    //     $accounts = $client->accounts()->get();
 
-        return view('client.accounts.all', compact('client', 'user', 'accounts'));
+    //     return view('client.accounts.all', compact('client', 'user', 'accounts'));
+    // }
+
+    public function reason($id){
+
+        $account = Account::findOrFail($id);
+        $process = Process::where('account_id',$id)->where('current_state',100)->latest()->first();
+        return view('reset.message',compact('process'));
+
     }
     public function index($account_id = 0)
     {
         $user = Auth::user();
-        $account = '';
-        $title = 'account';
-        if ($account_id != 0) {
-            $account = Account::findOrFail($account_id);
+        $account = Account::find($account_id);
+        $account_type = $account->type;
         
-            if ($account->pre == 0) {
 
-                return redirect()->route('client.newAccountEnd', $account_id);
-            } else {
-                $account_type = $account->type;
-                $account_id = $account->id;
-                return view('client.accounts.accountType', compact('user', 'account', 'account_id', 'account_type','title'));
-            }
-        } else {
-            $account_type = 1;
-            $account_id=0;
+        $title = 'account';
+       
+         
 
-            return view('client.accounts.accountType', compact('user', 'account', 'account_id', 'account_type','title'));
-        }
+            return view('client.reset.accountType', compact('user', 'account', 'account_id', 'account_type','title'));
+        
     }
 
     public function accountTypeSave(Request $request, $account_id = 0)
@@ -79,19 +79,20 @@ class AccountController extends Controller
             ]);
         }
 
-        return redirect()->route('client.newAccountBasicInfo', $account->id);
+        return redirect()->route('client.resetAccountBasicInfo', $account->id);
     }
     public function basicInfoShow($account_id = 0)
     {
 
         $user = Auth::user();
+
         $client = $user->client;
         $account = Account::findOrFail($account_id);
         $account_type = $account->type;
         $account_id = $account->id;
         $title = 'basic';
-
-        return view('client.accounts.mainUserInfo', compact('user', 'account', 'client','title','account_type','account_id'));
+     
+        return view('client.reset.mainUserInfo', compact('user', 'account', 'client','title','account_type','account_id'));
     }
 
     public function basicinfoSave(Request $request, $account_id = 0)
@@ -231,8 +232,9 @@ class AccountController extends Controller
         $jointHolders = $jointHoldersWithEmails = $account->jointHolders()->with(['user' => function ($query) {
             $query->select('id', 'email'); // Select only the 'id' and 'email' columns from the 'users' table
         }])->get();
-
-        return view('client.accounts.jointHolder', compact('user', 'account', 'client', 'account_type', 'title','account_id','jointHolders'));
+        // dd($jointHolders);
+      
+        return view('client.reset.jointHolder', compact('user', 'account', 'client', 'account_type', 'title','account_id','jointHolders'));
     }
 
     public function checkJointUser(Request $request)
@@ -529,7 +531,7 @@ class AccountController extends Controller
         $title = 'employment';
         $account_type = $account->type;
 
-        return view('client.accounts.employement', compact('user', 'account', 'client','title','account_type','account_id'));
+        return view('client.reset.employement', compact('user', 'account', 'client','title','account_type','account_id'));
     }
     public function employmentDetailsSave(Request $request, $account_id = 0)
     {
@@ -592,7 +594,7 @@ class AccountController extends Controller
 
         // return view('client.registration.employement', compact('user', 'account'));
 
-        return redirect()->route('client.newAccountBank', $account->id);
+        return redirect()->route('client.resetAccountBank', $account->id);
     }
 
 
@@ -615,7 +617,7 @@ class AccountController extends Controller
 
 
 
-        return view('client.accounts.bankparticulars', compact('banksJson', 'branches', 'banks', 'user', 'account', 'bankParticulars','account_id','title','account_type'));
+        return view('client.reset.bankparticulars', compact('banksJson', 'branches', 'banks', 'user', 'account', 'bankParticulars','account_id','title','account_type'));
     }
 
     public function bankParticularsSave(Request $request, $account_id = 0)
@@ -665,7 +667,7 @@ class AccountController extends Controller
         $account_type = $account->type;
         $title = 'other';
         $account_id = $account->id;
-        return view('client.accounts.otherInfo', compact('user', 'account', 'client','title','account_id','account_type'));
+        return view('client.reset.otherInfo', compact('user', 'account', 'client','title','account_id','account_type'));
     }
 
     public function otherInfoSave(Request $request, $account_id = 0)
@@ -732,7 +734,7 @@ class AccountController extends Controller
 
 
 
-        return redirect()->route('client.newAccountKyc', $account_id);
+        return redirect()->route('client.resetAccountKyc', $account_id);
     }
 
     public function KycShow($account_id = 0)
@@ -749,7 +751,7 @@ class AccountController extends Controller
 
         // dd($kyc);
 
-        return view('client.accounts.KYC', compact('user', 'account', 'kyc','title','account_type','account_id'));
+        return view('client.reset.KYC', compact('user', 'account', 'kyc','title','account_type','account_id'));
     }
 
     public function KycSave(Request $request, $account_id = 0)
@@ -839,13 +841,13 @@ class AccountController extends Controller
 
             $kyc->save();
         }
-        return redirect()->route('client.newAccountStatement', $account_id);
+        return redirect()->route('client.resetAccountStatement', $account_id);
     }
     public function statement($account_id = 0)
     {
         $account = Account::findOrFail($account_id);
 
-        return view('client.accounts.statement', compact('account'));
+        return view('client.reset.statement', compact('account'));
     }
 
     public function finish(Request $request, $account_id = 0)
@@ -877,13 +879,13 @@ class AccountController extends Controller
         } else {
         }
 
-        return redirect()->route('client.newAccountEnd', $account_id);
+        return redirect()->route('client.resetAccountEnd', $account_id);
     }
 
     public function end($account_id = 0)
     {
         $account = Account::findOrFail($account_id);
 
-        return view('client.accounts.finish', compact('account'));
+        return view('client.reset.finish', compact('account'));
     }
 }

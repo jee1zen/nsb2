@@ -7,9 +7,9 @@
         <div class="row justify-content-center">
             <div class="col-lg-12">
                 <div class="card ">
-                    @include('client.registration.common.registerHead')
+                    @include('client.reset.common.registerHead')
                     <div id="msform">
-                        @include('client.registration.common.sectionProgress')
+                        @include('client.reset.common.sectionProgress')
                         <fieldset id="basicinfoSection">
                             <div class="form-card">
                                 <h4>Add Joint Holders</h4>
@@ -23,9 +23,9 @@
                                 {{-- @include('auth.register.signature') --}}
                             </div>
                             <a type="submit" id="jontinfoNext" name="next" class="next action-button"
-                                href="{{ route('registration.empInfo') }}"> Next</a>
+                                href="{{ route('client.resetAccountEmpInfo',$account_id) }}"> Next</a>
                             <a name="previous" class="previous action-button-previous"
-                                href="{{ route('registration.basicInfo') }}">Back</a>
+                                href="{{ route('client.newAccountBasicInfo',$account_id) }}">Back</a>
                         </fieldset>
                     </div>
                 </div>
@@ -98,10 +98,6 @@
         </div>
     </div>
 
-
-
-
-
     <!-- Modal email -->
     <div class="modal fade" id="emailOTPModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
         aria-hidden="true">
@@ -138,7 +134,7 @@
     <div class="modal fade " id="newUserModal" role="dialog" aria-labelledby="newUserModal" aria-hidden="true">
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
-                <form id="jointform" method="POST" action="{{ route('registration.jointInfo') }}"
+                <form id="jointform" method="POST" action="{{ route('client.resetAccountJointInfo.save',$account_id) }}"
                 enctype="multipart/form-data">
                     @csrf
                     <div class="modal-header">
@@ -157,7 +153,6 @@
                     </div>
                 </form>
             </div>
-            
         </div>
     </div>
 
@@ -285,7 +280,7 @@
                                     var dataType = "json" //expected datatype from server
                                     //   $('#loader').show();
                                         $.post({
-                                            url: "{{ route('registration.jointInfo.delete') }}", //url of the server which stores time data
+                                            url: "{{ route('client.jointInfo.delete',$account_id) }}", //url of the server which stores time data
                                             data: data,
                                             beforeSend: function() {
 
@@ -315,11 +310,13 @@
                     let modalIdSuffix = buttonId.substring(buttonId.indexOf('-') + 1);
 
                     let jointHolderInformationArray =  JSON.parse('{!! json_encode($jointHolders ?? '') !!}');
-                 
+                  
+                    // console.log('email is',jointEmail)
                     console.log(jointHolderInformationArray);
 
                     let  filteredData = jointHolderInformationArray.filter(holder => holder.id == modalIdSuffix);
                    let jointHolderData = filteredData[0];
+                 
                  //loading data
                     $('#joint_title').val(jointHolderData.title);
                     $('#joint_name').val(jointHolderData.name);
@@ -327,7 +324,7 @@
                     $('#joint_address_line_1').val(jointHolderData.address_line_1);
                     $('#joint_address_line_2').val(jointHolderData.address_line_2);
                     $('#joint_address_line_3').val(jointHolderData.address_line_3);
-                    $('#joint_email').val(jointHolderData.user.email);
+                     $('#joint_email').val(jointHolderData.user.email);
                     $('#joint_dob').val(jointHolderData.dob);
                     $('#joint_nic').val(jointHolderData.nic);
                     $('#joint_nationality').val(jointHolderData.nationality);
@@ -426,7 +423,7 @@
                 var dataType = "json" //expected datatype from server
                 //   $('#loader').show();
                 $.post({
-                    url: "{{ route('registration.addExistingUser') }}", //url of the server which stores time data
+                    url: "{{ route('client.resetAddExistingUser',$account->id) }}", //url of the server which stores time data
                     data: data,
                     beforeSend: function() {
 
@@ -436,7 +433,7 @@
                             window.location.reload();
                         } else {
                             alertify.error(
-                                'Coudnt add User Please Try Again!'
+                                'Cannot add User Please Try Again!'
                             );
                         }
                     },
@@ -631,7 +628,7 @@
                 let token = $('meta[name="csrf-token"]').attr('content');
                 // Send AJAX POST request
                 $.ajax({
-                    url: "{{ route('registration.jointInfo.save') }}", // Replace with your actual route
+                    url: "{{ route('client.resetAccountJointInfo.save',$account_id) }}", // Replace with your actual route
                     method: "POST",
                     data: formData,
                     contentType: false,
@@ -784,17 +781,12 @@
                 console.log("clicked");
 
                 if ($(this).is(':checked')) {
-
                     $('#corresponding_address_line_1').val($('#address_line_1').val());
                     $('#corresponding_address_line_2').val($('#address_line_2').val());
                     $('#corresponding_address_line_3').val($('#address_line_3').val());
-
                     $('#billing_proof_div').hide();
                     $('#billing_proof').removeClass("fieldRequired");
-
-
                 } else {
-
                     $('#corresponding_address_line_1').val("");
                     $('#corresponding_address_line_2').val("");
                     $('#corresponding_address_line_3').val("");
@@ -805,10 +797,7 @@
                         $('#billing_proof_div').hide();
                         $('#billing_proof').removeClass("fieldRequired");
                     }
-
                 }
-
-
             });
 
             //accept to continue
@@ -822,74 +811,6 @@
             });
 
 
-            //making initiator signatureB 
-            $('#makeSignatureB').click(function() {
-
-                if ($(this).is(':checked')) {
-
-                    $("#signatureB_DIV").hide();
-                    $('#h3_B').html("Initiator is Signature B");
-
-                    //signatura B validate...
-                    $('#cp_name_b').removeClass('fieldRequired');
-                    $('#cp_occupation_b').removeClass('fieldRequired');
-                    $('#cp_address_line1_b').removeClass('fieldRequired');
-                    $('#cp_address_line_2_b').removeClass('fieldRequired');
-                    $('#cp_dob_b').removeClass('fieldRequired');
-                    $('#cp_nic_b').removeClass('fieldRequired');
-                    $('#cp_telephone_b').removeClass('fieldRequired');
-                    $('#cp_email_b').removeClass('fieldRequired');
-                    $('#cp_name_b').removeClass('fieldRequired');
-                    $('#cp_mobile_b').removeClass('fieldRequired');
-                    $('#cp_mobile_b').removeClass('OTP');
-                    if ($('#cp_nationality_b').val() === 'other') {
-                        $('#cp_passport_b').removeClass('fieldRequired');
-                        $('#cp_nic_front_b').removeClass('fieldRequired');
-                        $('#cp_nic_back_b').removeClass('fieldRequired');
-                        $('#cp_nationality_other_b').removeClass('fieldRequired');
-                    } else {
-                        //is sri lankan...   
-                        $('cp_passport_b').removeClass('fieldRequired');
-                        $('cp_nic_front_b').removeClass('fieldRequired');
-                        $('cp_nic_back_b').removeClass('fieldRequired');
-                        $('#cp_nationality_other_b').removeClass('fieldRequired');
-                    }
-                    $('#cp_signature_b').removeClass('fieldRequired');
-
-
-                } else {
-
-                    $("#signatureB_DIV").show();
-                    $('#h3_B').html("Signature B");
-                    //signatura B validate...
-                    $('#cp_name_b').addClass('fieldRequired');
-                    $('#cp_occupation_b').addClass('fieldRequired');
-                    $('#cp_address_line1_b').addClass('fieldRequired');
-                    $('#cp_address_line_2_b').addClass('fieldRequired');
-                    $('#cp_dob_b').addClass('fieldRequired');
-                    $('#cp_nic_b').addClass('fieldRequired');
-                    $('#cp_telephone_b').addClass('fieldRequired');
-                    $('#cp_email_b').addClass('fieldRequired');
-                    $('#cp_name_b').addClass('fieldRequired');
-                    $('#cp_mobile_b').addClass('fieldRequired');
-                    $('#cp_mobile_b').addClass('OTP');
-                    if ($('#cp_nationality_b').val() === 'other') {
-                        $('#cp_passport_b').addClass('fieldRequired');
-                        $('#cp_nic_front_b').removeClass('fieldRequired');
-                        $('#cp_nic_back_b').removeClass('fieldRequired');
-                        $('#cp_nationality_other_b').addClass('fieldRequired');
-                    } else {
-                        //is sri lankan...   
-                        $('cp_passport_b').removeClass('fieldRequired');
-                        $('cp_nic_front_b').addClass('fieldRequired');
-                        $('cp_nic_back_b').addClass('fieldRequired');
-                        $('#cp_nationality_other_b').removeClass('fieldRequired');
-                    }
-                    $('#cp_signature_b').addClass('fieldRequired');
-
-                }
-
-            });
 
 
 
@@ -910,236 +831,6 @@
 
             // documents upload according to company type 
 
-            $('#type_of_company').change(function() {
-
-
-                let selectedValue = $(this).val();
-                // alert(selectedValue);
-
-                if (selectedValue === 'Proprietorship') {
-
-                    $('#business_registration_DIV').show();
-                    $('#certificate_of_incorperation_DIV').hide();
-                    $('#trust_deed_DIV').hide();
-                    $('#board_resolution_DIV').hide();
-                    $('#society_constitution_DIV').hide();
-                    $('#partner_kyc_DIV').hide();
-                    $('#properitor_kyc_DIV').show();
-                    $('#declaration_of_beneficial_ownership_DIV').show();
-                    $('#certificate_of_registration_DIV').hide();
-                    $('#power_attorney_DIV').hide();
-                    $('#articles_of_association_DIV').hide();
-                    $('#partner_deed_DIV').hide();
-                    $('#articles_of_association_DIV').hide();
-                    $('#form01_DIV').hide();
-                    $('#form20_DIV').hide();
-                    $('#form44_DIV').hide();
-                    $('#form45_DIV').hide();
-                    $('#export_development_DIV').hide();
-                    $('#board_of_investment_DIV').hide();
-                    $('#list_of_subsidiaries_DIV').hide();
-                    $('#directors_kyc_DIV').hide();
-                    $('#office_barers_kyc_DIV').hide();
-                    $('#certificate_commence_DIV').hide();
-                    $('#society_constitution_DIV').hide();
-
-
-                } else if (selectedValue === 'Partnership') {
-
-                    $('#business_registration_DIV').show();
-                    $('#certificate_of_incorperation_DIV').hide();
-                    $('#trust_deed_DIV').hide();
-                    $('#board_resolution_DIV').hide();
-                    $('#society_constitution_DIV').hide();
-                    $('#partner_kyc_DIV').show();
-                    $('#properitor_kyc_DIV').hide();
-                    $('#declaration_of_beneficial_ownership_DIV').show();
-                    $('#certificate_of_registration_DIV').hide();
-                    $('#power_attorney_DIV').hide();
-                    $('#articles_of_association_DIV').hide();
-                    $('#partner_deed_DIV').hide();
-                    $('#articles_of_association_DIV').hide();
-                    $('#form01_DIV').hide();
-                    $('#form20_DIV').hide();
-                    $('#form44_DIV').hide();
-                    $('#form45_DIV').hide();
-                    $('#export_development_DIV').hide();
-                    $('#board_of_investment_DIV').hide();
-                    $('#list_of_subsidiaries_DIV').hide();
-                    $('#directors_kyc_DIV').hide();
-                    $('#office_barers_kyc_DIV').hide();
-                    $('#certificate_commence_DIV').hide();
-                    $('#society_constitution_DIV').hide();
-
-                } else if (selectedValue === 'Public Company') {
-
-                    $('#business_registration_DIV').show();
-                    $('#certificate_of_incorperation_DIV').show();
-                    $('#trust_deed_DIV').hide();
-                    $('#board_resolution_DIV').show();
-                    $('#society_constitution_DIV').hide();
-                    $('#partner_kyc_DIV').show();
-                    $('#properitor_kyc_DIV').hide();
-                    $('#declaration_of_beneficial_ownership_DIV').show();
-                    $('#certificate_of_registration_DIV').hide();
-                    $('#power_attorney_DIV').hide();
-                    $('#articles_of_association_DIV').hide();
-                    $('#partner_deed_DIV').hide();
-                    $('#articles_of_association_DIV').hide();
-                    $('#form01_DIV').show();
-                    $('#form20_DIV').show();
-                    $('#form44_DIV').show();
-                    $('#form45_DIV').show();
-                    $('#export_development_DIV').show();
-                    $('#board_of_investment_DIV').show();
-                    $('#list_of_subsidiaries_DIV').show();
-                    $('#directors_kyc_DIV').show();
-                    $('#office_barers_kyc_DIV').hide();
-                    $('#certificate_commence_DIV').hide();
-                    $('#society_constitution_DIV').hide();
-
-                } else if (selectedValue === 'Private Company') {
-
-                    $('#business_registration_DIV').show();
-                    $('#certificate_of_incorperation_DIV').show();
-                    $('#trust_deed_DIV').hide();
-                    $('#board_resolution_DIV').show();
-                    $('#society_constitution_DIV').hide();
-                    $('#partner_kyc_DIV').show();
-                    $('#properitor_kyc_DIV').hide();
-                    $('#declaration_of_beneficial_ownership_DIV').show();
-                    $('#certificate_of_registration_DIV').hide();
-                    $('#power_attorney_DIV').show();
-                    $('#articles_of_association_DIV').hide();
-                    $('#partner_deed_DIV').hide();
-                    $('#articles_of_association_DIV').hide();
-                    $('#form01_DIV').show();
-                    $('#form20_DIV').show();
-                    $('#form44_DIV').show();
-                    $('#form45_DIV').show();
-                    $('#export_development_DIV').show();
-                    $('#board_of_investment_DIV').show();
-                    $('#list_of_subsidiaries_DIV').show();
-                    $('#directors_kyc_DIV').show();
-                    $('#office_barers_kyc_DIV').hide();
-                    $('#certificate_commence_DIV').show();
-                    $('#society_constitution_DIV').hide();
-
-                } else if (selectedValue === 'Clubs/Societies/Association') {
-
-                    $('#business_registration_DIV').show();
-                    $('#certificate_of_incorperation_DIV').hide();
-                    $('#trust_deed_DIV').hide();
-                    $('#board_resolution_DIV').hide();
-                    $('#society_constitution_DIV').hide();
-                    $('#partner_kyc_DIV').hide();
-                    $('#properitor_kyc_DIV').show();
-                    $('#declaration_of_beneficial_ownership_DIV').show();
-                    $('#certificate_of_registration_DIV').hide();
-                    $('#power_attorney_DIV').show();
-                    $('#articles_of_association_DIV').hide();
-                    $('#partner_deed_DIV').hide();
-                    $('#articles_of_association_DIV').hide();
-                    $('#form01_DIV').hide();
-                    $('#form20_DIV').hide();
-                    $('#form44_DIV').hide();
-                    $('#form45_DIV').hide();
-                    $('#export_development_DIV').hide();
-                    $('#board_of_investment_DIV').hide();
-                    $('#list_of_subsidiaries_DIV').hide();
-                    $('#directors_kyc_DIV').hide();
-                    $('#office_barers_kyc_DIV').show();
-                    $('#certificate_commence_DIV').hide();
-                    $('#society_constitution_DIV').show();
-
-                } else if (selectedValue === 'Government/Institute/Bank') {
-
-
-                    $('#business_registration_DIV').show();
-                    $('#certificate_of_incorperation_DIV').show();
-                    $('#trust_deed_DIV').hide();
-                    $('#board_resolution_DIV').show();
-                    $('#society_constitution_DIV').hide();
-                    $('#partner_kyc_DIV').show();
-                    $('#properitor_kyc_DIV').hide();
-                    $('#declaration_of_beneficial_ownership_DIV').show();
-                    $('#certificate_of_registration_DIV').hide();
-                    $('#power_attorney_DIV').hide();
-                    $('#articles_of_association_DIV').hide();
-                    $('#partner_deed_DIV').hide();
-                    $('#articles_of_association_DIV').hide();
-                    $('#form01_DIV').show();
-                    $('#form20_DIV').show();
-                    $('#form44_DIV').show();
-                    $('#form45_DIV').show();
-                    $('#export_development_DIV').show();
-                    $('#board_of_investment_DIV').show();
-                    $('#list_of_subsidiaries_DIV').show();
-                    $('#directors_kyc_DIV').show();
-                    $('#office_barers_kyc_DIV').hide();
-                    $('#certificate_commence_DIV').show();
-                    $('#society_constitution_DIV').hide();
-
-
-                } else if (selectedValue === "Trust/Charities") {
-
-                    $('#business_registration_DIV').show();
-                    $('#certificate_of_incorperation_DIV').hide();
-                    $('#trust_deed_DIV').hide();
-                    $('#board_resolution_DIV').hide();
-                    $('#society_constitution_DIV').hide();
-                    $('#partner_kyc_DIV').hide();
-                    $('#properitor_kyc_DIV').show();
-                    $('#declaration_of_beneficial_ownership_DIV').show();
-                    $('#certificate_of_registration_DIV').hide();
-                    $('#power_attorney_DIV').hide();
-                    $('#articles_of_association_DIV').hide();
-                    $('#partner_deed_DIV').hide();
-                    $('#articles_of_association_DIV').hide();
-                    $('#form01_DIV').hide();
-                    $('#form20_DIV').hide();
-                    $('#form44_DIV').hide();
-                    $('#form45_DIV').hide();
-                    $('#export_development_DIV').hide();
-                    $('#board_of_investment_DIV').hide();
-                    $('#list_of_subsidiaries_DIV').hide();
-                    $('#directors_kyc_DIV').hide();
-                    $('#office_barers_kyc_DIV').show();
-                    $('#certificate_commence_DIV').hide();
-                    $('#society_constitution_DIV').show();
-
-                } else if (selectedValue === "NGO's/NPO's") {
-
-                    $('#business_registration_DIV').show();
-                    $('#certificate_of_incorperation_DIV').hide();
-                    $('#trust_deed_DIV').hide();
-                    $('#board_resolution_DIV').hide();
-                    $('#society_constitution_DIV').hide();
-                    $('#partner_kyc_DIV').hide();
-                    $('#properitor_kyc_DIV').show();
-                    $('#declaration_of_beneficial_ownership_DIV').show();
-                    $('#certificate_of_registration_DIV').hide();
-                    $('#power_attorney_DIV').show();
-                    $('#articles_of_association_DIV').hide();
-                    $('#partner_deed_DIV').hide();
-                    $('#articles_of_association_DIV').hide();
-                    $('#form01_DIV').hide();
-                    $('#form20_DIV').hide();
-                    $('#form44_DIV').hide();
-                    $('#form45_DIV').hide();
-                    $('#export_development_DIV').hide();
-                    $('#board_of_investment_DIV').hide();
-                    $('#list_of_subsidiaries_DIV').hide();
-                    $('#directors_kyc_DIV').hide();
-                    $('#office_barers_kyc_DIV').show();
-                    $('#certificate_commence_DIV').hide();
-                    $('#society_constitution_DIV').show();
-
-                } else {
-
-                }
-
-            });
 
 
 
@@ -1192,404 +883,13 @@
             });
             //-------------------------------------------------------
 
-
-
-
-
-
-
-
-
-
             //CLIENT TYPE DETECTION ............
-            //--------------------------------------------------------------
-            $('#client_type').change(function() {
-                if ($(this).val() == 2) {
-                    // Title set to Main Joint Holder..
-                    $('#mainPersontitle').html('Main Holder Information');
-
-                    //Joint account - Bank particulars fields..
-                    ACtype = 2;
-
-                    var newOptions = {
-                        "Select": "Select",
-                        "individual": "individual",
-                        "Joint": "Joint",
-                    };
-
-                    var $el = $(".accountType");
-                    $el.empty(); // remove old options
-                    $.each(newOptions, function(key, value) {
-                        $el.append($("<option></option>")
-                            .attr("value", value).text(key));
-                    });
-
-                    //company hide
-                    $('#company_DIV').hide();
-                    $('#company_type_DIV').hide();
-                    $('#signatures_DIV').hide();
-                    $('#occupation_DIV').hide();
-
-                    //show Joint Fields.................................
-                    $('#jointHoldersDiv').show();
-                    $('#joint_authority_DIV').show();
-                    $('#corresponding_address_DIV').show();
-                    $('#correspondanceCheck_DIV').show();
-                    $('#fieldEMPinfo').show();
-                    $('#employment').show();
-                    $('#benefactor').hide();
-                    $('#jointEmpInfoDIV').show();
-                    $('#addExistingJointHolderDiv').show();
-
-                    //....................................................
-
-                    //........add/remove OTP........
-
-                    $('.joint_mobile').addClass('OTP');
-                    $('.joint_mobile').intlTelInput({
-                        initialCountry: "lk",
-                        // nationalMode: false,
-                        separateDialCode: true,
-                        // preferredCountries: ["ua", "pl", "us"],
-                        // geoIpLookup: function(success, failure) {
-                        //     $.get("https://ipinfo.io", function() {}, "jsonp").always(function(resp) {
-                        //     var countryCode = (resp && resp.country) ? resp.country : "us";
-                        //     success(countryCode);
-                        //     });
-                        // },
-
-                    });
 
 
-                    $('.signature_mobile').removeClass('OTP');
-                    $('.joint_email').addClass('emailOTP');
+            $(document).on("blur", ".joint_email", function() {
+                // alert("Email checking now....");
 
-
-                    //remove validation of  Company fields......................................
-                    $('#occupation').removeClass('fieldRequired');
-                    $('#company_name').removeClass('fieldRequired');
-                    $('#company_address_line_1').removeClass('fieldRequired');
-                    $('#company_address_line_2').removeClass('fieldRequired');
-                    $('#company_address_line_3').removeClass('fieldRequired');
-                    $('#company_br_no').removeClass('fieldRequired');
-                    $('#company_nature_of_business').removeClass('fieldRequired');
-                    $('#company_telephone_1').removeClass('fieldRequired');
-                    $('#company_email_1').removeClass('fieldRequired');
-
-
-                    //signatura A validate remove...
-                    $('#cp_name_a').removeClass('fieldRequired');
-                    $('#cp_occupation_a').removeClass('fieldRequired');
-                    $('#cp_address_line1_a').removeClass('fieldRequired');
-                    $('#cp_address_line_2_a').removeClass('fieldRequired');
-                    $('#cp_dob_a').removeClass('fieldRequired');
-                    $('#cp_nic_a').removeClass('fieldRequired');
-                    $('#cp_telephone_a').removeClass('fieldRequired');
-                    $('#cp_email_a').removeClass('fieldRequired');
-                    $('#cp_name_a').removeClass('fieldRequired');
-                    if ($('#cp_nationality_a').val() === 'other') {
-                        $('#cp_passport_a').removeClass('fieldRequired');
-                        $('#cp_nic_front_a').removeClass('fieldRequired');
-                        $('#cp_nic_back_a').removeClass('fieldRequired');
-                        $('#cp_nationality_other_a').removeClass('fieldRequired');
-
-                    } else {
-                        //is sri lankan...   
-                        $('cp_passport_a').removeClass('fieldRequired');
-                        $('cp_nic_front_a').removeClass('fieldRequired');
-                        $('cp_nic_back_a').removeClass('fieldRequired');
-                        $('#cp_nationality_other_a').removeClass('fieldRequired');
-
-                    }
-                    $('#cp_signature_a').removeClass('fieldRequired');
-
-                    //signature b remove
-                    $('#cp_name_b').removeClass('fieldRequired');
-                    $('#cp_occupation_b').removeClass('fieldRequired');
-                    $('#cp_address_line1_b').removeClass('fieldRequired');
-                    $('#cp_address_line_2_b').removeClass('fieldRequired');
-                    $('#cp_dob_b').removeClass('fieldRequired');
-                    $('#cp_nic_b').removeClass('fieldRequired');
-                    $('#cp_telephone_b').removeClass('fieldRequired');
-                    $('#cp_email_b').removeClass('fieldRequired');
-                    $('#cp_name_b').removeClass('fieldRequired');
-                    if ($('#cp_nationality_b').val() === 'other') {
-                        $('#cp_passport_b').removeClass('fieldRequired');
-                        $('#cp_nic_front_b').removeClass('fieldRequired');
-                        $('#cp_nic_back_b').removeClass('fieldRequired');
-                        $('#cp_nationality_other_b').removeClass('fieldRequired');
-                    } else {
-                        //is sri lankan...   
-                        $('cp_passport_b').removeClass('fieldRequired');
-                        $('cp_nic_front_b').removeClass('fieldRequired');
-                        $('cp_nic_back_b').removeClass('fieldRequired');
-                        $('#cp_nationality_other_b').removeClass('fieldRequired');
-                    }
-                    $('#cp_signature_b').removeClass('fieldRequired');
-
-
-                    //..................................................................
-
-                } else if ($(this).val() == 3) {
-                    //title set to Intiator 
-                    $('#mainPersontitle').html('Initiator Information');
-                    //change values of bank particular AC TYPE
-                    ACtype = 3;
-                    var newOptions = {
-                        "Select": "Select",
-                        "Bank": "Bank",
-                        "RTGS": "RTGS"
-                    };
-                    var $el = $(".accountType");
-                    $el.empty(); // remove old options
-                    $.each(newOptions, function(key, value) {
-                        $el.append($("<option></option>")
-                            .attr("value", value).text(key));
-                    });
-                    //...........................................
-
-                    // hide   fields when institute...
-                    $('#jointHoldersDiv').hide();
-                    $('#joint_authority_DIV').hide();
-                    $('#jointEmpInfoDIV').hide();
-                    $('#company_DIV').show();
-                    $('#company_type_DIV').show();
-                    $('#signatures_DIV').show();
-                    $('#corresponding_address_DIV').hide();
-                    $('#fieldEMPinfo').hide();
-                    $('#employment').hide();
-                    $('#benefactor').show();
-                    $('#correspondanceCheck_DIV').hide();
-                    $('#occupation_DIV').show();
-                    //.........................
-
-                    //....add/Remove OTP
-                    $('.joint_mobile').removeClass('OTP');
-                    $('.signature_mobile').addClass('OTP');
-                    $('.joint_email').removeClass('emailOTP');
-
-                    //occupation validate..
-                    $('#occupation').addClass('fieldRequired');
-
-
-
-
-
-                    //make fields required when institute.....
-
-                    $('#company_name').addClass('fieldRequired');
-                    $('#company_address_line_1').addClass('fieldRequired');
-                    $('#company_address_line_2').addClass('fieldRequired');
-                    $('#company_br_no').addClass('fieldRequired');
-                    $('#company_nature_of_business').addClass('fieldRequired');
-                    $('#company_telephone_1').addClass('fieldRequired');
-                    $('#company_email_1').addClass('fieldRequired');
-
-
-                    //signatura A validate...
-                    $('#cp_name_a').addClass('fieldRequired');
-                    $('#cp_occupation_a').addClass('fieldRequired');
-                    $('#cp_address_line1_a').addClass('fieldRequired');
-                    $('#cp_address_line_2_a').addClass('fieldRequired');
-                    $('#cp_dob_a').addClass('fieldRequired');
-                    $('#cp_nic_a').addClass('fieldRequired');
-                    $('#cp_telephone_a').addClass('fieldRequired');
-                    $('#cp_email_a').addClass('fieldRequired');
-                    $('#cp_name_a').addClass('fieldRequired');
-                    if ($('#cp_nationality_a').val() === 'other') {
-                        $('#cp_passport_a').addClass('fieldRequired');
-                        $('#cp_nic_front_a').removeClass('fieldRequired');
-                        $('#cp_nic_back_a').removeClass('fieldRequired');
-                        $('#cp_nationality_other_a').addClass('fieldRequired');
-                    } else {
-                        //is sri lankan...   
-                        $('cp_passport_a').removeClass('fieldRequired');
-                        $('cp_nic_front_a').addClass('fieldRequired');
-                        $('cp_nic_back_a').addClass('fieldRequired');
-                        $('#cp_nationality_other_a').removeClass('fieldRequired');
-                    }
-                    $('#cp_signature_a').addClass('fieldRequired');
-
-
-
-                    //............................................
-
-                    //signature B status..............
-                    if ($('#makeSignatureB').is(':checked')) {
-
-                        //signatura B validate...
-                        $('#cp_name_b').removeClass('fieldRequired');
-                        $('#cp_occupation_b').removeClass('fieldRequired');
-                        $('#cp_address_line1_b').removeClass('fieldRequired');
-                        $('#cp_address_line_2_b').removeClass('fieldRequired');
-                        $('#cp_dob_b').removeClass('fieldRequired');
-                        $('#cp_nic_b').removeClass('fieldRequired');
-                        $('#cp_telephone_b').removeClass('fieldRequired');
-                        $('#cp_email_b').removeClass('fieldRequired');
-                        $('#cp_name_b').removeClass('fieldRequired');
-                        if ($('#cp_nationality_b').val() === 'other') {
-                            $('#cp_passport_b').removeClass('fieldRequired');
-                            $('#cp_nic_front_b').removeClass('fieldRequired');
-                            $('#cp_nic_back_b').removeClass('fieldRequired');
-                            $('#cp_nationality_other_b').removeClass('fieldRequired');
-                        } else {
-                            //is sri lankan...   
-                            $('cp_passport_b').removeClass('fieldRequired');
-                            $('cp_nic_front_b').removeClass('fieldRequired');
-                            $('cp_nic_back_b').removeClass('fieldRequired');
-                            $('#cp_nationality_other_b').removeClass('fieldRequired');
-                        }
-                        $('#cp_signature_b').removeClass('fieldRequired');
-
-
-                    } else {
-
-
-                        //signatura B validate...
-                        $('#cp_name_b').addClass('fieldRequired');
-                        $('#cp_occupation_b').addClass('fieldRequired');
-                        $('#cp_address_line1_b').addClass('fieldRequired');
-                        $('#cp_address_line_2_b').addClass('fieldRequired');
-                        $('#cp_dob_b').addClass('fieldRequired');
-                        $('#cp_nic_b').addClass('fieldRequired');
-                        $('#cp_telephone_b').addClass('fieldRequired');
-                        $('#cp_email_b').addClass('fieldRequired');
-                        $('#cp_name_b').addClass('fieldRequired');
-                        if ($('#cp_nationality_b').val() === 'other') {
-                            $('#cp_passport_b').addClass('fieldRequired');
-                            $('#cp_nic_front_b').removeClass('fieldRequired');
-                            $('#cp_nic_back_b').removeClass('fieldRequired');
-                            $('#cp_nationality_other_b').addClass('fieldRequired');
-                        } else {
-                            //is sri lankan...   
-                            $('cp_passport_b').removeClass('fieldRequired');
-                            $('cp_nic_front_b').addClass('fieldRequired');
-                            $('cp_nic_back_b').addClass('fieldRequired');
-                            $('#cp_nationality_other_b').removeClass('fieldRequired');
-                        }
-                        $('#cp_signature_b').addClass('fieldRequired');
-
-                    }
-
-
-
-
-                } else {
-                    //Title Set to you 
-                    $('#mainPersontitle').html('Your Information');
-                    //else AC type is indivitual.......... 
-                    // bank particulars account type............
-                    ACtype = 1;
-                    var newOptions = {
-                        "Select": "Select",
-                        "individual": "individual",
-                        "Joint": "Joint",
-                    };
-
-                    var $el = $(".accountType");
-                    $el.empty(); // remove old options
-                    $.each(newOptions, function(key, value) {
-                        $el.append($("<option></option>")
-                            .attr("value", value).text(key));
-                    });
-
-                    // $('#name').attr('required', 'required');
-                    //.............................................
-
-                    //........................................................
-
-                    //Hide joint  fields.............................................
-                    $('#jointHoldersDiv').hide();
-                    $('#joint_authority_DIV').hide();
-                    $('#jointEmpInfoDIV').hide();
-                    $('#company_DIV').hide();
-                    $('#company_type_DIV').hide();
-                    $('#signatures_DIV').hide();
-                    $('#corresponding_address_DIV').show();
-                    $('#correspondanceCheck_DIV').show();
-                    $('#employment').show();
-                    $('#benefactor').hide();
-                    $('#fieldEMPinfo').show();
-                    $('#occupation_DIV').hide();
-                    //........................................................
-
-                    //....Remove Joint Classes..
-                    $('.joint_mobile').removeClass('OTP');
-                    $('.signature_mobile').removeClass('OTP');
-                    $('.joint_email').removeClass('emailOTP');
-
-                    // remove institute validation............................
-                    $('#occupation').removeClass('fieldRequired');
-                    $('#company_name').removeClass('fieldRequired');
-                    $('#company_address_line_1').removeClass('fieldRequired');
-                    $('#company_address_line_2').removeClass('fieldRequired');
-                    $('#company_br_no').removeClass('fieldRequired');
-                    $('#company_nature_of_business').removeClass('fieldRequired');
-                    $('#company_telephone_1').removeClass('fieldRequired');
-                    $('#company_email_1').removeClass('fieldRequired');
-
-
-                    //signatura A validate remove...
-                    $('#cp_name_a').removeClass('fieldRequired');
-                    $('#cp_occupation_a').removeClass('fieldRequired');
-                    $('#cp_address_line1_a').removeClass('fieldRequired');
-                    $('#cp_address_line_2_a').removeClass('fieldRequired');
-                    $('#cp_dob_a').removeClass('fieldRequired');
-                    $('#cp_nic_a').removeClass('fieldRequired');
-                    $('#cp_telephone_a').removeClass('fieldRequired');
-                    $('#cp_email_a').removeClass('fieldRequired');
-                    $('#cp_name_a').removeClass('fieldRequired');
-                    if ($('#cp_nationality_a').val() === 'other') {
-                        $('#cp_passport_a').removeClass('fieldRequired');
-                        $('#cp_nic_front_a').removeClass('fieldRequired');
-                        $('#cp_nic_back_a').removeClass('fieldRequired');
-                        $('#cp_nationality_other_a').removeClass('fieldRequired');
-                    } else {
-                        //is sri lankan...   
-                        $('cp_passport_a').removeClass('fieldRequired');
-                        $('cp_nic_front_a').removeClass('fieldRequired');
-                        $('cp_nic_back_a').removeClass('fieldRequired');
-                        $('#cp_nationality_other_a').removeClass('fieldRequired');
-
-                    }
-                    $('#cp_signature_a').removeClass('fieldRequired');
-
-
-                    //signature B remove
-                    $('#cp_name_b').removeClass('fieldRequired');
-                    $('#cp_occupation_b').removeClass('fieldRequired');
-                    $('#cp_address_line1_b').removeClass('fieldRequired');
-                    $('#cp_address_line_2_b').removeClass('fieldRequired');
-                    $('#cp_dob_b').removeClass('fieldRequired');
-                    $('#cp_nic_b').removeClass('fieldRequired');
-                    $('#cp_telephone_b').removeClass('fieldRequired');
-                    $('#cp_email_b').removeClass('fieldRequired');
-                    $('#cp_name_b').removeClass('fieldRequired');
-                    if ($('#cp_nationality_b').val() === 'other') {
-                        $('#cp_passport_b').removeClass('fieldRequired');
-                        $('#cp_nic_front_b').removeClass('fieldRequired');
-                        $('#cp_nic_back_b').removeClass('fieldRequired');
-                        $('#cp_nationality_other_b').removeClass('fieldRequired');
-                    } else {
-                        //is sri lankan...   
-                        $('cp_passport_b').removeClass('fieldRequired');
-                        $('cp_nic_front_b').removeClass('fieldRequired');
-                        $('cp_nic_back_b').removeClass('fieldRequired');
-                        $('#cp_nationality_other_b').removeClass('fieldRequired');
-                    }
-                    $('#cp_signature_b').removeClass('fieldRequired');
-
-
-
-                    //........................................................
-
-                }
             });
-
-          //  $(document).on("blur", ".joint_email", function() {
-           //     alert("Email checking now....");
-
-          //  });
 
             $('.joint_nic_div').show();
             $('.joint_nationality_div').hide();

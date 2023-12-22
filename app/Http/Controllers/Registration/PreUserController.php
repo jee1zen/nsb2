@@ -124,6 +124,8 @@ class PreUserController extends Controller
 
         $user_id = $user->id;
         $client = $user->client;
+        $user->name = $request->name;
+        $user->save();
 
         if ($client == null) {
 
@@ -248,8 +250,11 @@ class PreUserController extends Controller
         $account = $user->accounts()->first();
         $account_type = $account->type;
         $title = 'joint';
+        $jointHolders = $jointHoldersWithEmails = $account->jointHolders()->with(['user' => function ($query) {
+            $query->select('id', 'email'); // Select only the 'id' and 'email' columns from the 'users' table
+        }])->get();
 
-        return view('client.registration.jointHolder', compact('user', 'account', 'client', 'account_type', 'title'));
+        return view('client.registration.jointHolder', compact('user', 'account', 'client', 'account_type', 'title','jointHolders'));
     }
 
     public function checkJointUser(Request $request)
