@@ -106,7 +106,7 @@ class Account extends Model
     }
 
     public function process(){
-        return $this->hasMany(Process::class,'account_id');
+        return $this->hasMany(Process::class);
     }
 
     public function hasProcess(){

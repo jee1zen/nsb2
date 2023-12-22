@@ -323,35 +323,7 @@ Route::group(['prefix' => 'client', 'as' => 'client.', 'namespace' => 'Client', 
     Route::post('newAccountfinish/{account_id}','AccountController@finish')->name('newAccountfinish');
     Route::get('newAccountEnd/{account_id}','AccountController@end')->name('newAccountEnd');
 
-
- // RESET ACCOUNT
-    Route::get('reset/{account}','ResetController@index')->name('reset.index');
-    Route::post('resetAccountAccountType/{account_id}','ResetController@accountTypeSave')->name('resetAccountAccountType.save');
-    Route::get('resetAccountBasicInfo/{account_id}','ResetController@basicInfoShow')->name('resetAccountBasicInfo');
-    Route::post('resetAccountBasicInfo/{account_id}','ResetController@basicinfoSave')->name('resetAccountBasicInfo.save');
-
-       //Adding Existing User ajax
-    //  Route::post('checkExistingUser','AccountController@checkJointUser')->name('checkJointUser');
-    Route::post('resetAddExistingUser/{account_id}','ResetController@addExistingUserAsJointParty')->name('resetAddExistingUser');
-    
-    Route::get('resetAccountJointInfo/{account_id}','ResetController@jointHolderShow')->name('resetAccountJointInfo');
-    Route::post('resetAccountJointInfo/{account_id}','ResetController@jointHolderSave')->name('resetAccountJointInfo.save');
-    
-    Route::get('resetAccountEmpInfo/{account_id}','ResetController@employmentDetailsShow')->name('resetAccountEmpInfo');
-    Route::post('resetAccountEmpInfo/{account_id}','ResetController@employmentDetailsSave')->name('resetAccountEmpInfo.save');
-
-    Route::get('resetAccountBank/{account_id}','ResetController@bankParticularsShow')->name('resetAccountBank');
-    Route::post('resetAccountBank/{account_id}','ResetController@bankParticularsSave')->name('resetAccountBank.save');
-   
-
-    Route::get('resetAccountOtherInfo/{account_id}','ResetController@otherInfoShow')->name('resetAccountOtherInfo');
-    Route::post('resetAccountOtherInfo/{account_id}','ResetController@otherInfoSave')->name('resetAccountOtherInfo.save');
-    Route::get('resetAccountKyc/{account_id}','ResetController@KycShow')->name('resetAccountKyc');
-    Route::post('resetAccountKyc/{account_id}','ResetController@KycSave')->name('resetAccountKyc.save');
-    Route::get('resetAccountStatement/{account_id}','ResetController@statement')->name('resetAccountStatement');
-    Route::post('resetAccountfinish/{account_id}','ResetController@finish')->name('resetAccountfinish');
-    Route::get('resetAccountEnd/{account_id}','ResetController@end')->name('resetAccountEnd');
-
+ 
 
         // //new Change
     // Route::get('changeAccountStaging/{account_id}','ChangeAccountController@index')->name('changeAccountStaging');
@@ -452,6 +424,38 @@ Route::group(['prefix' => 'client', 'as' => 'client.', 'namespace' => 'Client', 
     Route::get('inquiries','CustomerController@inquiries')->name('inquiries');
     Route::post('inquiries','CustomerController@inquiryPost')->name('inquiries.post');
     
+});
+// RESET ACCOUNT
+Route::group(['prefix' => 'client', 'as' => 'client.', 'namespace' => 'Client', 'middleware' => ['auth','password_expired','mix']], function () {
+
+   
+    Route::get('reset/{account}','ResetController@index')->name('reset.index');
+    Route::post('resetAccountAccountType/{account_id}','ResetController@accountTypeSave')->name('resetAccountAccountType.save');
+    Route::get('resetAccountBasicInfo/{account_id}','ResetController@basicInfoShow')->name('resetAccountBasicInfo');
+    Route::post('resetAccountBasicInfo/{account_id}','ResetController@basicinfoSave')->name('resetAccountBasicInfo.save');
+
+       //Adding Existing User ajax
+    //  Route::post('checkExistingUser','AccountController@checkJointUser')->name('checkJointUser');
+    Route::post('resetAddExistingUser/{account_id}','ResetController@addExistingUserAsJointParty')->name('resetAddExistingUser');
+    
+    Route::get('resetAccountJointInfo/{account_id}','ResetController@jointHolderShow')->name('resetAccountJointInfo');
+    Route::post('resetAccountJointInfo/{account_id}','ResetController@jointHolderSave')->name('resetAccountJointInfo.save');
+    
+    Route::get('resetAccountEmpInfo/{account_id}','ResetController@employmentDetailsShow')->name('resetAccountEmpInfo');
+    Route::post('resetAccountEmpInfo/{account_id}','ResetController@employmentDetailsSave')->name('resetAccountEmpInfo.save');
+
+    Route::get('resetAccountBank/{account_id}','ResetController@bankParticularsShow')->name('resetAccountBank');
+    Route::post('resetAccountBank/{account_id}','ResetController@bankParticularsSave')->name('resetAccountBank.save');
+   
+
+    Route::get('resetAccountOtherInfo/{account_id}','ResetController@otherInfoShow')->name('resetAccountOtherInfo');
+    Route::post('resetAccountOtherInfo/{account_id}','ResetController@otherInfoSave')->name('resetAccountOtherInfo.save');
+    Route::get('resetAccountKyc/{account_id}','ResetController@KycShow')->name('resetAccountKyc');
+    Route::post('resetAccountKyc/{account_id}','ResetController@KycSave')->name('resetAccountKyc.save');
+    Route::get('resetAccountStatement/{account_id}','ResetController@statement')->name('resetAccountStatement');
+    Route::post('resetAccountfinish/{account_id}','ResetController@finish')->name('resetAccountfinish');
+    Route::get('resetAccountEnd/{account_id}','ResetController@end')->name('resetAccountEnd');
+
 });
 
 

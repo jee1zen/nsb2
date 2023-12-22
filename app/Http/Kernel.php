@@ -48,5 +48,6 @@ class Kernel extends HttpKernel
         'admin'      => \App\Http\Middleware\AdminMiddleware::class,
         'client'      => \App\Http\Middleware\ClientMiddleware::class,
         'preUser'      => \App\Http\Middleware\PreUserMiddleware::class,
+        'mix'       => \App\Http\Middleware\MixMiddleware::class,
     ];
 }

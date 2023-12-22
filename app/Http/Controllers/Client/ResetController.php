@@ -870,15 +870,20 @@ class ResetController extends Controller
                         $message->to($jointHolder->user->email);
                         $message->subject('Need to Fill KYC Forms NSB FMC ' . $jointHolder->name);
                     });
+                    
                 }
             } else {
 
                 $account->pre = 0;
                 $account->save();
+              
             }
         } else {
         }
-
+        $account->pre = 0;
+        $process =$account->process()->where('current_state',100)->latest()->first();
+        $account->status =  $process->previous_state;
+        $account->save();
         return redirect()->route('client.resetAccountEnd', $account_id);
     }
 
