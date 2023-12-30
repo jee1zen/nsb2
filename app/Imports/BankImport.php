@@ -4,6 +4,8 @@ namespace App\Imports;
 
 use App\BankRecord;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 use Maatwebsite\Excel\Concerns\Importable;
 use Maatwebsite\Excel\Concerns\SkipsFailures;
 use Maatwebsite\Excel\Concerns\SkipsOnFailure;
@@ -11,16 +13,12 @@ use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithStartRow;
 use Maatwebsite\Excel\Concerns\WithValidation;
 
-class BankImport implements ToModel,WithValidation, SkipsOnFailure,WithStartRow
+class BankImport implements ToModel,WithStartRow
 {
-    use Importable, SkipsFailures;
+    use Importable;
+    private $currentLine = 1;
 
-    public function rules(): array
-    {
-        return [
-            // '0' => \Illuminate\Validation\Rule::unique('bank_records', 'ref_no'),
-        ];
-    }
+
     /**
      * @return int
      */
@@ -38,6 +36,19 @@ class BankImport implements ToModel,WithValidation, SkipsOnFailure,WithStartRow
     {
         config(['excel.import.startRow' => 2]);
         //  dd($row[0],$row[1],$row[2],$row[3],$row[4],$row[5],$row[6],$row[7],$row[8],$row[9]);
+        $this->currentLine++;
+        config(['excel.import.startRow' => 2]);
+        $validator = Validator::make([
+            'email' => $row[18] ?? null,
+        ], [
+            'email' => 'nullable|email',
+        ]);
+
+        if ($validator->fails()) {
+            $message = "Error on  CSV line number $this->currentLine , <b> $row[19]  </b> this  email is invaild, Please add valid email instead of this,  and re-upload the CSV";
+            throw ValidationException::withMessages([[$message]]);
+        }
+
 
         $data=[
             'account_id'=>$row[0] ?? 0,

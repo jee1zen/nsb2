@@ -176,12 +176,25 @@
                     },
                     error: function(xhr) {
                         console.log(xhr);
+                        if(xhr.status==422){
+                            let errorData = xhr.responseJSON;
+                            Swal.fire({
+                                html:  errorData.errors.map(error => `<p>${error[0]}</p>`).join(''),
+                                icon: "error",
+                                title: "Error",
+                            });
+                        }else{
 
-                        Swal.fire({
-                            html:xhr.responseJSON.message,
-                            icon: "error",
-                            title: "Error",
-                        });
+                            let errorData = xhr.responseJSON;
+
+                          Swal.fire({
+                                html:  errorData.message,
+                                icon: "error",
+                                title: "Error",
+                            });
+
+                        }
+                      
 
                     }
                 });
