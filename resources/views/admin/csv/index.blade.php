@@ -175,27 +175,20 @@
                         console.log('File uploaded successfully!', response);
                     },
                     error: function(xhr) {
-                        console.log(xhr);
+                        let errorData = xhr.responseJSON;
                         if(xhr.status==422){
-                            let errorData = xhr.responseJSON;
                             Swal.fire({
                                 html:  errorData.errors.map(error => `<p>${error[0]}</p>`).join(''),
                                 icon: "error",
                                 title: "Error",
                             });
                         }else{
-
-                            let errorData = xhr.responseJSON;
-
                           Swal.fire({
                                 html:  errorData.message,
                                 icon: "error",
                                 title: "Error",
                             });
-
                         }
-                      
-
                     }
                 });
 
